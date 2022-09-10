@@ -3,7 +3,7 @@ import { getLimitedValue } from "../helpers/limitValue";
 
 export const pitchState = atom<number>({
   key: "pitchState",
-  default: 10,
+  default: 0,
 });
 
 export const useZoom = (min: number, max: number) => {
