@@ -1,17 +1,18 @@
 import { useSetAreaConfig } from "../states/areaConfigState";
+import * as rp from "../helpers/realPoint";
 
-const useZoom = () => {
+export const useZoom = () => {
   const { incPitch, incPitchWithCorrect, decPitch, decPitchWithCorrect } =
     useSetAreaConfig();
 
-  const zoomIn = (r?: RealPoint) => {
-    if (!r) incPitch();
-    else incPitchWithCorrect(r);
+  const zoomIn = (x?: number, y?: number) => {
+    if (!x || !y) incPitch();
+    else incPitchWithCorrect(rp.create(x, y));
   };
 
-  const zoomOut = (r?: RealPoint) => {
-    if (!r) decPitch();
-    else decPitchWithCorrect(r);
+  const zoomOut = (x?: number, y?: number) => {
+    if (!x || !y) decPitch();
+    else decPitchWithCorrect(rp.create(x, y));
   };
 
   return {
