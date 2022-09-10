@@ -8,13 +8,8 @@ export const usePoint = () => {
   const pitch = useRecoilValue(pitchState);
   const upperLeft = useRecoilValue(upperLeftState);
 
-  const toVirtual = (r: RealPoint) => {
-    rp.toVirtual(r, pitch, upperLeft);
-  };
-
-  const toReal = (v: VirtualPoint) => {
-    vp.toReal(v, pitch, upperLeft);
-  };
+  const toVirtual = (r: RealPoint) => rp.toVirtual(r, pitch, upperLeft);
+  const toReal = (v: VirtualPoint) => vp.toReal(v, pitch, upperLeft);
 
   return {
     toVirtual,
