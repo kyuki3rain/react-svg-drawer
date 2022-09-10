@@ -1,4 +1,4 @@
-import * as vp from "./virtualPoint";
+import * as vp from "../virtualPoint";
 
 describe("virtualPoint", () => {
   test("create", () => {

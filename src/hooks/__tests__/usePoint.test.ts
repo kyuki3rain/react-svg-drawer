@@ -4,9 +4,9 @@
 
 import { renderHook } from "@testing-library/react";
 import { RecoilRoot } from "recoil";
-import { usePoint } from "./usePoint";
-import * as rp from "../helpers/realPoint";
-import * as vp from "../helpers/virtualPoint";
+import { usePoint } from "../usePoint";
+import * as rp from "../../helpers/realPoint";
+import * as vp from "../../helpers/virtualPoint";
 
 describe("usePoint", () => {
   const { result } = renderHook(() => usePoint(), { wrapper: RecoilRoot });

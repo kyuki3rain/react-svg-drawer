@@ -4,9 +4,9 @@
 
 import { act, renderHook } from "@testing-library/react";
 import { RecoilRoot } from "recoil";
-import { useMove } from "./useMove";
-import * as vp from "../helpers/virtualPoint";
-import { useAreaConfig } from "../states/areaConfigState";
+import { useMove } from "../useMove";
+import * as vp from "../../helpers/virtualPoint";
+import { useAreaConfig } from "../../states/areaConfigState";
 
 describe("useMove", () => {
   test("move", () => {
