@@ -1,11 +1,12 @@
-import { useRecoilState } from "recoil";
-import { pitchState, upperLeftState } from "../states/pointConfigState";
+import { useRecoilValue } from "recoil";
+import { pitchState } from "../states/pitchState";
 import * as rp from "../helpers/realPoint";
 import * as vp from "../helpers/virtualPoint";
+import { upperLeftState } from "../states/upperLeftState";
 
 export const usePoint = () => {
-  const [pitch] = useRecoilState(pitchState);
-  const [upperLeft] = useRecoilState(upperLeftState);
+  const pitch = useRecoilValue(pitchState);
+  const upperLeft = useRecoilValue(upperLeftState);
 
   const toVirtual = (r: RealPoint) => {
     rp.toVirtual(r, pitch, upperLeft);
