@@ -57,10 +57,10 @@ export const useSetAreaConfig = () => {
     });
   };
 
-  const setUpperLeftRelative = (vx: number, vy: number) => {
+  const setUpperLeftRelative = (v: VirtualPoint) => {
     setAreaConfig((prev) =>
       getNewAreaConfig(prev, {
-        upperLeft: vp.add(prev.upperLeft, vp.create(vx, vy)),
+        upperLeft: vp.add(prev.upperLeft, v),
       })
     );
   };
