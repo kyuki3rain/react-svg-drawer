@@ -13,6 +13,9 @@
     "test": "jest"
   },
   "dependencies": {
+    "@emotion/react": "^11.10.4",
+    "@emotion/styled": "^11.10.4",
+    "@mui/material": "^5.10.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "recoil": "^0.7.5"
@@ -23,10 +26,10 @@
     "@types/jest": "^29.0.0",
     "@types/react": "^18.0.17",
     "@types/react-dom": "^18.0.6",
-    "@vitejs/plugin-react": "^2.1.0",
-    "eslint": "^8.23.0",
     "@typescript-eslint/eslint-plugin": "^5.36.2",
     "@typescript-eslint/parser": "^5.36.2",
+    "@vitejs/plugin-react": "^2.1.0",
+    "eslint": "^8.23.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-react": "^7.31.8",
     "eslint-plugin-react-hooks": "^4.6.0",
