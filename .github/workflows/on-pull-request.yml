@@ -24,6 +24,7 @@ jobs:
   build:
     needs: pre_job
     if: ${{ needs.pre_job.outputs.should_skip != 'true' }}
+    if:  startsWith(github.head_ref, '53-複数回テストが走ってしまうのを防ぐ')
     runs-on: ubuntu-latest
     strategy:
       matrix:
