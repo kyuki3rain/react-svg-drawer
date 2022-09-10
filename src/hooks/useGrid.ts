@@ -1,14 +1,11 @@
-import { useRecoilValue } from "recoil";
-import { pitchState } from "../states/pitchState";
 import { useWindowSize } from "./useWindowSize";
 import * as vp from "../helpers/virtualPoint";
 import { usePoint } from "./usePoint";
-import { upperLeftState } from "../states/upperLeftState";
 import { useMemo } from "react";
+import { useAreaConfig } from "../states/areaConfigState";
 
 export const useGrid = () => {
-  const pitch = useRecoilValue(pitchState);
-  const upperLeft = useRecoilValue(upperLeftState);
+  const { pitch, upperLeft } = useAreaConfig();
 
   const { width, height } = useWindowSize();
   const { toReal } = usePoint();
