@@ -57,10 +57,10 @@ export const useSetAreaConfig = () => {
     });
   };
 
-  const setUpperLeftRelative = (v: VirtualPoint) => {
+  const setUpperLeftRelative = (vx: number, vy: number) => {
     setAreaConfig((prev) =>
       getNewAreaConfig(prev, {
-        upperLeft: vp.add(prev.upperLeft, v),
+        upperLeft: vp.add(prev.upperLeft, vp.create(vx, vy)),
       })
     );
   };
@@ -72,9 +72,6 @@ export const useSetAreaConfig = () => {
     incPitchWithCorrect: (r: RealPoint) => setPitchRleativeWithCorrect(1, r),
     decPitchWithCorrect: (r: RealPoint) => setPitchRleativeWithCorrect(-1, r),
 
-    ToLeftArea: (d: number) => setUpperLeftRelative(vp.create(-d, 0)),
-    ToRightArea: (d: number) => setUpperLeftRelative(vp.create(d, 0)),
-    ToTopArea: (d: number) => setUpperLeftRelative(vp.create(0, -d)),
-    ToBottomArea: (d: number) => setUpperLeftRelative(vp.create(0, d)),
+    setUpperLeftRelative: setUpperLeftRelative,
   };
 };
