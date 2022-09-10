@@ -10,7 +10,8 @@ type SvgObjectStyle = {
 
 type SvgObjectCommon = {
   id: SvgId;
-} & SvgObjectStyle;
+  style: SvgObjectStyle;
+};
 
 type LineObject = {
   type: "line";
