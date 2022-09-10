@@ -4,6 +4,7 @@ import { useWindowSize } from "./useWindowSize";
 import * as vp from "../helpers/virtualPoint";
 import { usePoint } from "./usePoint";
 import { upperLeftState } from "../states/upperLeftState";
+import { useMemo } from "react";
 
 export const useGrid = () => {
   const pitch = useRecoilValue(pitchState);
@@ -12,15 +13,23 @@ export const useGrid = () => {
   const { width, height } = useWindowSize();
   const { toReal } = usePoint();
 
-  const XGridStartPointArray = Array(Math.ceil(height / pitch)).map((_, i) =>
-    toReal(vp.create(i + Math.ceil(upperLeft.vy) - upperLeft.vy, 0))
+  const VerticalGridArray = useMemo(
+    () =>
+      [...Array(Math.ceil(width / pitch))].map((_, i) =>
+        toReal(vp.create(i + Math.ceil(upperLeft.vx) - upperLeft.vx, 0))
+      ),
+    [pitch, toReal, upperLeft.vx, width]
   );
-  const YGridStartPointArray = Array(Math.ceil(width / pitch)).map((_, i) =>
-    toReal(vp.create(i + Math.ceil(upperLeft.vx) - upperLeft.vx, 0))
+  const HorizontalGridArray = useMemo(
+    () =>
+      [...Array(Math.ceil(height / pitch))].map((_, i) =>
+        toReal(vp.create(0, i + Math.ceil(upperLeft.vy) - upperLeft.vy))
+      ),
+    [height, pitch, toReal, upperLeft.vy]
   );
 
   return {
-    XGridStartPointArray,
-    YGridStartPointArray,
+    VerticalGridArray,
+    HorizontalGridArray,
   };
 };
