@@ -7,24 +7,24 @@ const Grids: React.FC = () => {
 
   return (
     <svg>
-      {VerticalGridArray.map((rp, i) => (
+      {VerticalGridArray.map((x, i) => (
         <line
           key={`vertical-grid-${i}`}
-          x1={rp.x}
-          x2={rp.x}
-          y1={rp.y}
+          x1={x}
+          x2={x}
+          y1={0}
           y2={height}
           stroke="lightgray"
           strokeWidth={1}
         />
       ))}
-      {HorizontalGridArray.map((rp, i) => (
+      {HorizontalGridArray.map((y, i) => (
         <line
           key={`horizontal-grid-${i}`}
-          x1={rp.x}
+          x1={0}
           x2={width}
-          y1={rp.y}
-          y2={rp.y}
+          y1={y}
+          y2={y}
           stroke="lightgray"
           strokeWidth={1}
         />
