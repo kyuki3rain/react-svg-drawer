@@ -1,4 +1,4 @@
-import { getLimitedValue } from "./limitValue";
+import { getLimitedValue } from "../limitValue";
 
 describe("limitValue", () => {
   describe("getLimitedValue", () => {

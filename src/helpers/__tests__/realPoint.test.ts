@@ -1,5 +1,5 @@
-import * as rp from "./realPoint";
-import * as vp from "./virtualPoint";
+import * as rp from "../realPoint";
+import * as vp from "../virtualPoint";
 
 describe("realPoint", () => {
   test("create", () => {
