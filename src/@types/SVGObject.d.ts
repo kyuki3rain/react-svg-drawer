@@ -9,7 +9,7 @@ type SvgObjectStyle = {
 };
 
 type SvgObjectCommon = {
-  id: SvgId;
+  id?: SvgId;
   style: SvgObjectStyle;
 };
 
