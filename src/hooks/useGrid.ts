@@ -1,12 +1,13 @@
-import { useRecoilState } from "recoil";
-import { pitchState, upperLeftState } from "../states/pointConfigState";
+import { useRecoilValue } from "recoil";
+import { pitchState } from "../states/pitchState";
 import { useWindowSize } from "./useWindowSize";
 import * as vp from "../helpers/virtualPoint";
 import { usePoint } from "./usePoint";
+import { upperLeftState } from "../states/upperLeftState";
 
 export const useGrid = () => {
-  const [pitch] = useRecoilState(pitchState);
-  const [upperLeft] = useRecoilState(upperLeftState);
+  const pitch = useRecoilValue(pitchState);
+  const upperLeft = useRecoilValue(upperLeftState);
 
   const { width, height } = useWindowSize();
   const { toReal } = usePoint();
