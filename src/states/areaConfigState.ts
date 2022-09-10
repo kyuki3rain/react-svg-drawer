@@ -8,8 +8,9 @@ type AreaConfig = {
   upperLeft: VirtualPoint;
 };
 
-const PITCH_MIN = 0;
-const PITCH_MAX = 50;
+export const PITCH_DEFAULT = 10;
+export const PITCH_MIN = 1;
+export const PITCH_MAX = 50;
 
 const areaConfigState = atom({
   key: "areaConfigState",
