@@ -4,8 +4,8 @@
 name: On pull request
 
 on:
-  pull_request:
-    branches: [main]
+  push:
+    branches: [develop]
 
 jobs:
   pre_job:
@@ -22,7 +22,6 @@ jobs:
   build:
     needs: pre_job
     if: ${{ needs.pre_job.outputs.should_skip != 'true' }}
-    if:  ${{ !startsWith(github.head_ref, 'develop') }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
