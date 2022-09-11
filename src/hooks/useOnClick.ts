@@ -49,9 +49,6 @@ export const useOnClick = () => {
       case "text": {
         break;
       }
-      case "copy": {
-        break;
-      }
       default:
     }
   };
