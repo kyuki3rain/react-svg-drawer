@@ -1,9 +1,8 @@
-import { useAreaConfig, useSetAreaConfig } from "../states/areaConfigState";
+import { useAreaConfig } from "../states/areaConfigState";
 import * as vp from "../helpers/virtualPoint";
 
 export const useMove = () => {
-  const { setUpperLeftRelative } = useSetAreaConfig();
-  const { pitch } = useAreaConfig();
+  const { pitch, setUpperLeftRelative } = useAreaConfig();
 
   const move = (x: number, y: number) =>
     setUpperLeftRelative(vp.create(x / pitch, y / pitch));

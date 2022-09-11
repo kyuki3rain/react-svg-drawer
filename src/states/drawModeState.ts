@@ -10,11 +10,6 @@ const drawModeState = atom<DrawModeState>({
   default: { mode: "selector" },
 });
 
-export const useDrawMode = () => {
-  const drawMode = useRecoilValue(drawModeState);
-  return { drawMode };
-};
-
 export const useSetDrawMode = () => {
   const setDrawMode = useSetRecoilState(drawModeState);
 
@@ -23,4 +18,10 @@ export const useSetDrawMode = () => {
   };
 
   return { changeMode };
+};
+
+export const useDrawMode = () => {
+  const drawMode = useRecoilValue(drawModeState);
+  const setDrawMode = useSetDrawMode();
+  return { drawMode, ...setDrawMode };
 };

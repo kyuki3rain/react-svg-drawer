@@ -14,20 +14,6 @@ const svgObjectListState = atom<Set<SvgId>>({
   default: new Set(),
 });
 
-export const useSvgObject = (id: SvgId) => {
-  const svgObject = useRecoilValue(svgObjectStates(id));
-  return {
-    svgObject,
-  };
-};
-
-export const useSvgObjectList = () => {
-  const svgObjectList = useRecoilValue(svgObjectListState);
-  return {
-    svgObjectList,
-  };
-};
-
 export const useSetSvgObject = (id = nanoid() as SvgId) => {
   const setSvgObject = useSetRecoilState(svgObjectStates(id));
   const setSvgObjectList = useSetRecoilState(svgObjectListState);
@@ -49,5 +35,21 @@ export const useSetSvgObject = (id = nanoid() as SvgId) => {
   return {
     addOrUpdateSvgObject,
     deleteSvgObject,
+  };
+};
+
+export const useSvgObject = (id: SvgId) => {
+  const svgObject = useRecoilValue(svgObjectStates(id));
+  const setSvgObject = useSetSvgObject(id);
+  return {
+    svgObject,
+    ...setSvgObject,
+  };
+};
+
+export const useSvgObjectList = () => {
+  const svgObjectList = useRecoilValue(svgObjectListState);
+  return {
+    svgObjectList,
   };
 };
