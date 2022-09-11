@@ -16,7 +16,7 @@ type SvgObjectCommon = {
 type LineObject = {
   type: "line";
   point1: VirtualPoint;
-  point2: VirtualPoint;
+  point2?: VirtualPoint;
 } & SvgObjectCommon;
 
 type TextObject = {
