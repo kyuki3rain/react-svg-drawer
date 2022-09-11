@@ -7,12 +7,14 @@ type ConfigModalState = {
   type: ConfigType;
 };
 
-const configModalState = atom({
+const configModalState = atom<ConfigModalState>({
   key: "configModalState",
   default: {
     isOpen: false,
     type: "none",
-  } as ConfigModalState,
+    id: "preview" as SvgId,
+    configList: null,
+  },
 });
 
 export const useSetConfigModal = () => {
@@ -30,7 +32,7 @@ export const useSetConfigModal = () => {
     setConfigModal({
       isOpen: false,
       type: "none",
-      id: "none" as SvgId,
+      id: "preview" as SvgId,
       configList: null,
     });
   };
