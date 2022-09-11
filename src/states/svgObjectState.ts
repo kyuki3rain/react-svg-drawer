@@ -3,7 +3,10 @@ import { atom, atomFamily, useRecoilValue, useSetRecoilState } from "recoil";
 
 const svgObjectStates = atomFamily<SvgObject | null, SvgId>({
   key: "svgObjectStates",
-  default: null,
+  default: () => {
+    console.log("create new SvgObject");
+    return null;
+  },
 });
 
 const svgObjectListState = atom<Set<SvgId>>({

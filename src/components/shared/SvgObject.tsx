@@ -13,6 +13,7 @@ const SvgObject: React.FC<Props> = ({ svgId }) => {
 
   switch (obj.type) {
     case "line": {
+      if (!obj.point2) return null;
       const r1 = toReal(obj.point1);
       const r2 = toReal(obj.point2);
       return (
