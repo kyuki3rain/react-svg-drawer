@@ -4,6 +4,7 @@ import { RecoilRoot } from "recoil";
 import ButtonArea from "./components/ButtonArea";
 import DrawArea from "./components/DrawArea";
 import AreaController from "./components/AreaController";
+import ConfigModal from "./components/ConfigModal";
 
 const App: React.FC = () => (
   <RecoilRoot>
@@ -12,6 +13,7 @@ const App: React.FC = () => (
       <DrawArea />
       <ButtonArea />
     </AreaController>
+    <ConfigModal />
   </RecoilRoot>
 );
 

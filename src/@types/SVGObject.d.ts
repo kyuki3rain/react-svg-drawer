@@ -11,6 +11,7 @@ type SvgObjectStyle = {
 type SvgObjectCommon = {
   id?: SvgId;
   style: SvgObjectStyle;
+  configMap?: Map<string, string>;
 };
 
 type LineObject = {
@@ -27,6 +28,5 @@ type PolylineObject = {
 
 type TextObject = {
   type: "text";
-  text: string;
-  point: VirtualPoint;
+  point?: VirtualPoint;
 } & SvgObjectCommon;

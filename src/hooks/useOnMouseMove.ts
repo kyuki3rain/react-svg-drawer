@@ -2,6 +2,7 @@ import { useDrawMode } from "../states/drawModeState";
 import { useSvgObject } from "../states/svgObjectState";
 import { usePoint } from "./usePoint";
 import * as rp from "../helpers/realPoint";
+import { useConfigModal } from "../states/configModalState";
 
 export const useOnMouseMove = () => {
   const { drawMode } = useDrawMode();
@@ -9,6 +10,7 @@ export const useOnMouseMove = () => {
     "preview" as SvgId
   );
   const { toVirtual } = usePoint();
+  const { isOpen } = useConfigModal();
 
   const omMouseMoveLine = (obj: LineObject | null, v: VirtualPoint) => {
     if (!obj?.point1) return;
@@ -28,7 +30,17 @@ export const useOnMouseMove = () => {
     });
   };
 
+  const onMouseMoveText = (obj: TextObject | null, v: VirtualPoint) => {
+    if (!obj) return;
+
+    updatePreview({
+      ...obj,
+      point: v,
+    });
+  };
+
   const omMouseMove = (x: number, y: number) => {
+    if (isOpen) return;
     const v = toVirtual(rp.create(x, y));
 
     switch (drawMode.mode) {
@@ -43,6 +55,8 @@ export const useOnMouseMove = () => {
         break;
       }
       case "text": {
+        if (obj && obj.type !== "text") break;
+        onMouseMoveText(obj, v);
         break;
       }
       default:

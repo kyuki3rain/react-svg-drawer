@@ -32,10 +32,13 @@ const SvgObject: React.FC<Props> = ({ svgId }) => {
       return <polyline points={points} {...obj.style}></polyline>;
     }
     case "text": {
+      if (!obj.point) return null;
+      const text = obj.configMap?.get("text");
+      if (!text) return null;
       const r = toReal(obj.point);
       return (
         <text x={r.x} y={r.y} {...obj.style}>
-          {obj.text}
+          {text}
         </text>
       );
     }

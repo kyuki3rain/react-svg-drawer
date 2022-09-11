@@ -4,6 +4,7 @@ import { usePoint } from "./usePoint";
 import * as rp from "../helpers/realPoint";
 import { nanoid } from "nanoid";
 import { useState } from "react";
+import { useConfigModal } from "../states/configModalState";
 
 export const useOnClick = () => {
   const { drawMode } = useDrawMode();
@@ -15,6 +16,7 @@ export const useOnClick = () => {
   const [id, setId] = useState(nanoid() as SvgId);
   const { addOrUpdateSvgObject: addOrUpdateNew } = useSetSvgObject(id);
   const { toVirtual } = usePoint();
+  const { isOpen } = useConfigModal();
 
   const setNewId = () => setId(nanoid() as SvgId);
 
@@ -54,7 +56,17 @@ export const useOnClick = () => {
     });
   };
 
+  const onClickText = (obj: TextObject | null, v: VirtualPoint) => {
+    if (!obj) return;
+    addOrUpdateNew({
+      ...obj,
+      point: v,
+    });
+    setNewId();
+  };
+
   const onClick = (x: number, y: number) => {
+    if (isOpen) return;
     const v = toVirtual(rp.create(x, y));
 
     switch (drawMode.mode) {
@@ -69,6 +81,8 @@ export const useOnClick = () => {
         break;
       }
       case "text": {
+        if (obj && obj.type !== "text") break;
+        onClickText(obj, v);
         break;
       }
       default:
@@ -76,6 +90,7 @@ export const useOnClick = () => {
   };
 
   const onContextMenu = () => {
+    if (isOpen) return;
     switch (drawMode.mode) {
       case "polyline": {
         if (obj?.type !== "polyline") break;
