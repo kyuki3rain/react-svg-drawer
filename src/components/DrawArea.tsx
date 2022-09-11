@@ -3,9 +3,9 @@ import React, { useEffect } from "react";
 import { useWindowSize } from "../hooks/useWindowSize";
 import { useSetSvgObject, useSvgObjectList } from "../states/svgObjectState";
 import Grids from "./DrawArea/Grids";
-import WheelController from "./WheelController";
 import * as vp from "../helpers/virtualPoint";
 import SvgObject from "./shared/SvgObject";
+import Controller from "./Controller";
 
 const DrawArea: React.FC = () => {
   const { height, width } = useWindowSize();
@@ -25,25 +25,19 @@ const DrawArea: React.FC = () => {
   }, []);
 
   return (
-    <WheelController>
+    <Controller>
       <svg
         width={width}
         height={height}
         style={{ position: "fixed", right: 0 }}
         viewBox={`0, 0, ${width}, ${height}`}
-        onClick={() => {
-          console.log("onClick");
-        }}
-        onContextMenu={() => {
-          console.log("onContextMenu");
-        }}
       >
         <Grids />
         {[...svgObjectList].map((id) => (
           <SvgObject svgId={id} key={id}></SvgObject>
         ))}
       </svg>
-    </WheelController>
+    </Controller>
   );
 };
 
