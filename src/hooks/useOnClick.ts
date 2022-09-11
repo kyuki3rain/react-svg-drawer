@@ -37,6 +37,23 @@ export const useOnClick = () => {
     deletePreview();
   };
 
+  const onClickPolyline = (obj: PolylineObject | null, v: VirtualPoint) => {
+    if (!obj?.previewPoint) {
+      addOrUpdatePreview({
+        id: "preview" as SvgId,
+        type: "polyline",
+        points: [v],
+        style: { stroke: "black", fill: "none" },
+      });
+      return;
+    }
+
+    addOrUpdatePreview({
+      ...obj,
+      points: [...obj.points, v],
+    });
+  };
+
   const onClick = (x: number, y: number) => {
     const v = toVirtual(rp.create(x, y));
 
@@ -46,6 +63,11 @@ export const useOnClick = () => {
         onClickLine(obj, v);
         break;
       }
+      case "polyline": {
+        if (obj && obj.type !== "polyline") break;
+        onClickPolyline(obj, v);
+        break;
+      }
       case "text": {
         break;
       }
@@ -53,5 +75,21 @@ export const useOnClick = () => {
     }
   };
 
-  return { onClick };
+  const onContextMenu = () => {
+    switch (drawMode.mode) {
+      case "polyline": {
+        if (obj?.type !== "polyline") break;
+        addOrUpdateNew({
+          ...obj,
+          previewPoint: undefined,
+        });
+        setNewId();
+        deletePreview();
+        break;
+      }
+      default:
+    }
+  };
+
+  return { onClick, onContextMenu };
 };

@@ -20,6 +20,17 @@ const SvgObject: React.FC<Props> = ({ svgId }) => {
         <line x1={r1.x} y1={r1.y} x2={r2.x} y2={r2.y} {...obj.style}></line>
       );
     }
+    case "polyline": {
+      const points = (
+        obj.previewPoint ? [...obj.points, obj.previewPoint] : obj.points
+      )
+        .map((p) => {
+          const r = toReal(p);
+          return `${r.x},${r.y}`;
+        })
+        .join(" ");
+      return <polyline points={points} {...obj.style}></polyline>;
+    }
     case "text": {
       return <text></text>;
     }
