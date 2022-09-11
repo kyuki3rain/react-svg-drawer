@@ -1,4 +1,5 @@
 import ClickController from "./Controller/ClickController";
+import MouseMoveController from "./Controller/MouseMoveController";
 import WheelController from "./Controller/WheelController";
 
 type Props = {
@@ -7,7 +8,9 @@ type Props = {
 
 const Controller: React.FC<Props> = ({ children }) => (
   <WheelController>
-    <ClickController>{children}</ClickController>
+    <ClickController>
+      <MouseMoveController>{children}</MouseMoveController>
+    </ClickController>
   </WheelController>
 );
 

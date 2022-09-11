@@ -32,24 +32,18 @@ export const useSetSvgObject = (id = nanoid() as SvgId) => {
   const setSvgObject = useSetRecoilState(svgObjectStates(id));
   const setSvgObjectList = useSetRecoilState(svgObjectListState);
 
-  const addOrUpdateLineObject = (line: LineObject) => {
-    setSvgObject((prev) => ({ ...prev, ...line, id, type: "line" }));
-    setSvgObjectList((prev) => new Set(prev.add(id)));
-  };
-
   const deleteSvgObject = () => {
     setSvgObject(null);
-    setSvgObjectList((prev) => {
-      prev.delete(id);
-      return new Set(prev);
-    });
+    if (id !== "preview")
+      setSvgObjectList((prev) => {
+        prev.delete(id);
+        return new Set(prev);
+      });
   };
 
   const addOrUpdateSvgObject = (obj: SvgObject) => {
-    switch (obj.type) {
-      case "line":
-        addOrUpdateLineObject(obj);
-    }
+    setSvgObject((prev) => ({ ...prev, ...obj, id }));
+    if (id !== "preview") setSvgObjectList((prev) => new Set(prev.add(id)));
   };
 
   return {
