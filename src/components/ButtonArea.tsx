@@ -13,9 +13,8 @@ const ButtonArea: React.FC = () => {
       <Tooltip title="selector" style={{ marginLeft: 5 }} arrow>
         <Fab
           aria-label="selector"
-          disabled={drawMode.mode === "selector"}
-          color="primary"
-          onClick={() => changeMode("selector")}
+          color={drawMode.mode === "selector" ? "secondary" : "primary"}
+          onClick={() => drawMode.mode !== "selector" && changeMode("selector")}
         >
           <SvgIcon>
             <CursorIcon></CursorIcon>
@@ -25,9 +24,8 @@ const ButtonArea: React.FC = () => {
       <Tooltip title="line" style={{ marginLeft: 5 }} arrow>
         <Fab
           aria-label="line"
-          disabled={drawMode.mode === "line"}
-          color="primary"
-          onClick={() => changeMode("line")}
+          color={drawMode.mode === "line" ? "secondary" : "primary"}
+          onClick={() => drawMode.mode !== "line" && changeMode("line")}
         >
           <HorizontalRule />
         </Fab>
