@@ -29,6 +29,7 @@ const DrawArea: React.FC = () => {
         {[...svgObjectList].map((id) => (
           <SvgObject svgId={id} key={id}></SvgObject>
         ))}
+        <SvgObject svgId={"preview" as SvgId}></SvgObject>
       </svg>
     </Controller>
   );
