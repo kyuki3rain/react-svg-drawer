@@ -21,7 +21,9 @@ const SvgObject: React.FC<Props> = ({ svgId }) => {
       );
     }
     case "polyline": {
-      const points = obj.points
+      const points = (
+        obj.previewPoint ? [...obj.points, obj.previewPoint] : obj.points
+      )
         .map((p) => {
           const r = toReal(p);
           return `${r.x},${r.y}`;

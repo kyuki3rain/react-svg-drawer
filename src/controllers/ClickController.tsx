@@ -6,7 +6,7 @@ type Props = {
 };
 
 const ClickController: React.FC<Props> = ({ children }) => {
-  const { onClick } = useOnClick();
+  const { onClick, onContextMenu } = useOnClick();
 
   return (
     <div
@@ -14,7 +14,9 @@ const ClickController: React.FC<Props> = ({ children }) => {
         onClick(e.clientX, e.clientY);
         console.log("onClick");
       }}
-      onContextMenu={() => {
+      onContextMenu={(e) => {
+        e.preventDefault();
+        onContextMenu();
         console.log("onContextMenu");
       }}
     >

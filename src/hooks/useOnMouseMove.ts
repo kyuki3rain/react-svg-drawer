@@ -19,6 +19,15 @@ export const useOnMouseMove = () => {
     });
   };
 
+  const omMouseMovePolyline = (obj: PolylineObject | null, v: VirtualPoint) => {
+    if (!obj?.points.length) return;
+
+    updatePreview({
+      ...obj,
+      previewPoint: v,
+    });
+  };
+
   const omMouseMove = (x: number, y: number) => {
     const v = toVirtual(rp.create(x, y));
 
@@ -26,6 +35,11 @@ export const useOnMouseMove = () => {
       case "line": {
         if (obj && obj.type !== "line") break;
         omMouseMoveLine(obj, v);
+        break;
+      }
+      case "polyline": {
+        if (obj && obj.type !== "polyline") break;
+        omMouseMovePolyline(obj, v);
         break;
       }
       case "text": {
