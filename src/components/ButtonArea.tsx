@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import { HorizontalRule, ShowChart } from "@mui/icons-material";
+import { HorizontalRule, ShowChart, TextFields } from "@mui/icons-material";
 import { Fab, SvgIcon, Tooltip } from "@mui/material";
 import React from "react";
 import { useDrawMode } from "../states/drawModeState";
@@ -37,6 +37,15 @@ const ButtonArea: React.FC = () => {
           onClick={() => drawMode.mode !== "polyline" && changeMode("polyline")}
         >
           <ShowChart />
+        </Fab>
+      </Tooltip>
+      <Tooltip title="text" style={{ marginLeft: 5 }} arrow>
+        <Fab
+          aria-label="text"
+          color={drawMode.mode === "text" ? "secondary" : "primary"}
+          onClick={() => drawMode.mode !== "text" && changeMode("text")}
+        >
+          <TextFields />
         </Fab>
       </Tooltip>
     </div>
