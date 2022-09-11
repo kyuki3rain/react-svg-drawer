@@ -22,7 +22,7 @@ type LineObject = {
 type PolylineObject = {
   type: "polyline";
   points: VirtualPoint[];
-  lastPoint?: VirtualPoint;
+  previewPoint?: VirtualPoint;
 } & SvgObjectCommon;
 
 type TextObject = {
