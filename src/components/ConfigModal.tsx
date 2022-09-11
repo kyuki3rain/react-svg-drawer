@@ -3,7 +3,6 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import { useEffect, useState } from "react";
 import { useConfig } from "../hooks/useConfigModal";
-import { useConfigModal } from "../states/configModalState";
 
 const style = {
   display: "flex",
@@ -22,9 +21,9 @@ const style = {
 };
 
 const ConfigModal = () => {
-  const [state, setState] = useState(new Map() as Map<string, string>);
-  const { isOpen, type } = useConfigModal();
-  const { configList, saveConfig, closeModalWithoutMode } = useConfig();
+  const [state, setState] = useState<Map<string, string>>(new Map());
+  const { isOpen, type, configList, saveConfig, closeModalWithoutMode } =
+    useConfig();
 
   const handleClose = () => {
     closeModalWithoutMode();

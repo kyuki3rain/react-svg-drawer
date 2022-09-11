@@ -3,7 +3,7 @@ import { useSetDrawMode } from "../states/drawModeState";
 import { useSvgObject } from "../states/svgObjectState";
 
 export const useConfig = () => {
-  const { id, configList, closeModal } = useConfigModal();
+  const { isOpen, id, type, configList, closeModal } = useConfigModal();
   const { svgObject, addOrUpdateSvgObject } = useSvgObject(id);
   const { changeMode } = useSetDrawMode();
 
@@ -31,6 +31,8 @@ export const useConfig = () => {
 
   return {
     configList,
+    type,
+    isOpen,
     saveConfig,
     closeModalWithoutMode,
   };
