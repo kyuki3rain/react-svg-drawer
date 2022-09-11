@@ -17,8 +17,6 @@ const areaConfigState = atom({
   default: { pitch: 10, upperLeft: vp.create(0, 0) },
 });
 
-export const useAreaConfig = () => useRecoilValue(areaConfigState);
-
 export const useSetAreaConfig = () => {
   const setAreaConfig = useSetRecoilState(areaConfigState);
 
@@ -74,5 +72,15 @@ export const useSetAreaConfig = () => {
     decPitchWithCorrect: (r: RealPoint) => setPitchRleativeWithCorrect(-1, r),
 
     setUpperLeftRelative: setUpperLeftRelative,
+  };
+};
+
+export const useAreaConfig = () => {
+  const areaConfig = useRecoilValue(areaConfigState);
+  const setAreaConfig = useSetAreaConfig();
+
+  return {
+    ...areaConfig,
+    ...setAreaConfig,
   };
 };

@@ -7,11 +7,11 @@ import { useState } from "react";
 
 export const useOnClick = () => {
   const { drawMode } = useDrawMode();
-  const { svgObject: obj } = useSvgObject("preview" as SvgId);
   const {
+    svgObject: obj,
     addOrUpdateSvgObject: addOrUpdatePreview,
     deleteSvgObject: deletePreview,
-  } = useSetSvgObject("preview" as SvgId);
+  } = useSvgObject("preview" as SvgId);
   const [id, setId] = useState(nanoid() as SvgId);
   const { addOrUpdateSvgObject: addOrUpdateNew } = useSetSvgObject(id);
   const { toVirtual } = usePoint();

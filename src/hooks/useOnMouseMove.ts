@@ -1,12 +1,11 @@
 import { useDrawMode } from "../states/drawModeState";
-import { useSetSvgObject, useSvgObject } from "../states/svgObjectState";
+import { useSvgObject } from "../states/svgObjectState";
 import { usePoint } from "./usePoint";
 import * as rp from "../helpers/realPoint";
 
 export const useOnMouseMove = () => {
   const { drawMode } = useDrawMode();
-  const { svgObject: obj } = useSvgObject("preview" as SvgId);
-  const { addOrUpdateSvgObject: updatePreview } = useSetSvgObject(
+  const { svgObject: obj, addOrUpdateSvgObject: updatePreview } = useSvgObject(
     "preview" as SvgId
   );
   const { toVirtual } = usePoint();
