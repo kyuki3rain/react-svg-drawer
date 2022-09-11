@@ -1,5 +1,5 @@
 import React from "react";
-import { useOnClick } from "../../hooks/useOnClick";
+import { useOnClick } from "../../../hooks/useOnClick";
 
 type Props = {
   children: React.ReactNode;

@@ -1,6 +1,6 @@
 import React, { ReactNode, useEffect, useRef } from "react";
-import { useMove } from "../../hooks/useMove";
-import { useZoom } from "../../hooks/useZoom";
+import { useMove } from "../../../hooks/useMove";
+import { useZoom } from "../../../hooks/useZoom";
 
 type Props = {
   children: ReactNode;
