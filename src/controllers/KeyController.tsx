@@ -6,10 +6,14 @@ type Props = {
 };
 
 const KeyController: React.FC<Props> = ({ children }) => {
-  const { onKeyDown } = useKey();
+  const { onKeyDown, onKeyUp } = useKey();
 
   return (
-    <div tabIndex={1} onKeyDown={(e) => onKeyDown(e.code)}>
+    <div
+      tabIndex={1}
+      onKeyDown={(e) => onKeyDown(e.key)}
+      onKeyUp={(e) => onKeyUp(e.key)}
+    >
       {children}
     </div>
   );
