@@ -1,1 +1,1 @@
-type DrawMode = "selector" | "line" | "text" | "copy";
+type DrawMode = "selector" | "line" | "text";

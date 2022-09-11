@@ -28,7 +28,11 @@ export const useSetSvgObject = (id = nanoid() as SvgId) => {
   };
 
   const addOrUpdateSvgObject = (obj: SvgObject) => {
-    setSvgObject((prev) => ({ ...prev, ...obj, id }));
+    setSvgObject((prev) => {
+      if (prev?.type === obj.type) return { ...prev, ...obj, id };
+
+      return { ...obj, id };
+    });
     if (id !== "preview") setSvgObjectList((prev) => new Set(prev.add(id)));
   };
 
