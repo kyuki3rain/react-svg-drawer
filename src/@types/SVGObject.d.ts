@@ -1,6 +1,6 @@
 type SvgId = string & { _brand: "SvgId" };
 
-type SvgObject = LineObject | TextObject;
+type SvgObject = LineObject | TextObject | PolylineObject;
 
 type SvgObjectStyle = {
   stroke?: string;
@@ -17,6 +17,11 @@ type LineObject = {
   type: "line";
   point1: VirtualPoint;
   point2?: VirtualPoint;
+} & SvgObjectCommon;
+
+type PolylineObject = {
+  type: "polyline";
+  points: VirtualPoint[];
 } & SvgObjectCommon;
 
 type TextObject = {
