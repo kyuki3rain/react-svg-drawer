@@ -1,5 +1,5 @@
 import React from "react";
-import { useKey } from "../../../hooks/useKey";
+import { useKey } from "../hooks/useKey";
 
 type Props = {
   children: React.ReactNode;

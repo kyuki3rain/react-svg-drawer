@@ -2,7 +2,7 @@ import React from "react";
 
 import { useWindowSize } from "../hooks/useWindowSize";
 import { useSvgObjectList } from "../states/svgObjectState";
-import Controller from "./DrawArea/Controller";
+import DrawAreaController from "./DrawArea/DrawAreaController";
 import Grids from "./DrawArea/Grids";
 import SvgObject from "./shared/SvgObject";
 
@@ -11,7 +11,7 @@ const DrawArea: React.FC = () => {
   const { svgObjectList } = useSvgObjectList();
 
   return (
-    <Controller>
+    <DrawAreaController>
       <svg
         width={width}
         height={height}
@@ -24,7 +24,7 @@ const DrawArea: React.FC = () => {
         ))}
         <SvgObject svgId={"preview" as SvgId}></SvgObject>
       </svg>
-    </Controller>
+    </DrawAreaController>
   );
 };
 

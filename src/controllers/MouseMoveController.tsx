@@ -1,5 +1,5 @@
 import React from "react";
-import { useOnMouseMove } from "../../../hooks/useOnMouseMove";
+import { useOnMouseMove } from "../hooks/useOnMouseMove";
 
 type Props = {
   children: React.ReactNode;

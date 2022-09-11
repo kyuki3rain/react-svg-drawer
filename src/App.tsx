@@ -3,15 +3,15 @@ import React from "react";
 import { RecoilRoot } from "recoil";
 import ButtonArea from "./components/ButtonArea";
 import DrawArea from "./components/DrawArea";
-import KeyController from "./components/DrawArea/Controller/KeyController";
+import AreaController from "./components/AreaController";
 
 const App: React.FC = () => (
   <RecoilRoot>
     <CssBaseline />
-    <KeyController>
+    <AreaController>
       <DrawArea />
       <ButtonArea />
-    </KeyController>
+    </AreaController>
   </RecoilRoot>
 );
 
