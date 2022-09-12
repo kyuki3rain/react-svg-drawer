@@ -4,6 +4,12 @@ export const add = (v1: VirtualPoint, v2: VirtualPoint) =>
   create(v1.vx + v2.vx, v1.vy + v2.vy);
 export const sub = (v1: VirtualPoint, v2: VirtualPoint) =>
   create(v1.vx - v2.vx, v1.vy - v2.vy);
+export const mulConst = (v1: VirtualPoint, c: number) =>
+  create(v1.vx * c, v1.vy * c);
+export const divConst = (v1: VirtualPoint, c: number) =>
+  create(v1.vx / c, v1.vy / c);
+export const abs = (v1: VirtualPoint) =>
+  create(Math.abs(v1.vx), Math.abs(v1.vy));
 
 export const toReal = (
   v: VirtualPoint,

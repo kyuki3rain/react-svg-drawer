@@ -31,6 +31,12 @@ first click で一箇所確定
 そこから mousemove に対応して preview を表示
 second click のとき、その点と一つ目の点を対角とする四角を描画して初期状態に戻る
 
+## circle
+
+first click で一箇所確定
+そこから mousemove に対応して preview を表示
+second click のとき、その点と一つ目の点に接する楕円を描画して初期状態に戻る
+
 # その他
 
 ## without snap mode

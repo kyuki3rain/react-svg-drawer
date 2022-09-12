@@ -1,6 +1,11 @@
 type SvgId = string & { _brand: "SvgId" };
 
-type SvgObject = LineObject | TextObject | PolylineObject | RectObject;
+type SvgObject =
+  | LineObject
+  | TextObject
+  | PolylineObject
+  | RectObject
+  | CircleObject;
 
 type SvgObjectStyle = {
   stroke?: string;
@@ -37,4 +42,11 @@ type RectObject = {
   point: VirtualPoint;
   size?: VirtualPoint;
   rx?: number;
+} & SvgObjectCommon;
+
+type CircleObject = {
+  type: "circle";
+  point: VirtualPoint;
+  c?: VirtualPoint;
+  r?: VirtualPoint;
 } & SvgObjectCommon;
