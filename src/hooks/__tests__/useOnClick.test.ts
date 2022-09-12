@@ -9,6 +9,8 @@ import { PITCH_DEFAULT } from "../../states/areaConfigState";
 import { useDrawMode } from "../../states/drawModeState";
 import { useOnClick } from "../useOnClick";
 import { useSvgObject } from "../../states/svgObjectState";
+import { useConfig } from "../useConfigModal";
+import { useResetPreview } from "../useResetPreview";
 
 jest.mock("nanoid", () => ({
   nanoid: () => "test",
@@ -59,11 +61,12 @@ describe("useOnClick", () => {
       });
       expect(result.current.usePreviewObject.svgObject).toBe(null);
 
+      const configMap = new Map([["text", "test"]]);
       act(() => {
         result.current.usePreviewObject.addOrUpdateSvgObject({
           type: "text",
-          text: "",
           point: vp.create(0, 0),
+          configMap,
           style: {},
         });
       });
@@ -72,8 +75,8 @@ describe("useOnClick", () => {
       expect(result.current.usePreviewObject.svgObject).toEqual({
         id: "preview",
         type: "text",
-        text: "",
         point: vp.create(0, 0),
+        configMap,
         style: {},
       });
     });
@@ -84,8 +87,10 @@ describe("useOnClick", () => {
           return {
             useDrawMode: useDrawMode(),
             useOnClick: useOnClick(),
+            useResetPreview: useResetPreview(),
             useSvgObject: useSvgObject("test" as SvgId),
             usePreviewObject: useSvgObject("preview" as SvgId),
+            useConfig: useConfig(),
           };
         },
         { wrapper: RecoilRoot }
@@ -94,12 +99,40 @@ describe("useOnClick", () => {
       act(() => result.current.useDrawMode.changeMode("text"));
       expect(result.current.useDrawMode.drawMode.mode).toBe("text");
       expect(result.current.useSvgObject.svgObject).toBe(null);
-      expect(result.current.usePreviewObject.svgObject).toBe(null);
+      expect(result.current.usePreviewObject.svgObject).toEqual({
+        id: "preview" as SvgId,
+        type: "text",
+        configMap: new Map([["text", ""]]),
+        style: { stroke: "black" },
+      });
+
+      act(() => {
+        result.current.useConfig.saveConfig(new Map([["text", "test"]]));
+      });
+      expect(result.current.useDrawMode.drawMode.mode).toBe("text");
+      expect(result.current.useSvgObject.svgObject).toBe(null);
+      expect(result.current.usePreviewObject.svgObject).toEqual({
+        id: "preview" as SvgId,
+        type: "text",
+        configMap: new Map([["text", "test"]]),
+        style: { stroke: "black" },
+      });
 
       act(() => result.current.useOnClick.onClick(30, 50));
       expect(result.current.useDrawMode.drawMode.mode).toBe("text");
-      expect(result.current.useSvgObject.svgObject).toBe(null);
-      expect(result.current.usePreviewObject.svgObject).toBe(null);
+      expect(result.current.useSvgObject.svgObject).toEqual({
+        id: "test" as SvgId,
+        type: "text",
+        point: vp.create(30 / PITCH_DEFAULT, 50 / PITCH_DEFAULT),
+        configMap: new Map([["text", "test"]]),
+        style: { stroke: "black" },
+      });
+      expect(result.current.usePreviewObject.svgObject).toEqual({
+        id: "preview" as SvgId,
+        type: "text",
+        configMap: new Map([["text", "test"]]),
+        style: { stroke: "black" },
+      });
     });
 
     test("mode: selector", () => {
