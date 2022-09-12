@@ -23,9 +23,11 @@
     "recoil": "^0.7.5"
   },
   "devDependencies": {
+    "@babel/core": "^7.19.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@types/jest": "^29.0.1",
+    "@types/node": "^18.7.16",
     "@types/react": "^18.0.19",
     "@types/react-dom": "^18.0.6",
     "@typescript-eslint/eslint-plugin": "^5.36.2",
