@@ -7,12 +7,17 @@ export const usePoint = () => {
   const { pitch, upperLeft } = useAreaConfig();
   const { snapGrid } = useSnapGrid();
 
-  const toVirtual = (r: RealPoint, withSnap?: boolean) => {
+  const toVirtual = (
+    r: RealPoint,
+    withSnap?: boolean,
+    isRelative?: boolean
+  ) => {
     if (withSnap === false || !snapGrid)
-      return rp.toVirtual(r, pitch, upperLeft);
-    return rp.toVirtualWithSnap(r, pitch, upperLeft);
+      return rp.toVirtual(r, pitch, upperLeft, isRelative);
+    return rp.toVirtualWithSnap(r, pitch, upperLeft, isRelative);
   };
-  const toReal = (v: VirtualPoint) => vp.toReal(v, pitch, upperLeft);
+  const toReal = (v: VirtualPoint, isRelative?: boolean) =>
+    vp.toReal(v, pitch, upperLeft, isRelative);
 
   return {
     toVirtual,

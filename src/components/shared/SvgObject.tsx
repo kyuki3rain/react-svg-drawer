@@ -42,6 +42,14 @@ const SvgObject: React.FC<Props> = ({ svgId }) => {
         </text>
       );
     }
+    case "rect": {
+      if (!obj.size) return null;
+      const r = toReal(obj.upperLeft);
+      const s = toReal(obj.size, true);
+      return (
+        <rect x={r.x} y={r.y} width={s.x} height={s.y} {...obj.style}></rect>
+      );
+    }
   }
 };
 
