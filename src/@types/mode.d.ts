@@ -1,1 +1,1 @@
-type DrawMode = "selector" | "line" | "polyline" | "text";
+type DrawMode = "selector" | "line" | "polyline" | "text" | "rect";

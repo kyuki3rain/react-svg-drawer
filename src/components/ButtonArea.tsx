@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
 import { HorizontalRule, ShowChart, TextFields } from "@mui/icons-material";
+import RectangleIcon from "@mui/icons-material/Rectangle";
 import { Fab, SvgIcon, Tooltip } from "@mui/material";
 import React from "react";
 import { useDrawMode } from "../states/drawModeState";
@@ -46,6 +47,15 @@ const ButtonArea: React.FC = () => {
           onClick={() => drawMode.mode !== "text" && changeMode("text")}
         >
           <TextFields />
+        </Fab>
+      </Tooltip>
+      <Tooltip title="rect" style={{ marginLeft: 5 }} arrow>
+        <Fab
+          aria-label="rect"
+          color={drawMode.mode === "rect" ? "secondary" : "primary"}
+          onClick={() => drawMode.mode !== "rect" && changeMode("rect")}
+        >
+          <RectangleIcon />
         </Fab>
       </Tooltip>
     </div>

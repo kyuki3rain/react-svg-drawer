@@ -2,6 +2,7 @@ import { useDrawMode } from "../states/drawModeState";
 import { useSetSvgObject, useSvgObject } from "../states/svgObjectState";
 import { usePoint } from "./usePoint";
 import * as rp from "../helpers/realPoint";
+import * as vp from "../helpers/virtualPoint";
 import { nanoid } from "nanoid";
 import { useState } from "react";
 import { useConfigModal } from "../states/configModalState";
@@ -65,6 +66,53 @@ export const useOnClick = () => {
     setNewId();
   };
 
+  const onClickRect = (obj: RectObject | null, v: VirtualPoint) => {
+    if (!obj) {
+      addOrUpdatePreview({
+        id: "preview",
+        type: "rect",
+        upperLeft: v,
+        point: v,
+        style: { stroke: "black", fill: "none" },
+      });
+      return;
+    }
+
+    const diff = vp.sub(v, obj.point);
+    if (diff.vx == 0 || diff.vy == 0) {
+      console.log("size is not equal to 0!");
+      return;
+    }
+
+    if (diff.vx > 0 && diff.vy > 0) {
+      addOrUpdateNew({
+        ...obj,
+        upperLeft: obj.point,
+        size: diff,
+      });
+    } else if (diff.vx > 0) {
+      addOrUpdateNew({
+        ...obj,
+        upperLeft: vp.create(obj.point.vx, v.vy),
+        size: vp.create(diff.vx, -diff.vy),
+      });
+    } else if (diff.vy > 0) {
+      addOrUpdateNew({
+        ...obj,
+        upperLeft: vp.create(v.vx, obj.point.vy),
+        size: vp.create(-diff.vx, diff.vy),
+      });
+    } else {
+      addOrUpdateNew({
+        ...obj,
+        upperLeft: vp.create(v.vx, v.vy),
+        size: vp.create(-diff.vx, -diff.vy),
+      });
+    }
+    setNewId();
+    deletePreview();
+  };
+
   const onClick = (x: number, y: number) => {
     if (isOpen) return;
     const v = toVirtual(rp.create(x, y));
@@ -83,6 +131,11 @@ export const useOnClick = () => {
       case "text": {
         if (obj && obj.type !== "text") break;
         onClickText(obj, v);
+        break;
+      }
+      case "rect": {
+        if (obj && obj.type !== "rect") break;
+        onClickRect(obj, v);
         break;
       }
       default:
