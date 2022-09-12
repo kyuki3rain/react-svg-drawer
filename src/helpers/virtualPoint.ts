@@ -8,9 +8,15 @@ export const sub = (v1: VirtualPoint, v2: VirtualPoint) =>
 export const toReal = (
   v: VirtualPoint,
   pitch: number,
-  upperLeft: VirtualPoint
-) =>
-  createRealPoint((v.vx - upperLeft.vx) * pitch, (v.vy - upperLeft.vy) * pitch);
+  upperLeft: VirtualPoint,
+  isRelative?: boolean
+) => {
+  if (isRelative) return createRealPoint(v.vx * pitch, v.vy * pitch);
+  return createRealPoint(
+    (v.vx - upperLeft.vx) * pitch,
+    (v.vy - upperLeft.vy) * pitch
+  );
+};
 
 export const create = (x: number, y: number) => ({
   vx: x as VirtualNumber,
