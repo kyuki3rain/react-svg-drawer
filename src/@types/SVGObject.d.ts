@@ -30,3 +30,9 @@ type TextObject = {
   type: "text";
   point?: VirtualPoint;
 } & SvgObjectCommon;
+
+type RectObject = {
+  upperLeft: VirtualPoint;
+  size?: VirtualPoint;
+  rx?: number;
+} & SvgObjectCommon;

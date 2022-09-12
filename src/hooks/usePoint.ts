@@ -8,9 +8,9 @@ export const usePoint = () => {
   const { snapGrid } = useSnapGrid();
 
   const toVirtual = (r: RealPoint, withSnap?: boolean) => {
-    if ((withSnap === undefined && snapGrid) || withSnap)
-      return rp.toVirtualWithSnap(r, pitch, upperLeft);
-    else return rp.toVirtual(r, pitch, upperLeft);
+    if (withSnap === false || !snapGrid)
+      return rp.toVirtual(r, pitch, upperLeft);
+    return rp.toVirtualWithSnap(r, pitch, upperLeft);
   };
   const toReal = (v: VirtualPoint) => vp.toReal(v, pitch, upperLeft);
 
