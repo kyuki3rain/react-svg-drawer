@@ -12,8 +12,8 @@ export const toVirtualWithSnap = (
   upperLeft: VirtualPoint
 ) =>
   createVirtualPoint(
-    Math.round(r.x / pitch) + upperLeft.vx,
-    Math.round(r.y / pitch) + upperLeft.vy
+    Math.round(r.x / pitch + upperLeft.vx),
+    Math.round(r.y / pitch + upperLeft.vy)
   );
 
 export const create = (x: number, y: number) => ({
