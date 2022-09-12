@@ -113,6 +113,30 @@ export const useOnClick = () => {
     deletePreview();
   };
 
+  const onClickCircle = (obj: CircleObject | null, v: VirtualPoint) => {
+    if (!obj) {
+      addOrUpdatePreview({
+        id: "preview",
+        type: "circle",
+        point: v,
+        style: { stroke: "black", fill: "none" },
+      });
+      return;
+    }
+
+    const tmp = vp.divConst(vp.sub(v, obj.point), 2);
+    const r = vp.abs(tmp);
+    const c = vp.add(tmp, obj.point);
+
+    addOrUpdateNew({
+      ...obj,
+      r,
+      c,
+    });
+    setNewId();
+    deletePreview();
+  };
+
   const onClick = (x: number, y: number) => {
     if (isOpen) return;
     const v = toVirtual(rp.create(x, y));
@@ -136,6 +160,11 @@ export const useOnClick = () => {
       case "rect": {
         if (obj && obj.type !== "rect") break;
         onClickRect(obj, v);
+        break;
+      }
+      case "circle": {
+        if (obj && obj.type !== "circle") break;
+        onClickCircle(obj, v);
         break;
       }
       default:

@@ -77,6 +77,19 @@ export const useOnMouseMove = () => {
       });
     }
   };
+  const onMouseMoveCircle = (obj: CircleObject | null, v: VirtualPoint) => {
+    if (!obj) return;
+
+    const tmp = vp.divConst(vp.sub(v, obj.point), 2);
+    const r = vp.abs(tmp);
+    const c = vp.add(tmp, obj.point);
+
+    updatePreview({
+      ...obj,
+      r,
+      c,
+    });
+  };
 
   const omMouseMove = (x: number, y: number) => {
     if (isOpen) return;
@@ -101,6 +114,11 @@ export const useOnMouseMove = () => {
       case "rect": {
         if (obj && obj.type !== "rect") break;
         onMouseMoveRect(obj, v);
+        break;
+      }
+      case "circle": {
+        if (obj && obj.type !== "circle") break;
+        onMouseMoveCircle(obj, v);
         break;
       }
       default:

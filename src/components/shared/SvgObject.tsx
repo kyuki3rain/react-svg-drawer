@@ -50,6 +50,14 @@ const SvgObject: React.FC<Props> = ({ svgId }) => {
         <rect x={r.x} y={r.y} width={s.x} height={s.y} {...obj.style}></rect>
       );
     }
+    case "circle": {
+      if (!obj.c || !obj.r) return null;
+      const c = toReal(obj.c);
+      const r = toReal(obj.r, true);
+      return (
+        <ellipse cx={c.x} cy={c.y} rx={r.x} ry={r.y} {...obj.style}></ellipse>
+      );
+    }
   }
 };
 
