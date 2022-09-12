@@ -46,7 +46,10 @@ describe("useMove", () => {
       });
       expect(result.current.pitch).toBe(PITCH_DEFAULT + 1);
       expect(
-        result.current.toVirtual(result.current.toReal(vp.create(10, 10)))
+        result.current.toVirtual(
+          result.current.toReal(vp.create(10, 10)),
+          false
+        )
       ).toEqual(vp.create(10, 10));
     });
 
@@ -97,7 +100,10 @@ describe("useMove", () => {
       });
       expect(result.current.pitch).toBe(PITCH_DEFAULT - 1);
       expect(
-        result.current.toVirtual(result.current.toReal(vp.create(10, 10)))
+        result.current.toVirtual(
+          result.current.toReal(vp.create(10, 10)),
+          false
+        )
       ).toEqual(vp.create(10, 10));
     });
 
