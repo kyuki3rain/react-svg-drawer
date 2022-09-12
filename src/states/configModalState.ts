@@ -1,7 +1,7 @@
 import { atom, useRecoilValue, useSetRecoilState } from "recoil";
 
 type ConfigModalState = {
-  id: SvgId;
+  id: SvgId | "preview";
   isOpen: boolean;
   configList: ObjectConfigs | null;
   type: ConfigType;
@@ -12,7 +12,7 @@ const configModalState = atom<ConfigModalState>({
   default: {
     isOpen: false,
     type: "none",
-    id: "preview" as SvgId,
+    id: "preview",
     configList: null,
   },
 });
@@ -22,7 +22,7 @@ export const useSetConfigModal = () => {
 
   const openModal = (
     type: ConfigType,
-    id: SvgId,
+    id: SvgId | "preview",
     configList: ObjectConfigs
   ) => {
     setConfigModal({ isOpen: true, type, configList, id });
@@ -32,7 +32,7 @@ export const useSetConfigModal = () => {
     setConfigModal({
       isOpen: false,
       type: "none",
-      id: "preview" as SvgId,
+      id: "preview",
       configList: null,
     });
   };

@@ -23,7 +23,7 @@ describe("useRsetPreview", () => {
           useDrawMode: useDrawMode(),
           useResetPreview: useResetPreview(),
           useOnClick: useOnClick(),
-          usePreviewObject: useSvgObject("preview" as SvgId),
+          usePreviewObject: useSvgObject("preview"),
         };
       },
       { wrapper: RecoilRoot }
@@ -33,7 +33,7 @@ describe("useRsetPreview", () => {
     act(() => result.current.useOnClick.onClick(20, 10));
     expect(result.current.useDrawMode.drawMode.mode).toBe("line");
     expect(result.current.usePreviewObject.svgObject).toEqual({
-      id: "preview" as SvgId,
+      id: "preview",
       type: "line",
       point1: vp.create(20 / PITCH_DEFAULT, 10 / PITCH_DEFAULT),
       style: { stroke: "black" },
@@ -51,7 +51,7 @@ describe("useRsetPreview", () => {
           useDrawMode: useDrawMode(),
           useResetPreview: useResetPreview(),
           useOnClick: useOnClick(),
-          usePreviewObject: useSvgObject("preview" as SvgId),
+          usePreviewObject: useSvgObject("preview"),
         };
       },
       { wrapper: RecoilRoot }
@@ -61,7 +61,7 @@ describe("useRsetPreview", () => {
     act(() => result.current.useOnClick.onClick(20, 10));
     expect(result.current.useDrawMode.drawMode.mode).toBe("line");
     expect(result.current.usePreviewObject.svgObject).toEqual({
-      id: "preview" as SvgId,
+      id: "preview",
       type: "line",
       point1: vp.create(20 / PITCH_DEFAULT, 10 / PITCH_DEFAULT),
       style: { stroke: "black" },

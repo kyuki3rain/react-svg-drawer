@@ -9,7 +9,7 @@ type SvgObjectStyle = {
 };
 
 type SvgObjectCommon = {
-  id?: SvgId;
+  id?: SvgId | "preview";
   style: SvgObjectStyle;
   configMap?: Map<string, string>;
 };

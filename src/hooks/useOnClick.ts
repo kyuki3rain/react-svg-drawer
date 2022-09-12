@@ -12,7 +12,7 @@ export const useOnClick = () => {
     svgObject: obj,
     addOrUpdateSvgObject: addOrUpdatePreview,
     deleteSvgObject: deletePreview,
-  } = useSvgObject("preview" as SvgId);
+  } = useSvgObject("preview");
   const [id, setId] = useState(nanoid() as SvgId);
   const { addOrUpdateSvgObject: addOrUpdateNew } = useSetSvgObject(id);
   const { toVirtual } = usePoint();
@@ -23,7 +23,7 @@ export const useOnClick = () => {
   const onClickLine = (obj: LineObject | null, v: VirtualPoint) => {
     if (!obj?.point1) {
       addOrUpdatePreview({
-        id: "preview" as SvgId,
+        id: "preview",
         type: "line",
         point1: v,
         style: { stroke: "black" },
@@ -42,7 +42,7 @@ export const useOnClick = () => {
   const onClickPolyline = (obj: PolylineObject | null, v: VirtualPoint) => {
     if (!obj?.previewPoint) {
       addOrUpdatePreview({
-        id: "preview" as SvgId,
+        id: "preview",
         type: "polyline",
         points: [v],
         style: { stroke: "black", fill: "none" },

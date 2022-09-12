@@ -6,9 +6,8 @@ import { useConfigModal } from "../states/configModalState";
 
 export const useOnMouseMove = () => {
   const { drawMode } = useDrawMode();
-  const { svgObject: obj, addOrUpdateSvgObject: updatePreview } = useSvgObject(
-    "preview" as SvgId
-  );
+  const { svgObject: obj, addOrUpdateSvgObject: updatePreview } =
+    useSvgObject("preview");
   const { toVirtual } = usePoint();
   const { isOpen } = useConfigModal();
 

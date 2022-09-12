@@ -4,9 +4,7 @@ import { useDrawMode } from "../states/drawModeState";
 import { useSetSvgObject } from "../states/svgObjectState";
 
 export const useResetPreview = () => {
-  const { deleteSvgObject, addOrUpdateSvgObject } = useSetSvgObject(
-    "preview" as SvgId
-  );
+  const { deleteSvgObject, addOrUpdateSvgObject } = useSetSvgObject("preview");
   const { drawMode } = useDrawMode();
   const { openModal } = useConfigModal();
 
@@ -19,7 +17,7 @@ export const useResetPreview = () => {
           configMap: new Map(textConfig.map((c) => [c.key, c.defaultValue])),
           style: { stroke: "black" },
         });
-        openModal("text", "preview" as SvgId, textConfig);
+        openModal("text", "preview", textConfig);
         break;
       }
       default:

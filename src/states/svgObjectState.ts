@@ -1,7 +1,7 @@
 import { nanoid } from "nanoid";
 import { atom, atomFamily, useRecoilValue, useSetRecoilState } from "recoil";
 
-const svgObjectStates = atomFamily<SvgObject | null, SvgId>({
+const svgObjectStates = atomFamily<SvgObject | null, SvgId | "preview">({
   key: "svgObjectStates",
   default: () => {
     console.log("create new SvgObject");
@@ -14,7 +14,7 @@ const svgObjectListState = atom<Set<SvgId>>({
   default: new Set(),
 });
 
-export const useSetSvgObject = (id = nanoid() as SvgId) => {
+export const useSetSvgObject = (id = nanoid() as SvgId | "preview") => {
   const setSvgObject = useSetRecoilState(svgObjectStates(id));
   const setSvgObjectList = useSetRecoilState(svgObjectListState);
 
@@ -42,7 +42,7 @@ export const useSetSvgObject = (id = nanoid() as SvgId) => {
   };
 };
 
-export const useSvgObject = (id: SvgId) => {
+export const useSvgObject = (id: SvgId | "preview") => {
   const svgObject = useRecoilValue(svgObjectStates(id));
   const setSvgObject = useSetSvgObject(id);
   return {

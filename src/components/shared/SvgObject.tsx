@@ -2,7 +2,7 @@ import { usePoint } from "../../hooks/usePoint";
 import { useSvgObject } from "../../states/svgObjectState";
 
 type Props = {
-  svgId: SvgId;
+  svgId: SvgId | "preview";
 };
 
 const SvgObject: React.FC<Props> = ({ svgId }) => {

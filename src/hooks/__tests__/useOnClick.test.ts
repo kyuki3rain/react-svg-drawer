@@ -25,7 +25,7 @@ describe("useOnClick", () => {
             useDrawMode: useDrawMode(),
             useOnClick: useOnClick(),
             useSvgObject: useSvgObject("test" as SvgId),
-            usePreviewObject: useSvgObject("preview" as SvgId),
+            usePreviewObject: useSvgObject("preview"),
           };
         },
         { wrapper: RecoilRoot }
@@ -42,7 +42,7 @@ describe("useOnClick", () => {
       expect(result.current.useDrawMode.drawMode.mode).toBe("line");
       expect(result.current.useSvgObject.svgObject).toBe(null);
       expect(result.current.usePreviewObject.svgObject).toEqual({
-        id: "preview" as SvgId,
+        id: "preview",
         type: "line",
         point1: vp.create(20 / PITCH_DEFAULT, 10 / PITCH_DEFAULT),
         style: { stroke: "black" },
@@ -89,7 +89,7 @@ describe("useOnClick", () => {
             useOnClick: useOnClick(),
             useResetPreview: useResetPreview(),
             useSvgObject: useSvgObject("test" as SvgId),
-            usePreviewObject: useSvgObject("preview" as SvgId),
+            usePreviewObject: useSvgObject("preview"),
             useConfig: useConfig(),
           };
         },
@@ -100,7 +100,7 @@ describe("useOnClick", () => {
       expect(result.current.useDrawMode.drawMode.mode).toBe("text");
       expect(result.current.useSvgObject.svgObject).toBe(null);
       expect(result.current.usePreviewObject.svgObject).toEqual({
-        id: "preview" as SvgId,
+        id: "preview",
         type: "text",
         configMap: new Map([["text", ""]]),
         style: { stroke: "black" },
@@ -112,7 +112,7 @@ describe("useOnClick", () => {
       expect(result.current.useDrawMode.drawMode.mode).toBe("text");
       expect(result.current.useSvgObject.svgObject).toBe(null);
       expect(result.current.usePreviewObject.svgObject).toEqual({
-        id: "preview" as SvgId,
+        id: "preview",
         type: "text",
         configMap: new Map([["text", "test"]]),
         style: { stroke: "black" },
@@ -128,7 +128,7 @@ describe("useOnClick", () => {
         style: { stroke: "black" },
       });
       expect(result.current.usePreviewObject.svgObject).toEqual({
-        id: "preview" as SvgId,
+        id: "preview",
         type: "text",
         configMap: new Map([["text", "test"]]),
         style: { stroke: "black" },
@@ -142,7 +142,7 @@ describe("useOnClick", () => {
             useDrawMode: useDrawMode(),
             useOnClick: useOnClick(),
             useSvgObject: useSvgObject("test" as SvgId),
-            usePreviewObject: useSvgObject("preview" as SvgId),
+            usePreviewObject: useSvgObject("preview"),
           };
         },
         { wrapper: RecoilRoot }
