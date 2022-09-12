@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { useConfigModal } from "../states/configModalState";
 import { useDrawMode } from "../states/drawModeState";
 import { useSetSvgObject } from "../states/svgObjectState";
@@ -24,9 +23,6 @@ export const useResetPreview = () => {
         deleteSvgObject();
     }
   };
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => resetPreview(), [drawMode]);
 
   return {
     resetPreview,

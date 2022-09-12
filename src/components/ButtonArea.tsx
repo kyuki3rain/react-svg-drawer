@@ -3,12 +3,17 @@ import { HorizontalRule, ShowChart, TextFields } from "@mui/icons-material";
 import RectangleIcon from "@mui/icons-material/Rectangle";
 import CircleIcon from "@mui/icons-material/Circle";
 import { Fab, SvgIcon, Tooltip } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import { useDrawMode } from "../states/drawModeState";
 import { ReactComponent as CursorIcon } from "../assets/CursorIcon.svg";
+import { useResetPreview } from "../hooks/useResetPreview";
 
 const ButtonArea: React.FC = () => {
   const { drawMode, changeMode } = useDrawMode();
+  const { resetPreview } = useResetPreview();
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => resetPreview(), [drawMode]);
 
   return (
     <div style={{ float: "left", marginTop: 5 }}>
