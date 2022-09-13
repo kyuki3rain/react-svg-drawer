@@ -4,7 +4,7 @@ import { useWindowSize } from "../hooks/useWindowSize";
 import { useSvgObjectList } from "../states/svgObjectState";
 import DrawAreaController from "./DrawArea/DrawAreaController";
 import Grids from "./DrawArea/Grids";
-import SvgObject from "./shared/SvgObject";
+import SvgObjectWrapper from "./DrawArea/SvgObjectWrapper";
 
 const DrawArea: React.FC = () => {
   const { height, width } = useWindowSize();
@@ -20,9 +20,9 @@ const DrawArea: React.FC = () => {
       >
         <Grids />
         {[...svgObjectList].map((id) => (
-          <SvgObject svgId={id} key={id}></SvgObject>
+          <SvgObjectWrapper svgId={id} key={id}></SvgObjectWrapper>
         ))}
-        <SvgObject svgId="preview"></SvgObject>
+        <SvgObjectWrapper svgId="preview"></SvgObjectWrapper>
       </svg>
     </DrawAreaController>
   );
