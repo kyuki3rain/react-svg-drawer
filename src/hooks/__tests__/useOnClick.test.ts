@@ -11,6 +11,7 @@ import { useOnClick } from "../useOnClick";
 import { useSvgObject } from "../../states/svgObjectState";
 import { useConfig } from "../useConfigModal";
 import { useResetPreview } from "../useResetPreview";
+import { useEffect } from "react";
 
 jest.mock("nanoid", () => ({
   nanoid: () => "test",
@@ -21,6 +22,10 @@ describe("useOnClick", () => {
     test("mode: line", () => {
       const { result } = renderHook(
         () => {
+          const { resetPreview } = useResetPreview();
+          const { drawMode } = useDrawMode();
+          // eslint-disable-next-line react-hooks/exhaustive-deps
+          useEffect(() => resetPreview(), [drawMode]);
           return {
             useDrawMode: useDrawMode(),
             useOnClick: useOnClick(),
@@ -44,7 +49,8 @@ describe("useOnClick", () => {
       expect(result.current.usePreviewObject.svgObject).toEqual({
         id: "preview",
         type: "line",
-        point1: vp.create(20 / PITCH_DEFAULT, 10 / PITCH_DEFAULT),
+        fixedPoint: vp.create(20 / PITCH_DEFAULT, 10 / PITCH_DEFAULT),
+        point1: vp.create(0, 0),
         style: { stroke: "black" },
       });
 
@@ -55,8 +61,9 @@ describe("useOnClick", () => {
       expect(result.current.useSvgObject.svgObject).toEqual({
         id: "test" as SvgId,
         type: "line",
-        point1: vp.create(20 / PITCH_DEFAULT, 10 / PITCH_DEFAULT),
-        point2: vp.create(30 / PITCH_DEFAULT, 50 / PITCH_DEFAULT),
+        fixedPoint: vp.create(20 / PITCH_DEFAULT, 10 / PITCH_DEFAULT),
+        point1: vp.create(0, 0),
+        point2: vp.create(10 / PITCH_DEFAULT, 40 / PITCH_DEFAULT),
         style: { stroke: "black" },
       });
       expect(result.current.usePreviewObject.svgObject).toBe(null);
@@ -84,10 +91,13 @@ describe("useOnClick", () => {
     test("mode: text", () => {
       const { result } = renderHook(
         () => {
+          const { resetPreview } = useResetPreview();
+          const { drawMode } = useDrawMode();
+          // eslint-disable-next-line react-hooks/exhaustive-deps
+          useEffect(() => resetPreview(), [drawMode]);
           return {
             useDrawMode: useDrawMode(),
             useOnClick: useOnClick(),
-            useResetPreview: useResetPreview(),
             useSvgObject: useSvgObject("test" as SvgId),
             usePreviewObject: useSvgObject("preview"),
             useConfig: useConfig(),
@@ -123,7 +133,8 @@ describe("useOnClick", () => {
       expect(result.current.useSvgObject.svgObject).toEqual({
         id: "test" as SvgId,
         type: "text",
-        point: vp.create(30 / PITCH_DEFAULT, 50 / PITCH_DEFAULT),
+        fixedPoint: vp.create(30 / PITCH_DEFAULT, 50 / PITCH_DEFAULT),
+        point: vp.create(0, 0),
         configMap: new Map([["text", "test"]]),
         style: { stroke: "black" },
       });
@@ -138,6 +149,10 @@ describe("useOnClick", () => {
     test("mode: selector", () => {
       const { result } = renderHook(
         () => {
+          const { resetPreview } = useResetPreview();
+          const { drawMode } = useDrawMode();
+          // eslint-disable-next-line react-hooks/exhaustive-deps
+          useEffect(() => resetPreview(), [drawMode]);
           return {
             useDrawMode: useDrawMode(),
             useOnClick: useOnClick(),

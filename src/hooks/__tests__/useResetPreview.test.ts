@@ -10,6 +10,7 @@ import { useOnClick } from "../useOnClick";
 import { useResetPreview } from "../useResetPreview";
 import * as vp from "../../helpers/virtualPoint";
 import { PITCH_DEFAULT } from "../../states/areaConfigState";
+import { useEffect } from "react";
 
 jest.mock("nanoid", () => ({
   nanoid: () => "test",
@@ -19,6 +20,10 @@ describe("useRsetPreview", () => {
   test("resetPreview", () => {
     const { result } = renderHook(
       () => {
+        const { resetPreview } = useResetPreview();
+        const { drawMode } = useDrawMode();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        useEffect(() => resetPreview(), [drawMode]);
         return {
           useDrawMode: useDrawMode(),
           useResetPreview: useResetPreview(),
@@ -35,7 +40,8 @@ describe("useRsetPreview", () => {
     expect(result.current.usePreviewObject.svgObject).toEqual({
       id: "preview",
       type: "line",
-      point1: vp.create(20 / PITCH_DEFAULT, 10 / PITCH_DEFAULT),
+      fixedPoint: vp.create(20 / PITCH_DEFAULT, 10 / PITCH_DEFAULT),
+      point1: vp.create(0, 0),
       style: { stroke: "black" },
     });
 
@@ -47,6 +53,10 @@ describe("useRsetPreview", () => {
   test("useEffect", () => {
     const { result } = renderHook(
       () => {
+        const { resetPreview } = useResetPreview();
+        const { drawMode } = useDrawMode();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        useEffect(() => resetPreview(), [drawMode]);
         return {
           useDrawMode: useDrawMode(),
           useResetPreview: useResetPreview(),
@@ -63,7 +73,8 @@ describe("useRsetPreview", () => {
     expect(result.current.usePreviewObject.svgObject).toEqual({
       id: "preview",
       type: "line",
-      point1: vp.create(20 / PITCH_DEFAULT, 10 / PITCH_DEFAULT),
+      fixedPoint: vp.create(20 / PITCH_DEFAULT, 10 / PITCH_DEFAULT),
+      point1: vp.create(0, 0),
       style: { stroke: "black" },
     });
 
