@@ -1,4 +1,6 @@
 import { useAllSvgObject } from "../states/svgObjectState";
+import { useFileUpload } from "./useFileUpload";
+import dayjs from "dayjs";
 
 type View = {
   allSvgObject: (SvgObject | null)[];
@@ -6,14 +8,19 @@ type View = {
 
 export const useView = () => {
   const [allSvgObject, setAllSvgObject] = useAllSvgObject();
+  const { uploadFile } = useFileUpload();
 
   const toJSON = () => {
-    const s = JSON.stringify({
-      allSvgObject: allSvgObject.map((obj) => ({
-        ...obj,
-        configMap: obj?.configMap && Array.from(obj.configMap.entries()),
-      })),
-    });
+    const s = JSON.stringify(
+      {
+        allSvgObject: allSvgObject.map((obj) => ({
+          ...obj,
+          configMap: obj?.configMap && Array.from(obj.configMap.entries()),
+        })),
+      },
+      null,
+      2
+    );
     console.log(s);
     return s;
   };
@@ -37,8 +44,32 @@ export const useView = () => {
     }
   };
 
+  const upload = () => {
+    if (!uploadFile) return;
+    uploadFile({ accept: "*.json", multiple: false }, (p) => {
+      p[0].file.text().then((s) => {
+        fromJSON(s);
+      });
+    });
+  };
+
+  const download = () => {
+    const fileName =
+      "svg_drawer_" + dayjs().format("YYYYMMDD_HHmmss") + ".json";
+    const data = new Blob([toJSON()], { type: "text/json" });
+    const jsonURL = window.URL.createObjectURL(data);
+    const link = document.createElement("a");
+    document.body.appendChild(link);
+    link.href = jsonURL;
+    link.setAttribute("download", fileName);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return {
     toJSON,
     fromJSON,
+    upload,
+    download,
   };
 };
