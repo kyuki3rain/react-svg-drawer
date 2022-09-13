@@ -17,11 +17,12 @@ type SvgObjectCommon = {
   id?: SvgId | "preview";
   style: SvgObjectStyle;
   configMap?: Map<string, string>;
+  fixedPoint?: VirtualPoint;
 };
 
 type LineObject = {
   type: "line";
-  point1: VirtualPoint;
+  point1?: VirtualPoint;
   point2?: VirtualPoint;
 } & SvgObjectCommon;
 
@@ -39,14 +40,12 @@ type TextObject = {
 type RectObject = {
   type: "rect";
   upperLeft: VirtualPoint;
-  point: VirtualPoint;
   size?: VirtualPoint;
   rx?: number;
 } & SvgObjectCommon;
 
 type CircleObject = {
   type: "circle";
-  point: VirtualPoint;
   c?: VirtualPoint;
   r?: VirtualPoint;
 } & SvgObjectCommon;

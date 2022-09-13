@@ -22,11 +22,12 @@ export const useOnClick = () => {
   const setNewId = () => setId(nanoid() as SvgId);
 
   const onClickLine = (obj: LineObject | null, v: VirtualPoint) => {
-    if (!obj?.point1) {
+    if (!obj?.fixedPoint) {
       addOrUpdatePreview({
         id: "preview",
         type: "line",
-        point1: v,
+        fixedPoint: v,
+        point1: vp.create(0, 0),
         style: { stroke: "black" },
       });
       return;
@@ -34,18 +35,19 @@ export const useOnClick = () => {
 
     addOrUpdateNew({
       ...obj,
-      point2: v,
+      point2: vp.sub(v, obj.fixedPoint),
     });
     setNewId();
     deletePreview();
   };
 
   const onClickPolyline = (obj: PolylineObject | null, v: VirtualPoint) => {
-    if (!obj?.previewPoint) {
+    if (!obj?.fixedPoint) {
       addOrUpdatePreview({
         id: "preview",
         type: "polyline",
-        points: [v],
+        fixedPoint: v,
+        points: [vp.create(0, 0)],
         style: { stroke: "black", fill: "none" },
       });
       return;
@@ -53,7 +55,7 @@ export const useOnClick = () => {
 
     addOrUpdatePreview({
       ...obj,
-      points: [...obj.points, v],
+      points: [...obj.points, vp.sub(v, obj.fixedPoint)],
     });
   };
 
@@ -61,24 +63,25 @@ export const useOnClick = () => {
     if (!obj) return;
     addOrUpdateNew({
       ...obj,
-      point: v,
+      fixedPoint: v,
+      point: vp.create(0, 0),
     });
     setNewId();
   };
 
   const onClickRect = (obj: RectObject | null, v: VirtualPoint) => {
-    if (!obj) {
+    if (!obj?.fixedPoint) {
       addOrUpdatePreview({
         id: "preview",
         type: "rect",
-        upperLeft: v,
-        point: v,
+        upperLeft: vp.create(0, 0),
+        fixedPoint: v,
         style: { stroke: "black", fill: "none" },
       });
       return;
     }
 
-    const diff = vp.sub(v, obj.point);
+    const diff = vp.sub(v, obj.fixedPoint);
     if (diff.vx == 0 || diff.vy == 0) {
       console.log("size is not equal to 0!");
       return;
@@ -87,25 +90,25 @@ export const useOnClick = () => {
     if (diff.vx > 0 && diff.vy > 0) {
       addOrUpdateNew({
         ...obj,
-        upperLeft: obj.point,
+        upperLeft: vp.create(0, 0),
         size: diff,
       });
     } else if (diff.vx > 0) {
       addOrUpdateNew({
         ...obj,
-        upperLeft: vp.create(obj.point.vx, v.vy),
+        upperLeft: vp.create(0, diff.vy),
         size: vp.create(diff.vx, -diff.vy),
       });
     } else if (diff.vy > 0) {
       addOrUpdateNew({
         ...obj,
-        upperLeft: vp.create(v.vx, obj.point.vy),
+        upperLeft: vp.create(diff.vx, 0),
         size: vp.create(-diff.vx, diff.vy),
       });
     } else {
       addOrUpdateNew({
         ...obj,
-        upperLeft: vp.create(v.vx, v.vy),
+        upperLeft: diff,
         size: vp.create(-diff.vx, -diff.vy),
       });
     }
@@ -114,19 +117,18 @@ export const useOnClick = () => {
   };
 
   const onClickCircle = (obj: CircleObject | null, v: VirtualPoint) => {
-    if (!obj) {
+    if (!obj?.fixedPoint) {
       addOrUpdatePreview({
         id: "preview",
         type: "circle",
-        point: v,
+        fixedPoint: v,
         style: { stroke: "black", fill: "none" },
       });
       return;
     }
 
-    const tmp = vp.divConst(vp.sub(v, obj.point), 2);
-    const r = vp.abs(tmp);
-    const c = vp.add(tmp, obj.point);
+    const c = vp.divConst(vp.sub(v, obj.fixedPoint), 2);
+    const r = vp.abs(c);
 
     addOrUpdateNew({
       ...obj,

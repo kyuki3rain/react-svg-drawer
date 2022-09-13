@@ -13,20 +13,20 @@ export const useOnMouseMove = () => {
   const { isOpen } = useConfigModal();
 
   const omMouseMoveLine = (obj: LineObject | null, v: VirtualPoint) => {
-    if (!obj?.point1) return;
+    if (!obj?.fixedPoint) return;
 
     updatePreview({
       ...obj,
-      point2: v,
+      point2: vp.sub(v, obj.fixedPoint),
     });
   };
 
   const omMouseMovePolyline = (obj: PolylineObject | null, v: VirtualPoint) => {
-    if (!obj?.points.length) return;
+    if (!obj?.fixedPoint) return;
 
     updatePreview({
       ...obj,
-      previewPoint: v,
+      previewPoint: vp.sub(v, obj.fixedPoint),
     });
   };
 
@@ -35,14 +35,15 @@ export const useOnMouseMove = () => {
 
     updatePreview({
       ...obj,
-      point: v,
+      fixedPoint: v,
+      point: vp.create(0, 0),
     });
   };
 
   const onMouseMoveRect = (obj: RectObject | null, v: VirtualPoint) => {
-    if (!obj) return;
+    if (!obj?.fixedPoint) return;
 
-    const diff = vp.sub(v, obj.point);
+    const diff = vp.sub(v, obj.fixedPoint);
     if (diff.vx == 0 || diff.vy == 0) {
       updatePreview({
         ...obj,
@@ -54,35 +55,34 @@ export const useOnMouseMove = () => {
     if (diff.vx > 0 && diff.vy > 0) {
       updatePreview({
         ...obj,
-        upperLeft: obj.point,
+        upperLeft: vp.create(0, 0),
         size: diff,
       });
     } else if (diff.vx > 0) {
       updatePreview({
         ...obj,
-        upperLeft: vp.create(obj.point.vx, v.vy),
+        upperLeft: vp.create(0, diff.vy),
         size: vp.create(diff.vx, -diff.vy),
       });
     } else if (diff.vy > 0) {
       updatePreview({
         ...obj,
-        upperLeft: vp.create(v.vx, obj.point.vy),
+        upperLeft: vp.create(diff.vx, 0),
         size: vp.create(-diff.vx, diff.vy),
       });
     } else {
       updatePreview({
         ...obj,
-        upperLeft: vp.create(v.vx, v.vy),
+        upperLeft: diff,
         size: vp.create(-diff.vx, -diff.vy),
       });
     }
   };
   const onMouseMoveCircle = (obj: CircleObject | null, v: VirtualPoint) => {
-    if (!obj) return;
+    if (!obj?.fixedPoint) return;
 
-    const tmp = vp.divConst(vp.sub(v, obj.point), 2);
-    const r = vp.abs(tmp);
-    const c = vp.add(tmp, obj.point);
+    const c = vp.divConst(vp.sub(v, obj.fixedPoint), 2);
+    const r = vp.abs(c);
 
     updatePreview({
       ...obj,
