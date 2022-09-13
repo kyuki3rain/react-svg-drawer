@@ -22,5 +22,6 @@ export const usePoint = () => {
   return {
     toVirtual,
     toReal,
+    rootPoint: vp.sub(vp.create(0, 0), upperLeft),
   };
 };
