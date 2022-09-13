@@ -2,10 +2,6 @@ import { useAllSvgObject } from "../states/svgObjectState";
 import { useFileUpload } from "./useFileUpload";
 import dayjs from "dayjs";
 
-type View = {
-  allSvgObject: (SvgObject | null)[];
-};
-
 export const useView = () => {
   const [allSvgObject, setAllSvgObject] = useAllSvgObject();
   const { uploadFile } = useFileUpload();
@@ -13,7 +9,7 @@ export const useView = () => {
   const toJSON = () => {
     const s = JSON.stringify(
       {
-        allSvgObject: allSvgObject.map((obj) => ({
+        objects: allSvgObject.map((obj) => ({
           ...obj,
           configMap: obj?.configMap && Array.from(obj.configMap.entries()),
         })),
@@ -29,8 +25,8 @@ export const useView = () => {
     try {
       const json = JSON.parse(s) as View;
       console.log(json);
-      if (json?.allSvgObject) {
-        const allSvgObject = json.allSvgObject.map(
+      if (json?.objects) {
+        const allSvgObject = json.objects.map(
           (obj) =>
             obj && {
               ...obj,
