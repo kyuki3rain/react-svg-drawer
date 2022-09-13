@@ -13,6 +13,8 @@ export const useView = () => {
           ...obj,
           configMap: obj?.configMap && Array.from(obj.configMap.entries()),
         })),
+        version: process.env.REACT_APP_VERSION,
+        appName: process.env.REACT_APP_NAME,
       },
       null,
       2
@@ -25,6 +27,31 @@ export const useView = () => {
     try {
       const json = JSON.parse(s) as View;
       console.log(json);
+      if (json?.appName && json.version) {
+        if (json.version !== process.env.REACT_APP_VERSION) {
+          console.log(
+            "Warning: The version of import data is not matched to this Application."
+          );
+          console.log(
+            "This version: ",
+            process.env.REACT_APP_VERSION,
+            " import version: ",
+            json.version
+          );
+        }
+        if (json.appName !== process.env.REACT_APP_NAME) {
+          console.log(
+            "Warning: The appName of import data is not matched to this Application."
+          );
+          console.log(
+            "This appName: ",
+            process.env.REACT_APP_NAME,
+            " import AppName: ",
+            json.appName
+          );
+        }
+      }
+
       if (json?.objects) {
         const allSvgObject = json.objects.map(
           (obj) =>
