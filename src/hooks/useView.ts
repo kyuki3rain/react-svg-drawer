@@ -40,7 +40,7 @@ export const useView = () => {
     }
   };
 
-  const upload = () => {
+  const importJSON = () => {
     if (!uploadFile) return;
     uploadFile({ accept: "*.json", multiple: false }, (p) => {
       p[0].file.text().then((s) => {
@@ -49,7 +49,7 @@ export const useView = () => {
     });
   };
 
-  const download = () => {
+  const exportJSON = () => {
     const fileName =
       "svg_drawer_" + dayjs().format("YYYYMMDD_HHmmss") + ".json";
     const data = new Blob([toJSON()], { type: "text/json" });
@@ -57,7 +57,7 @@ export const useView = () => {
     const link = document.createElement("a");
     document.body.appendChild(link);
     link.href = jsonURL;
-    link.setAttribute("download", fileName);
+    link.setAttribute("export", fileName);
     link.click();
     document.body.removeChild(link);
   };
@@ -65,7 +65,7 @@ export const useView = () => {
   return {
     toJSON,
     fromJSON,
-    upload,
-    download,
+    importJSON,
+    exportJSON,
   };
 };

@@ -14,7 +14,7 @@ import { useView } from "../hooks/useView";
 const ButtonArea: React.FC = () => {
   const { drawMode, changeMode } = useDrawMode();
   const { resetPreview } = useResetPreview();
-  const { upload, download } = useView();
+  const { importJSON, exportJSON } = useView();
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => resetPreview(), [drawMode]);
@@ -77,13 +77,13 @@ const ButtonArea: React.FC = () => {
           <CircleIcon />
         </Fab>
       </Tooltip>
-      <Tooltip title="upload" style={{ marginLeft: 5 }} arrow>
-        <Fab aria-label="upload" color="default" onClick={upload}>
+      <Tooltip title="import" style={{ marginLeft: 5 }} arrow>
+        <Fab aria-label="import" color="default" onClick={importJSON}>
           <FileUploadIcon />
         </Fab>
       </Tooltip>
-      <Tooltip title="download" style={{ marginLeft: 5 }} arrow>
-        <Fab aria-label="download" color="default" onClick={download}>
+      <Tooltip title="export" style={{ marginLeft: 5 }} arrow>
+        <Fab aria-label="export" color="default" onClick={exportJSON}>
           <FileDownloadIcon />
         </Fab>
       </Tooltip>
