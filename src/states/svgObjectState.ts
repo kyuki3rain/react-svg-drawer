@@ -1,5 +1,13 @@
 import { nanoid } from "nanoid";
-import { atom, atomFamily, useRecoilValue, useSetRecoilState } from "recoil";
+import {
+  atom,
+  atomFamily,
+  DefaultValue,
+  selector,
+  useRecoilState,
+  useRecoilValue,
+  useSetRecoilState,
+} from "recoil";
 
 const svgObjectStates = atomFamily<SvgObject | null, SvgId | "preview">({
   key: "svgObjectStates",
@@ -13,6 +21,33 @@ const svgObjectListState = atom<Set<SvgId>>({
   key: "svgObjectListState",
   default: new Set(),
 });
+
+const allSvgObjectSelector = selector({
+  key: "objectView",
+  get: ({ get }) =>
+    [...get(svgObjectListState)].map((id) => get(svgObjectStates(id))),
+  set: ({ get, set, reset }, newValue) => {
+    if (newValue instanceof DefaultValue) {
+      [...get(svgObjectListState)].map((id) => reset(svgObjectStates(id)));
+      set(svgObjectListState, new Set());
+      return;
+    }
+
+    const idList = newValue
+      .map((obj) => {
+        if (!obj?.id || obj.id == "preview") return;
+        set(svgObjectStates(obj.id), obj);
+        return obj.id;
+      })
+      .flatMap((x) => x ?? []);
+
+    set(svgObjectListState, new Set(idList));
+  },
+});
+
+export const useAllSvgObject = () => {
+  return useRecoilState(allSvgObjectSelector);
+};
 
 export const useSetSvgObject = (id = nanoid() as SvgId | "preview") => {
   const setSvgObject = useSetRecoilState(svgObjectStates(id));
