@@ -37,6 +37,14 @@ first click で一箇所確定
 そこから mousemove に対応して preview を表示
 second click のとき、その点と一つ目の点に接する楕円を描画して初期状態に戻る
 
+## import
+
+対応する json ファイルを渡せば、読み込み可能
+
+## export
+
+画面上にあるオブジェクトの情報を全て吐き出す
+
 # その他
 
 ## without snap mode
