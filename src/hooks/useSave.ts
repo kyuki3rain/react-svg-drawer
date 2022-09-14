@@ -1,5 +1,11 @@
 import { useView } from "./useView";
 
+const defaultJSON = JSON.stringify({
+  appName: __APP_NAME__,
+  version: __APP_VERSION__,
+  objects: [],
+});
+
 export const useSave = () => {
   const { toJSON, fromJSON } = useView();
 
@@ -19,8 +25,13 @@ export const useSave = () => {
     fromJSON(json);
   };
 
+  const newView = () => {
+    fromJSON(defaultJSON);
+  };
+
   return {
     save,
     load,
+    newView,
   };
 };
