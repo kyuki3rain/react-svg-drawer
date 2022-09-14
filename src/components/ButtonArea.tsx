@@ -4,17 +4,21 @@ import RectangleIcon from "@mui/icons-material/Rectangle";
 import CircleIcon from "@mui/icons-material/Circle";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
 import { Fab, SvgIcon, Tooltip } from "@mui/material";
 import React, { useEffect } from "react";
 import { useDrawMode } from "../states/drawModeState";
 import { ReactComponent as CursorIcon } from "../assets/CursorIcon.svg";
 import { useResetPreview } from "../hooks/useResetPreview";
 import { useView } from "../hooks/useView";
+import { useSave } from "../hooks/useSave";
 
 const ButtonArea: React.FC = () => {
   const { drawMode, changeMode } = useDrawMode();
   const { resetPreview } = useResetPreview();
   const { importJSON, exportJSON } = useView();
+  const { save, load } = useSave();
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => resetPreview(), [drawMode]);
@@ -75,6 +79,16 @@ const ButtonArea: React.FC = () => {
           onClick={() => drawMode.mode !== "circle" && changeMode("circle")}
         >
           <CircleIcon />
+        </Fab>
+      </Tooltip>
+      <Tooltip title="save" style={{ marginLeft: 5 }} arrow>
+        <Fab aria-label="save" color="default" onClick={save}>
+          <CloudUploadIcon />
+        </Fab>
+      </Tooltip>
+      <Tooltip title="load" style={{ marginLeft: 5 }} arrow>
+        <Fab aria-label="load" color="default" onClick={load}>
+          <CloudDownloadIcon />
         </Fab>
       </Tooltip>
       <Tooltip title="import" style={{ marginLeft: 5 }} arrow>
