@@ -25,12 +25,12 @@ const ButtonArea: React.FC = () => {
   useEffect(() => resetPreview(), [drawMode]);
 
   return (
-    <div style={{ float: "left", marginTop: 5 }}>
-      <div style={{ marginBottom: 10 }}>
+    <div style={{ width: "100%" }}>
+      <div style={{ float: "left", marginTop: 5 }}>
         <Tooltip title="selector" style={{ marginLeft: 5 }} arrow>
           <Fab
             aria-label="selector"
-            color={drawMode.mode === "selector" ? "secondary" : "primary"}
+            color={drawMode.mode === "selector" ? "success" : "primary"}
             onClick={() =>
               drawMode.mode !== "selector" && changeMode("selector")
             }
@@ -43,7 +43,7 @@ const ButtonArea: React.FC = () => {
         <Tooltip title="line" style={{ marginLeft: 5 }} arrow>
           <Fab
             aria-label="line"
-            color={drawMode.mode === "line" ? "secondary" : "primary"}
+            color={drawMode.mode === "line" ? "success" : "primary"}
             onClick={() => drawMode.mode !== "line" && changeMode("line")}
           >
             <HorizontalRule />
@@ -52,7 +52,7 @@ const ButtonArea: React.FC = () => {
         <Tooltip title="polyline" style={{ marginLeft: 5 }} arrow>
           <Fab
             aria-label="polyline"
-            color={drawMode.mode === "polyline" ? "secondary" : "primary"}
+            color={drawMode.mode === "polyline" ? "success" : "primary"}
             onClick={() =>
               drawMode.mode !== "polyline" && changeMode("polyline")
             }
@@ -63,7 +63,7 @@ const ButtonArea: React.FC = () => {
         <Tooltip title="text" style={{ marginLeft: 5 }} arrow>
           <Fab
             aria-label="text"
-            color={drawMode.mode === "text" ? "secondary" : "primary"}
+            color={drawMode.mode === "text" ? "success" : "primary"}
             onClick={() => drawMode.mode !== "text" && changeMode("text")}
           >
             <TextFields />
@@ -72,7 +72,7 @@ const ButtonArea: React.FC = () => {
         <Tooltip title="rect" style={{ marginLeft: 5 }} arrow>
           <Fab
             aria-label="rect"
-            color={drawMode.mode === "rect" ? "secondary" : "primary"}
+            color={drawMode.mode === "rect" ? "success" : "primary"}
             onClick={() => drawMode.mode !== "rect" && changeMode("rect")}
           >
             <RectangleIcon />
@@ -81,14 +81,14 @@ const ButtonArea: React.FC = () => {
         <Tooltip title="circle" style={{ marginLeft: 5 }} arrow>
           <Fab
             aria-label="circle"
-            color={drawMode.mode === "circle" ? "secondary" : "primary"}
+            color={drawMode.mode === "circle" ? "success" : "primary"}
             onClick={() => drawMode.mode !== "circle" && changeMode("circle")}
           >
             <CircleIcon />
           </Fab>
         </Tooltip>
       </div>
-      <div>
+      <div style={{ float: "right", marginTop: 5, marginRight: 5 }}>
         <Tooltip title="new" style={{ marginLeft: 5 }} arrow>
           <Fab aria-label="new" color="default" onClick={newView}>
             <NoteAddIcon />
