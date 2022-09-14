@@ -84,7 +84,7 @@ export const useView = () => {
     const link = document.createElement("a");
     document.body.appendChild(link);
     link.href = jsonURL;
-    link.setAttribute("export", fileName);
+    link.setAttribute("download", fileName);
     link.click();
     document.body.removeChild(link);
   };
