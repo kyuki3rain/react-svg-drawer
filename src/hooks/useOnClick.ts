@@ -2,7 +2,7 @@ import { useDrawMode } from "../states/drawModeState";
 import {
   useSetSvgObject,
   useSvgObject,
-  useSvgObjects,
+  usePreviewSvgObjects,
 } from "../states/svgObjectState";
 import { usePoint } from "./usePoint";
 import * as rp from "../helpers/realPoint";
@@ -11,7 +11,7 @@ import { nanoid } from "nanoid";
 import { useState } from "react";
 import { useConfigModal } from "../states/configModalState";
 import { useSelectedSvgId } from "../states/selectedSvgIdState";
-import { useGroup } from "./usePreviewGroup";
+import { useGroup } from "./useGroup";
 
 export const useOnClick = () => {
   const { drawMode } = useDrawMode();
@@ -25,8 +25,8 @@ export const useOnClick = () => {
   const { toVirtual } = usePoint();
   const { isOpen } = useConfigModal();
   const { selectedSvgId, resetSelect } = useSelectedSvgId();
-  const { createPreviewGroup, deletePreviewGroup } = useGroup();
-  const { copySvgObjects } = useSvgObjects();
+  const { grouping, ungrouping } = useGroup();
+  const { copySvgObjects } = usePreviewSvgObjects();
 
   const setNewId = () => setId(nanoid() as SvgId);
 
@@ -151,7 +151,7 @@ export const useOnClick = () => {
   const onClickCopy = (obj: GroupObject | null, v: VirtualPoint) => {
     if (!obj) {
       const newIds = copySvgObjects([...selectedSvgId]);
-      createPreviewGroup(v, newIds);
+      grouping(v, newIds);
       addOrUpdatePreview({
         type: "group" as const,
         objectIds: newIds,
@@ -159,11 +159,10 @@ export const useOnClick = () => {
         style: {},
         isCopy: true,
       });
-      setNewId();
       return;
     }
 
-    deletePreviewGroup(obj);
+    ungrouping(obj);
     setNewId();
     deletePreview();
   };

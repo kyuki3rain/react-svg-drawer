@@ -2,7 +2,7 @@ import { useConfigModal } from "../states/configModalState";
 import { useDrawMode } from "../states/drawModeState";
 import { useSetSelectedSvgId } from "../states/selectedSvgIdState";
 import { useSvgObject } from "../states/svgObjectState";
-import { useGroup } from "./usePreviewGroup";
+import { useGroup } from "./useGroup";
 
 export const useResetPreview = () => {
   const { deleteSvgObject, addOrUpdateSvgObject, svgObject } =
