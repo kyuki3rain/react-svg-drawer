@@ -115,7 +115,7 @@ export const useSvgObjectList = () => {
   };
 };
 
-export const usePreviewSvgObjects = () => {
+export const useSvgObjects = () => {
   const updateFixedPoint = useRecoilCallback(
     ({ set }) =>
       (ids: SvgId[], correction: VirtualPoint) => {
@@ -162,9 +162,22 @@ export const usePreviewSvgObjects = () => {
     []
   );
 
+  const getObjects = useRecoilCallback(
+    ({ snapshot }) =>
+      (ids: SvgId[]) =>
+        ids.map((id) => {
+          const svgObject = snapshot
+            .getLoadable(svgObjectStates(id))
+            .getValue();
+          return svgObject;
+        }),
+    []
+  );
+
   return {
     updateFixedPoint,
     copySvgObjects,
     deleteObjects,
+    getObjects,
   };
 };

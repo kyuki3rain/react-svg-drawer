@@ -10,6 +10,7 @@ import GroupObject from "./SvgObjectWrapper/GroupObject";
 type Props = {
   svgId: SvgId | "preview";
   parentPoint?: VirtualPoint;
+  parentId?: SvgId | "preview";
   isSelected: boolean;
 };
 
@@ -17,6 +18,7 @@ const SvgObjectWrapper: React.FC<Props> = ({
   svgId,
   parentPoint,
   isSelected,
+  parentId,
 }) => {
   const { svgObject: obj } = useSvgObject(svgId);
   const { rootPoint } = usePoint();
@@ -30,6 +32,7 @@ const SvgObjectWrapper: React.FC<Props> = ({
           obj={obj}
           parentPoint={parentPoint ?? rootPoint}
           isSelected={isSelected}
+          parentId={parentId}
         ></LineObject>
       );
     case "polyline":
@@ -38,6 +41,7 @@ const SvgObjectWrapper: React.FC<Props> = ({
           obj={obj}
           parentPoint={parentPoint ?? rootPoint}
           isSelected={isSelected}
+          parentId={parentId}
         ></PolylineObject>
       );
     case "text":
@@ -46,6 +50,7 @@ const SvgObjectWrapper: React.FC<Props> = ({
           obj={obj}
           parentPoint={parentPoint ?? rootPoint}
           isSelected={isSelected}
+          parentId={parentId}
         ></TextObject>
       );
     case "rect":
@@ -54,6 +59,7 @@ const SvgObjectWrapper: React.FC<Props> = ({
           obj={obj}
           parentPoint={parentPoint ?? rootPoint}
           isSelected={isSelected}
+          parentId={parentId}
         ></RectObject>
       );
     case "circle":
@@ -62,6 +68,7 @@ const SvgObjectWrapper: React.FC<Props> = ({
           obj={obj}
           parentPoint={parentPoint ?? rootPoint}
           isSelected={isSelected}
+          parentId={parentId}
         ></CircleObject>
       );
     case "group":
@@ -70,6 +77,7 @@ const SvgObjectWrapper: React.FC<Props> = ({
           obj={obj}
           parentPoint={parentPoint ?? rootPoint}
           isSelected={isSelected}
+          parentId={parentId}
         ></GroupObject>
       );
   }

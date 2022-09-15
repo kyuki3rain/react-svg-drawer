@@ -2,7 +2,7 @@ import { useDrawMode } from "../states/drawModeState";
 import {
   useSetSvgObject,
   useSvgObject,
-  usePreviewSvgObjects,
+  useSvgObjects,
 } from "../states/svgObjectState";
 import { usePoint } from "./usePoint";
 import * as rp from "../helpers/realPoint";
@@ -26,7 +26,7 @@ export const useOnClick = () => {
   const { isOpen } = useConfigModal();
   const { selectedSvgId, resetSelect } = useSelectedSvgId();
   const { grouping, ungrouping } = useGroup();
-  const { copySvgObjects } = usePreviewSvgObjects();
+  const { copySvgObjects } = useSvgObjects();
 
   const setNewId = () => setId(nanoid() as SvgId);
 

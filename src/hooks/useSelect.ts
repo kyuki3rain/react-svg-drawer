@@ -9,6 +9,7 @@ export const useSelect = () => {
     if (!id) return false;
     if (id === "preview") return false;
     if (drawMode.mode !== "selector") return false;
+    console.log("click");
 
     toggleSelect(id);
 

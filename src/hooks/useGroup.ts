@@ -1,11 +1,8 @@
-import {
-  useSetSvgObjectList,
-  usePreviewSvgObjects,
-} from "../states/svgObjectState";
+import { useSetSvgObjectList, useSvgObjects } from "../states/svgObjectState";
 import * as vp from "../helpers/virtualPoint";
 
 export const useGroup = () => {
-  const { updateFixedPoint, deleteObjects } = usePreviewSvgObjects();
+  const { updateFixedPoint, deleteObjects } = useSvgObjects();
   const { addIds, deleteIds } = useSetSvgObjectList();
 
   const grouping = (newPoint: VirtualPoint, ids: SvgId[]) => {

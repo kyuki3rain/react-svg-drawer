@@ -6,9 +6,15 @@ type Props = {
   obj: PolylineObject;
   parentPoint: VirtualPoint;
   isSelected: boolean;
+  parentId?: SvgId | "preview";
 };
 
-const PolylineObject: React.FC<Props> = ({ obj, parentPoint, isSelected }) => {
+const PolylineObject: React.FC<Props> = ({
+  obj,
+  parentPoint,
+  isSelected,
+  parentId,
+}) => {
   const { toReal } = usePoint();
   const { onClick } = useSelect();
 
@@ -30,7 +36,7 @@ const PolylineObject: React.FC<Props> = ({ obj, parentPoint, isSelected }) => {
         strokeWidth={(obj.style.strokeWidth ?? 0) + 10}
         strokeOpacity="0"
         onClick={(e) => {
-          if (onClick(obj.id)) e.stopPropagation();
+          if (onClick(parentId ?? obj.id)) e.stopPropagation();
         }}
       ></polyline>
       <polyline

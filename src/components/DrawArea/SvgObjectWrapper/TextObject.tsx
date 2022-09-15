@@ -6,9 +6,15 @@ type Props = {
   obj: TextObject;
   parentPoint: VirtualPoint;
   isSelected: boolean;
+  parentId?: SvgId | "preview";
 };
 
-const TextObject: React.FC<Props> = ({ obj, parentPoint, isSelected }) => {
+const TextObject: React.FC<Props> = ({
+  obj,
+  parentPoint,
+  isSelected,
+  parentId,
+}) => {
   const { toReal } = usePoint();
   const { onClick } = useSelect();
 
@@ -27,7 +33,7 @@ const TextObject: React.FC<Props> = ({ obj, parentPoint, isSelected }) => {
         {...obj.style}
         stroke={isSelected ? "blue" : "black"}
         onClick={(e) => {
-          if (onClick(obj.id)) e.stopPropagation();
+          if (onClick(parentId ?? obj.id)) e.stopPropagation();
         }}
       >
         {text}
