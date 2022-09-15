@@ -15,7 +15,7 @@ const DrawArea: React.FC = () => {
       <svg
         width={width}
         height={height}
-        style={{ position: "fixed", right: 0 }}
+        style={{ position: "fixed", right: 0, userSelect: "none" }}
         viewBox={`0, 0, ${width}, ${height}`}
       >
         <Grids />
