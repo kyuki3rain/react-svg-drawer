@@ -5,7 +5,8 @@ type SvgObject =
   | TextObject
   | PolylineObject
   | RectObject
-  | CircleObject;
+  | CircleObject
+  | GroupObject;
 
 type SvgObjectStyle = {
   stroke?: string;
@@ -48,4 +49,9 @@ type CircleObject = {
   type: "circle";
   c?: VirtualPoint;
   r?: VirtualPoint;
+} & SvgObjectCommon;
+
+type GroupObject = {
+  type: "group";
+  objectIds: [];
 } & SvgObjectCommon;

@@ -5,6 +5,7 @@ import PolylineObject from "./SvgObjectWrapper/PolylineObject";
 import RectObject from "./SvgObjectWrapper/RectObject";
 import CircleObject from "./SvgObjectWrapper/CircleObject";
 import { usePoint } from "../../hooks/usePoint";
+import GroupObject from "./SvgObjectWrapper/GroupObject";
 
 type Props = {
   svgId: SvgId | "preview";
@@ -62,6 +63,13 @@ const SvgObjectWrapper: React.FC<Props> = ({
           parentPoint={parentPoint ?? rootPoint}
           isSelected={isSelected}
         ></CircleObject>
+      );
+    case "group":
+      return (
+        <GroupObject
+          obj={obj}
+          parentPoint={parentPoint ?? rootPoint}
+        ></GroupObject>
       );
   }
 };
