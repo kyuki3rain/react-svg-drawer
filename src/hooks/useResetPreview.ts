@@ -15,9 +15,11 @@ export const useResetPreview = () => {
         break;
       case "line":
         resetSelect();
+        deleteSvgObject();
         break;
       case "polyline":
         resetSelect();
+        deleteSvgObject();
         break;
       case "text": {
         resetSelect();
@@ -32,9 +34,11 @@ export const useResetPreview = () => {
       }
       case "rect":
         resetSelect();
+        deleteSvgObject();
         break;
       case "circle":
         resetSelect();
+        deleteSvgObject();
         break;
       default:
         deleteSvgObject();
