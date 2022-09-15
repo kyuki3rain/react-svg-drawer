@@ -91,6 +91,15 @@ export const useOnMouseMove = () => {
     });
   };
 
+  const onMouseMoveCopy = (obj: GroupObject | null, v: VirtualPoint) => {
+    if (!obj) return;
+
+    updatePreview({
+      ...obj,
+      fixedPoint: v,
+    });
+  };
+
   const omMouseMove = (x: number, y: number) => {
     if (isOpen) return;
     const v = toVirtual(rp.create(x, y));
@@ -119,6 +128,11 @@ export const useOnMouseMove = () => {
       case "circle": {
         if (obj && obj.type !== "circle") break;
         onMouseMoveCircle(obj, v);
+        break;
+      }
+      case "copy": {
+        if (obj && obj.type !== "group") break;
+        onMouseMoveCopy(obj, v);
         break;
       }
       default:

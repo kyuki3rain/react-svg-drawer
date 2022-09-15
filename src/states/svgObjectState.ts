@@ -4,10 +4,12 @@ import {
   atomFamily,
   DefaultValue,
   selector,
+  useRecoilCallback,
   useRecoilState,
   useRecoilValue,
   useSetRecoilState,
 } from "recoil";
+import * as vp from "../helpers/virtualPoint";
 
 const svgObjectStates = atomFamily<SvgObject | null, SvgId | "preview">({
   key: "svgObjectStates",
@@ -16,7 +18,6 @@ const svgObjectStates = atomFamily<SvgObject | null, SvgId | "preview">({
     return null;
   },
 });
-
 const svgObjectListState = atom<Set<SvgId>>({
   key: "svgObjectListState",
   default: new Set(),
@@ -90,5 +91,63 @@ export const useSvgObjectList = () => {
   const svgObjectList = useRecoilValue(svgObjectListState);
   return {
     svgObjectList,
+  };
+};
+
+export const useSvgObjects = () => {
+  const setSvgObjectList = useSetRecoilState(svgObjectListState);
+
+  const updateFixedPoint = useRecoilCallback(
+    ({ set }) =>
+      (ids: SvgId[], correction: VirtualPoint) => {
+        ids.map((id) =>
+          set(
+            svgObjectStates(id),
+            (prev) =>
+              prev && {
+                ...prev,
+                fixedPoint: vp.sub(
+                  prev.fixedPoint ?? vp.create(0, 0),
+                  correction
+                ),
+              }
+          )
+        );
+      },
+    []
+  );
+
+  const copySvgObjects = useRecoilCallback(
+    ({ set, snapshot }) =>
+      (ids: SvgId[]) =>
+        ids
+          .map((id) => {
+            const svgObject = snapshot
+              .getLoadable(svgObjectStates(id))
+              .getValue();
+            if (!svgObject) return;
+
+            const newId = nanoid() as SvgId;
+            set(svgObjectStates(newId), { ...svgObject, id: newId });
+            return newId;
+          })
+          .flatMap((x) => x ?? []),
+    []
+  );
+
+  const deleteObjects = useRecoilCallback(
+    ({ set }) =>
+      (ids: SvgId[]) =>
+        ids.map((id) => {
+          set(svgObjectStates(id), null);
+        }),
+    []
+  );
+
+  return {
+    updateFixedPoint,
+    copySvgObjects,
+    setSvgObjectList,
+    deleteObjects,
   };
 };
