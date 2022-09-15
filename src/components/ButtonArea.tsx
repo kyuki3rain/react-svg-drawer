@@ -25,8 +25,20 @@ const ButtonArea: React.FC = () => {
   useEffect(() => resetPreview(), [drawMode]);
 
   return (
-    <div style={{ width: "100%" }}>
-      <div style={{ float: "left", marginTop: 5 }}>
+    <div
+      style={{
+        float: "left",
+        paddingTop: 5,
+        paddingLeft: 5,
+        paddingRight: 5,
+        width: "100%",
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between",
+      }}
+    >
+      <div style={{ flex: 1, alignItems: "start" }}>
         <Tooltip title="selector" style={{ marginLeft: 5 }} arrow>
           <Fab
             aria-label="selector"
@@ -88,28 +100,29 @@ const ButtonArea: React.FC = () => {
           </Fab>
         </Tooltip>
       </div>
-      <div style={{ float: "right", marginTop: 5, marginRight: 5 }}>
-        <Tooltip title="new" style={{ marginLeft: 5 }} arrow>
+      <div>インフォメーション</div>
+      <div style={{ flex: 1, display: "flex", justifyContent: "flex-end" }}>
+        <Tooltip title="new" style={{ marginRight: 5 }} arrow>
           <Fab aria-label="new" color="default" onClick={newView}>
             <NoteAddIcon />
           </Fab>
         </Tooltip>
-        <Tooltip title="save" style={{ marginLeft: 5 }} arrow>
+        <Tooltip title="save" style={{ marginRight: 5 }} arrow>
           <Fab aria-label="save" color="default" onClick={save}>
             <CloudUploadIcon />
           </Fab>
         </Tooltip>
-        <Tooltip title="load" style={{ marginLeft: 5 }} arrow>
+        <Tooltip title="load" style={{ marginRight: 5 }} arrow>
           <Fab aria-label="load" color="default" onClick={load}>
             <CloudDownloadIcon />
           </Fab>
         </Tooltip>
-        <Tooltip title="import" style={{ marginLeft: 5 }} arrow>
+        <Tooltip title="import" style={{ marginRight: 5 }} arrow>
           <Fab aria-label="import" color="default" onClick={importJSON}>
             <FileUploadIcon />
           </Fab>
         </Tooltip>
-        <Tooltip title="export" style={{ marginLeft: 5 }} arrow>
+        <Tooltip title="export" style={{ marginRight: 5 }} arrow>
           <Fab aria-label="export" color="default" onClick={exportJSON}>
             <FileDownloadIcon />
           </Fab>
