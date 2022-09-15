@@ -10,6 +10,8 @@ import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import NoteAddIcon from "@mui/icons-material/NoteAdd";
 import MoveDownIcon from "@mui/icons-material/MoveDown";
 import LogoDevIcon from "@mui/icons-material/LogoDev";
+import LinkIcon from "@mui/icons-material/Link";
+import LinkOffIcon from "@mui/icons-material/LinkOff";
 import { Fab, SvgIcon, Tooltip } from "@mui/material";
 import React, { useEffect } from "react";
 import { useDrawMode } from "../states/drawModeState";
@@ -17,12 +19,14 @@ import { ReactComponent as CursorIcon } from "../assets/CursorIcon.svg";
 import { useResetPreview } from "../hooks/useResetPreview";
 import { useView } from "../hooks/useView";
 import { useSave } from "../hooks/useSave";
+import { useGroupObject } from "../hooks/useGroupObject";
 
 const ButtonArea: React.FC = () => {
   const { drawMode, changeMode } = useDrawMode();
   const { resetPreview } = useResetPreview();
   const { importJSON, exportJSON, toJSON } = useView();
   const { save, load, newView } = useSave();
+  const { createGroup, removeGroup } = useGroupObject();
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => resetPreview(), [drawMode]);
@@ -159,6 +163,16 @@ const ButtonArea: React.FC = () => {
         <Tooltip title="export" style={{ marginRight: 5 }} arrow>
           <Fab aria-label="export" color="default" onClick={exportJSON}>
             <FileDownloadIcon />
+          </Fab>
+        </Tooltip>
+        <Tooltip title="grouping" style={{ marginRight: 5 }} arrow>
+          <Fab aria-label="grouping" color="default" onClick={createGroup}>
+            <LinkIcon />
+          </Fab>
+        </Tooltip>
+        <Tooltip title="ungrouping" style={{ marginRight: 5 }} arrow>
+          <Fab aria-label="ungrouping" color="default" onClick={removeGroup}>
+            <LinkOffIcon />
           </Fab>
         </Tooltip>
         <Tooltip title="log" style={{ marginRight: 5 }} arrow>

@@ -19,14 +19,12 @@ export const useView = () => {
       null,
       2
     );
-    console.log(s);
     return s;
   };
 
   const fromJSON = (s: string) => {
     try {
       const json = JSON.parse(s) as View;
-      console.log(json);
       if (json?.appName && json.version) {
         if (json.version !== __APP_VERSION__) {
           console.log(

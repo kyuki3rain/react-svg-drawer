@@ -14,7 +14,6 @@ export const useResetPreview = () => {
 
   const resetPreview = () => {
     if (svgObject && svgObject.type === "group") {
-      console.log(svgObject);
       resetPreviewGroup(svgObject);
     }
 

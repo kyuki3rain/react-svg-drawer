@@ -6,9 +6,15 @@ type Props = {
   obj: LineObject;
   parentPoint: VirtualPoint;
   isSelected: boolean;
+  parentId?: SvgId | "preview";
 };
 
-const LineObject: React.FC<Props> = ({ obj, parentPoint, isSelected }) => {
+const LineObject: React.FC<Props> = ({
+  obj,
+  parentPoint,
+  isSelected,
+  parentId,
+}) => {
   const { toReal } = usePoint();
   const { onClick } = useSelect();
 
@@ -32,7 +38,7 @@ const LineObject: React.FC<Props> = ({ obj, parentPoint, isSelected }) => {
         strokeWidth={(obj.style.strokeWidth ?? 0) + 10}
         strokeOpacity="0"
         onClick={(e) => {
-          if (onClick(obj.id)) e.stopPropagation();
+          if (onClick(parentId ?? obj.id)) e.stopPropagation();
         }}
       ></line>
       <line
