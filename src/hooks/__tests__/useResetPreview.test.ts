@@ -49,37 +49,4 @@ describe("useRsetPreview", () => {
     expect(result.current.useDrawMode.drawMode.mode).toBe("line");
     expect(result.current.usePreviewObject.svgObject).toEqual(null);
   });
-
-  test("useEffect", () => {
-    const { result } = renderHook(
-      () => {
-        const { resetPreview } = useResetPreview();
-        const { drawMode } = useDrawMode();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        useEffect(() => resetPreview(), [drawMode]);
-        return {
-          useDrawMode: useDrawMode(),
-          useResetPreview: useResetPreview(),
-          useOnClick: useOnClick(),
-          usePreviewObject: useSvgObject("preview"),
-        };
-      },
-      { wrapper: RecoilRoot }
-    );
-
-    act(() => result.current.useDrawMode.changeMode("line"));
-    act(() => result.current.useOnClick.onClick(20, 10));
-    expect(result.current.useDrawMode.drawMode.mode).toBe("line");
-    expect(result.current.usePreviewObject.svgObject).toEqual({
-      id: "preview",
-      type: "line",
-      fixedPoint: vp.create(20 / PITCH_DEFAULT, 10 / PITCH_DEFAULT),
-      point1: vp.create(0, 0),
-      style: { stroke: "black" },
-    });
-
-    act(() => result.current.useDrawMode.changeMode("selector"));
-    expect(result.current.useDrawMode.drawMode.mode).toBe("selector");
-    expect(result.current.usePreviewObject.svgObject).toEqual(null);
-  });
 });
