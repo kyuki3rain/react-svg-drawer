@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import { useWindowSize } from "../hooks/useWindowSize";
+import { useSelectedSvgId } from "../states/selectedSvgIdState";
 import { useSvgObjectList } from "../states/svgObjectState";
 import DrawAreaController from "./DrawArea/DrawAreaController";
 import Grids from "./DrawArea/Grids";
@@ -9,6 +10,9 @@ import SvgObjectWrapper from "./DrawArea/SvgObjectWrapper";
 const DrawArea: React.FC = () => {
   const { height, width } = useWindowSize();
   const { svgObjectList } = useSvgObjectList();
+  const { selectedSvgId } = useSelectedSvgId();
+
+  useEffect(() => console.log(selectedSvgId), [selectedSvgId]);
 
   return (
     <DrawAreaController>
@@ -20,9 +24,13 @@ const DrawArea: React.FC = () => {
       >
         <Grids />
         {[...svgObjectList].map((id) => (
-          <SvgObjectWrapper svgId={id} key={id}></SvgObjectWrapper>
+          <SvgObjectWrapper
+            svgId={id}
+            key={id}
+            isSelected={selectedSvgId.has(id)}
+          ></SvgObjectWrapper>
         ))}
-        <SvgObjectWrapper svgId="preview"></SvgObjectWrapper>
+        <SvgObjectWrapper svgId="preview" isSelected={false}></SvgObjectWrapper>
       </svg>
     </DrawAreaController>
   );

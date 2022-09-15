@@ -6,6 +6,7 @@ import * as vp from "../helpers/virtualPoint";
 import { nanoid } from "nanoid";
 import { useState } from "react";
 import { useConfigModal } from "../states/configModalState";
+import { useSetSelectedSvgId } from "../states/selectedSvgIdState";
 
 export const useOnClick = () => {
   const { drawMode } = useDrawMode();
@@ -18,6 +19,7 @@ export const useOnClick = () => {
   const { addOrUpdateSvgObject: addOrUpdateNew } = useSetSvgObject(id);
   const { toVirtual } = usePoint();
   const { isOpen } = useConfigModal();
+  const { resetSelect } = useSetSelectedSvgId();
 
   const setNewId = () => setId(nanoid() as SvgId);
 
@@ -167,6 +169,10 @@ export const useOnClick = () => {
       case "circle": {
         if (obj && obj.type !== "circle") break;
         onClickCircle(obj, v);
+        break;
+      }
+      case "selector": {
+        resetSelect();
         break;
       }
       default:

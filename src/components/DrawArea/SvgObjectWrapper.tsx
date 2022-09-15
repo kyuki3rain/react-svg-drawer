@@ -9,9 +9,14 @@ import { usePoint } from "../../hooks/usePoint";
 type Props = {
   svgId: SvgId | "preview";
   parentPoint?: VirtualPoint;
+  isSelected: boolean;
 };
 
-const SvgObjectWrapper: React.FC<Props> = ({ svgId, parentPoint }) => {
+const SvgObjectWrapper: React.FC<Props> = ({
+  svgId,
+  parentPoint,
+  isSelected,
+}) => {
   const { svgObject: obj } = useSvgObject(svgId);
   const { rootPoint } = usePoint();
 
@@ -23,6 +28,7 @@ const SvgObjectWrapper: React.FC<Props> = ({ svgId, parentPoint }) => {
         <LineObject
           obj={obj}
           parentPoint={parentPoint ?? rootPoint}
+          isSelected={isSelected}
         ></LineObject>
       );
     case "polyline":
@@ -30,6 +36,7 @@ const SvgObjectWrapper: React.FC<Props> = ({ svgId, parentPoint }) => {
         <PolylineObject
           obj={obj}
           parentPoint={parentPoint ?? rootPoint}
+          isSelected={isSelected}
         ></PolylineObject>
       );
     case "text":
@@ -37,6 +44,7 @@ const SvgObjectWrapper: React.FC<Props> = ({ svgId, parentPoint }) => {
         <TextObject
           obj={obj}
           parentPoint={parentPoint ?? rootPoint}
+          isSelected={isSelected}
         ></TextObject>
       );
     case "rect":
@@ -44,6 +52,7 @@ const SvgObjectWrapper: React.FC<Props> = ({ svgId, parentPoint }) => {
         <RectObject
           obj={obj}
           parentPoint={parentPoint ?? rootPoint}
+          isSelected={isSelected}
         ></RectObject>
       );
     case "circle":
@@ -51,6 +60,7 @@ const SvgObjectWrapper: React.FC<Props> = ({ svgId, parentPoint }) => {
         <CircleObject
           obj={obj}
           parentPoint={parentPoint ?? rootPoint}
+          isSelected={isSelected}
         ></CircleObject>
       );
   }
