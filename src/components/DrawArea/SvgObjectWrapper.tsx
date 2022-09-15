@@ -69,6 +69,7 @@ const SvgObjectWrapper: React.FC<Props> = ({
         <GroupObject
           obj={obj}
           parentPoint={parentPoint ?? rootPoint}
+          isSelected={isSelected}
         ></GroupObject>
       );
   }
