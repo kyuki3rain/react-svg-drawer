@@ -5,4 +5,5 @@ type DrawMode =
   | "text"
   | "rect"
   | "circle"
-  | "copy";
+  | "copy"
+  | "move";

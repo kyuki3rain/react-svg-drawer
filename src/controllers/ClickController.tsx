@@ -11,14 +11,11 @@ const ClickController: React.FC<Props> = ({ children }) => {
   return (
     <div
       onClick={(e) => {
-        console.log(e.target, "controller");
         onClick(e.clientX, e.clientY);
-        console.log("onClick");
       }}
       onContextMenu={(e) => {
         e.preventDefault();
         onContextMenu();
-        console.log("onContextMenu");
       }}
     >
       {children}

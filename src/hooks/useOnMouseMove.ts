@@ -91,7 +91,7 @@ export const useOnMouseMove = () => {
     });
   };
 
-  const onMouseMoveCopy = (obj: GroupObject | null, v: VirtualPoint) => {
+  const onMouseMoveGroup = (obj: GroupObject | null, v: VirtualPoint) => {
     if (!obj) return;
 
     updatePreview({
@@ -132,7 +132,12 @@ export const useOnMouseMove = () => {
       }
       case "copy": {
         if (obj && obj.type !== "group") break;
-        onMouseMoveCopy(obj, v);
+        onMouseMoveGroup(obj, v);
+        break;
+      }
+      case "move": {
+        if (obj && obj.type !== "group") break;
+        onMouseMoveGroup(obj, v);
         break;
       }
       default:

@@ -156,8 +156,28 @@ export const useOnClick = () => {
         type: "group" as const,
         objectIds: newIds,
         fixedPoint: v,
+        firstFixedPoint: v,
         style: {},
         isCopy: true,
+      });
+      return;
+    }
+
+    ungrouping(obj);
+    setNewId();
+    deletePreview();
+  };
+
+  const onClickMove = (obj: GroupObject | null, v: VirtualPoint) => {
+    if (!obj) {
+      grouping(v, [...selectedSvgId]);
+      addOrUpdatePreview({
+        type: "group" as const,
+        objectIds: [...selectedSvgId],
+        fixedPoint: v,
+        firstFixedPoint: v,
+        style: {},
+        isCopy: false,
       });
       return;
     }
@@ -200,6 +220,11 @@ export const useOnClick = () => {
       case "copy": {
         if (obj && obj.type !== "group") break;
         onClickCopy(obj, v);
+        break;
+      }
+      case "move": {
+        if (obj && obj.type !== "group") break;
+        onClickMove(obj, v);
         break;
       }
       case "selector": {

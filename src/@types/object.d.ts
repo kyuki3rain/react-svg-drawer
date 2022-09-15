@@ -55,4 +55,5 @@ type GroupObject = {
   type: "group";
   objectIds: SvgId[];
   isCopy: boolean;
+  firstFixedPoint: VirtualPoint;
 } & SvgObjectCommon;

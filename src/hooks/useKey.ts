@@ -6,7 +6,6 @@ export const useKey = () => {
   const { snapGridOff, snapGridOn } = useSetSnapGrid();
 
   const onKeyUp = (key: string) => {
-    console.log("onKeyUp: ", key);
     switch (key) {
       case "Alt":
         snapGridOn();
@@ -16,7 +15,6 @@ export const useKey = () => {
   };
 
   const onKeyDown = (key: string) => {
-    console.log("onKeyDown: ", key);
     switch (key) {
       case "Escape":
         resetPreview();

@@ -21,7 +21,6 @@ export const useSetSelectedSvgId = () => {
 
   const toggleSelect = (id: SvgId) => {
     setSelectedSvgId((prev) => {
-      console.log(prev);
       if (prev.has(id)) {
         prev.delete(id);
         return new Set(prev);
