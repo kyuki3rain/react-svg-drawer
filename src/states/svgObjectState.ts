@@ -14,7 +14,6 @@ import * as vp from "../helpers/virtualPoint";
 const svgObjectStates = atomFamily<SvgObject | null, SvgId | "preview">({
   key: "svgObjectStates",
   default: () => {
-    console.log("create new SvgObject");
     return null;
   },
 });
