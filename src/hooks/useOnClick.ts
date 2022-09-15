@@ -1,12 +1,17 @@
 import { useDrawMode } from "../states/drawModeState";
-import { useSetSvgObject, useSvgObject } from "../states/svgObjectState";
+import {
+  useSetSvgObject,
+  useSvgObject,
+  usePreviewSvgObjects,
+} from "../states/svgObjectState";
 import { usePoint } from "./usePoint";
 import * as rp from "../helpers/realPoint";
 import * as vp from "../helpers/virtualPoint";
 import { nanoid } from "nanoid";
 import { useState } from "react";
 import { useConfigModal } from "../states/configModalState";
-import { useSetSelectedSvgId } from "../states/selectedSvgIdState";
+import { useSelectedSvgId } from "../states/selectedSvgIdState";
+import { useGroup } from "./useGroup";
 
 export const useOnClick = () => {
   const { drawMode } = useDrawMode();
@@ -19,7 +24,9 @@ export const useOnClick = () => {
   const { addOrUpdateSvgObject: addOrUpdateNew } = useSetSvgObject(id);
   const { toVirtual } = usePoint();
   const { isOpen } = useConfigModal();
-  const { resetSelect } = useSetSelectedSvgId();
+  const { selectedSvgId, resetSelect } = useSelectedSvgId();
+  const { grouping, ungrouping } = useGroup();
+  const { copySvgObjects } = usePreviewSvgObjects();
 
   const setNewId = () => setId(nanoid() as SvgId);
 
@@ -141,6 +148,25 @@ export const useOnClick = () => {
     deletePreview();
   };
 
+  const onClickCopy = (obj: GroupObject | null, v: VirtualPoint) => {
+    if (!obj) {
+      const newIds = copySvgObjects([...selectedSvgId]);
+      grouping(v, newIds);
+      addOrUpdatePreview({
+        type: "group" as const,
+        objectIds: newIds,
+        fixedPoint: v,
+        style: {},
+        isCopy: true,
+      });
+      return;
+    }
+
+    ungrouping(obj);
+    setNewId();
+    deletePreview();
+  };
+
   const onClick = (x: number, y: number) => {
     if (isOpen) return;
     const v = toVirtual(rp.create(x, y));
@@ -169,6 +195,11 @@ export const useOnClick = () => {
       case "circle": {
         if (obj && obj.type !== "circle") break;
         onClickCircle(obj, v);
+        break;
+      }
+      case "copy": {
+        if (obj && obj.type !== "group") break;
+        onClickCopy(obj, v);
         break;
       }
       case "selector": {

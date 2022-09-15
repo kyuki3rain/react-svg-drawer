@@ -6,6 +6,7 @@ import FileUploadIcon from "@mui/icons-material/FileUpload";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import NoteAddIcon from "@mui/icons-material/NoteAdd";
 import { Fab, SvgIcon, Tooltip } from "@mui/material";
 import React, { useEffect } from "react";
@@ -38,7 +39,10 @@ const ButtonArea: React.FC = () => {
         justifyContent: "space-between",
       }}
     >
-      <div style={{ flex: 1, alignItems: "start" }}>
+      <div
+        style={{ flex: 1, alignItems: "start" }}
+        onClick={(e) => console.log(e.target, "div")}
+      >
         <Tooltip title="selector" style={{ marginLeft: 5 }} arrow>
           <Fab
             aria-label="selector"
@@ -97,6 +101,15 @@ const ButtonArea: React.FC = () => {
             onClick={() => drawMode.mode !== "circle" && changeMode("circle")}
           >
             <CircleIcon />
+          </Fab>
+        </Tooltip>
+        <Tooltip title="copy" style={{ marginLeft: 5 }} arrow>
+          <Fab
+            aria-label="copy"
+            color={drawMode.mode === "copy" ? "success" : "primary"}
+            onClick={() => drawMode.mode !== "copy" && changeMode("copy")}
+          >
+            <ContentCopyIcon />
           </Fab>
         </Tooltip>
       </div>

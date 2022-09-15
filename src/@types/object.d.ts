@@ -53,5 +53,6 @@ type CircleObject = {
 
 type GroupObject = {
   type: "group";
-  objectIds: [];
+  objectIds: SvgId[];
+  isCopy: boolean;
 } & SvgObjectCommon;

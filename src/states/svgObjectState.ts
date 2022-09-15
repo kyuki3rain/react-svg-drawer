@@ -4,10 +4,12 @@ import {
   atomFamily,
   DefaultValue,
   selector,
+  useRecoilCallback,
   useRecoilState,
   useRecoilValue,
   useSetRecoilState,
 } from "recoil";
+import * as vp from "../helpers/virtualPoint";
 
 const svgObjectStates = atomFamily<SvgObject | null, SvgId | "preview">({
   key: "svgObjectStates",
@@ -16,7 +18,6 @@ const svgObjectStates = atomFamily<SvgObject | null, SvgId | "preview">({
     return null;
   },
 });
-
 const svgObjectListState = atom<Set<SvgId>>({
   key: "svgObjectListState",
   default: new Set(),
@@ -86,9 +87,84 @@ export const useSvgObject = (id: SvgId | "preview") => {
   };
 };
 
+export const useSetSvgObjectList = () => {
+  const setSvgObjectList = useSetRecoilState(svgObjectListState);
+
+  const addIds = (ids: SvgId[]) =>
+    setSvgObjectList((prev) => {
+      ids.map((id) => prev.add(id));
+      return new Set(prev);
+    });
+
+  const deleteIds = (ids: SvgId[]) =>
+    setSvgObjectList((prev) => {
+      ids.map((id) => prev.delete(id));
+      return new Set(prev);
+    });
+
+  return {
+    addIds,
+    deleteIds,
+  };
+};
+
 export const useSvgObjectList = () => {
   const svgObjectList = useRecoilValue(svgObjectListState);
   return {
     svgObjectList,
+  };
+};
+
+export const usePreviewSvgObjects = () => {
+  const updateFixedPoint = useRecoilCallback(
+    ({ set }) =>
+      (ids: SvgId[], correction: VirtualPoint) => {
+        ids.map((id) =>
+          set(svgObjectStates(id), (prev) => {
+            if (!prev) return prev;
+            if (!prev.fixedPoint) return prev;
+            return (
+              prev && {
+                ...prev,
+                fixedPoint: vp.sub(prev.fixedPoint, correction),
+              }
+            );
+          })
+        );
+      },
+    []
+  );
+
+  const copySvgObjects = useRecoilCallback(
+    ({ set, snapshot }) =>
+      (ids: SvgId[]) =>
+        ids
+          .map((id) => {
+            const svgObject = snapshot
+              .getLoadable(svgObjectStates(id))
+              .getValue();
+            if (!svgObject) return;
+
+            const newId = nanoid() as SvgId;
+            set(svgObjectStates(newId), { ...svgObject, id: newId });
+            return newId;
+          })
+          .flatMap((x) => x ?? []),
+    []
+  );
+
+  const deleteObjects = useRecoilCallback(
+    ({ set }) =>
+      (ids: SvgId[]) =>
+        ids.map((id) => {
+          set(svgObjectStates(id), null);
+        }),
+    []
+  );
+
+  return {
+    updateFixedPoint,
+    copySvgObjects,
+    deleteObjects,
   };
 };
