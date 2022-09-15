@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 import { useWindowSize } from "../hooks/useWindowSize";
 import { useSelectedSvgId } from "../states/selectedSvgIdState";
@@ -11,8 +11,6 @@ const DrawArea: React.FC = () => {
   const { height, width } = useWindowSize();
   const { svgObjectList } = useSvgObjectList();
   const { selectedSvgId } = useSelectedSvgId();
-
-  useEffect(() => console.log(selectedSvgId), [selectedSvgId]);
 
   return (
     <DrawAreaController>

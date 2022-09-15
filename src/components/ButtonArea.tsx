@@ -8,6 +8,8 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import NoteAddIcon from "@mui/icons-material/NoteAdd";
+import MoveDownIcon from "@mui/icons-material/MoveDown";
+import LogoDevIcon from "@mui/icons-material/LogoDev";
 import { Fab, SvgIcon, Tooltip } from "@mui/material";
 import React, { useEffect } from "react";
 import { useDrawMode } from "../states/drawModeState";
@@ -19,7 +21,7 @@ import { useSave } from "../hooks/useSave";
 const ButtonArea: React.FC = () => {
   const { drawMode, changeMode } = useDrawMode();
   const { resetPreview } = useResetPreview();
-  const { importJSON, exportJSON } = useView();
+  const { importJSON, exportJSON, toJSON } = useView();
   const { save, load, newView } = useSave();
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -40,8 +42,12 @@ const ButtonArea: React.FC = () => {
       }}
     >
       <div
-        style={{ flex: 1, alignItems: "start" }}
-        onClick={(e) => console.log(e.target, "div")}
+        style={{
+          flex: 1,
+          display: "flex",
+          justifyContent: "flex-start",
+          flexWrap: "wrap",
+        }}
       >
         <Tooltip title="selector" style={{ marginLeft: 5 }} arrow>
           <Fab
@@ -112,9 +118,24 @@ const ButtonArea: React.FC = () => {
             <ContentCopyIcon />
           </Fab>
         </Tooltip>
+        <Tooltip title="move" style={{ marginLeft: 5 }} arrow>
+          <Fab
+            aria-label="move"
+            color={drawMode.mode === "move" ? "success" : "primary"}
+            onClick={() => drawMode.mode !== "move" && changeMode("move")}
+          >
+            <MoveDownIcon />
+          </Fab>
+        </Tooltip>
       </div>
-      <div>インフォメーション</div>
-      <div style={{ flex: 1, display: "flex", justifyContent: "flex-end" }}>
+      <div
+        style={{
+          flex: 1,
+          display: "flex",
+          justifyContent: "flex-end",
+          flexWrap: "wrap",
+        }}
+      >
         <Tooltip title="new" style={{ marginRight: 5 }} arrow>
           <Fab aria-label="new" color="default" onClick={newView}>
             <NoteAddIcon />
@@ -138,6 +159,15 @@ const ButtonArea: React.FC = () => {
         <Tooltip title="export" style={{ marginRight: 5 }} arrow>
           <Fab aria-label="export" color="default" onClick={exportJSON}>
             <FileDownloadIcon />
+          </Fab>
+        </Tooltip>
+        <Tooltip title="log" style={{ marginRight: 5 }} arrow>
+          <Fab
+            aria-label="log"
+            color="default"
+            onClick={() => console.log(toJSON())}
+          >
+            <LogoDevIcon />
           </Fab>
         </Tooltip>
       </div>

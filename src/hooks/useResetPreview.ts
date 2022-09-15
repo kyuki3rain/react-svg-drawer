@@ -13,7 +13,10 @@ export const useResetPreview = () => {
   const { resetPreviewGroup } = useGroup();
 
   const resetPreview = () => {
-    if (svgObject && svgObject.type === "group") resetPreviewGroup(svgObject);
+    if (svgObject && svgObject.type === "group") {
+      console.log(svgObject);
+      resetPreviewGroup(svgObject);
+    }
 
     switch (drawMode.mode) {
       case "text": {
@@ -27,6 +30,9 @@ export const useResetPreview = () => {
         break;
       }
       case "copy":
+        deleteSvgObject();
+        break;
+      case "move":
         deleteSvgObject();
         break;
       default:
