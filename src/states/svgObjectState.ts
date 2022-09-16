@@ -12,18 +12,18 @@ import {
 } from "recoil";
 import * as vp from "../helpers/virtualPoint";
 
-const svgObjectStates = atomFamily<SvgObject | null, SvgId | "preview">({
+export const svgObjectStates = atomFamily<SvgObject | null, SvgId | "preview">({
   key: "svgObjectStates",
   default: () => {
     return null;
   },
 });
-const svgObjectListState = atom<Set<SvgId>>({
+export const svgObjectListState = atom<Set<SvgId>>({
   key: "svgObjectListState",
   default: new Set(),
 });
 
-const allSvgObjectSelector = selector({
+export const allSvgObjectSelector = selector({
   key: "objectView",
   get: ({ get }) =>
     [...get(svgObjectListState)].map((id) => get(svgObjectStates(id))),
@@ -194,7 +194,42 @@ export const useSvgObjects = () => {
     []
   );
 
+  const resetPreviewGroup = useRecoilCallback(
+    ({ set, snapshot }) =>
+      () => {
+        const obj = snapshot.getLoadable(svgObjectStates("preview")).getValue();
+
+        if (!obj || obj.type !== "group" || !obj.fixedPoint) return;
+
+        if (obj.isCopy) {
+          obj.objectIds.map((id) => {
+            set(svgObjectStates(id), null);
+          });
+        } else {
+          const correction = vp.sub(vp.create(0, 0), obj.firstFixedPoint);
+          obj.objectIds.map((id) =>
+            set(svgObjectStates(id), (prev) => {
+              if (!prev) return prev;
+              if (!prev.fixedPoint) return prev;
+              return (
+                prev && {
+                  ...prev,
+                  fixedPoint: vp.sub(prev.fixedPoint, correction),
+                }
+              );
+            })
+          );
+          set(svgObjectListState, (prev) => {
+            obj.objectIds.map((id) => prev.add(id));
+            return new Set(prev);
+          });
+        }
+      },
+    []
+  );
+
   return {
+    resetPreviewGroup,
     updateFixedPoint,
     copySvgObjects,
     deleteObjects,
