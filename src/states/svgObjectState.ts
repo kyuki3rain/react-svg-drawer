@@ -1,4 +1,5 @@
 import { nanoid } from "nanoid";
+import { useCallback } from "react";
 import {
   atom,
   atomFamily,
@@ -56,7 +57,7 @@ export const useSetSvgObject = (id = nanoid() as SvgId | "preview") => {
   const setSvgObject = useSetRecoilState(svgObjectStates(id));
   const setSvgObjectList = useSetRecoilState(svgObjectListState);
 
-  const deleteSvgObject = () => {
+  const deleteSvgObject = useCallback(() => {
     setSvgObject(null);
     if (id !== "preview") {
       setSvgObjectList((prev) => {
@@ -64,18 +65,21 @@ export const useSetSvgObject = (id = nanoid() as SvgId | "preview") => {
         return new Set(prev);
       });
     }
-  };
+  }, [id, setSvgObject, setSvgObjectList]);
 
-  const addOrUpdateSvgObject = (obj: SvgObject) => {
-    setSvgObject((prev) => {
-      if (prev?.type === obj.type) return { ...prev, ...obj, id };
+  const addOrUpdateSvgObject = useCallback(
+    (obj: SvgObject) => {
+      setSvgObject((prev) => {
+        if (prev?.type === obj.type) return { ...prev, ...obj, id };
 
-      return { ...obj, id };
-    });
-    if (id !== "preview") {
-      setSvgObjectList((prev) => new Set(prev.add(id)));
-    }
-  };
+        return { ...obj, id };
+      });
+      if (id !== "preview") {
+        setSvgObjectList((prev) => new Set(prev.add(id)));
+      }
+    },
+    [id, setSvgObject, setSvgObjectList]
+  );
 
   return {
     addOrUpdateSvgObject,
@@ -95,19 +99,25 @@ export const useSvgObject = (id: SvgId | "preview") => {
 export const useSetSvgObjectList = () => {
   const setSvgObjectList = useSetRecoilState(svgObjectListState);
 
-  const addIds = (ids: SvgId[]) => {
-    setSvgObjectList((prev) => {
-      ids.map((id) => prev.add(id));
-      return new Set(prev);
-    });
-  };
+  const addIds = useCallback(
+    (ids: SvgId[]) => {
+      setSvgObjectList((prev) => {
+        ids.map((id) => prev.add(id));
+        return new Set(prev);
+      });
+    },
+    [setSvgObjectList]
+  );
 
-  const deleteIds = (ids: SvgId[]) => {
-    setSvgObjectList((prev) => {
-      ids.map((id) => prev.delete(id));
-      return new Set(prev);
-    });
-  };
+  const deleteIds = useCallback(
+    (ids: SvgId[]) => {
+      setSvgObjectList((prev) => {
+        ids.map((id) => prev.delete(id));
+        return new Set(prev);
+      });
+    },
+    [setSvgObjectList]
+  );
 
   return {
     addIds,

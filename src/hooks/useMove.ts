@@ -1,11 +1,15 @@
 import { useAreaConfig } from "../states/areaConfigState";
 import * as vp from "../helpers/virtualPoint";
+import { useCallback } from "react";
 
 export const useMove = () => {
   const { pitch, setUpperLeftRelative } = useAreaConfig();
 
-  const move = (x: number, y: number) =>
-    setUpperLeftRelative(vp.create(x / pitch, y / pitch));
+  const move = useCallback(
+    (x: number, y: number) =>
+      setUpperLeftRelative(vp.create(x / pitch, y / pitch)),
+    [pitch, setUpperLeftRelative]
+  );
 
   return {
     move,

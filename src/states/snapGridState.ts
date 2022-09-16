@@ -1,3 +1,4 @@
+import { useCallback } from "react";
 import { atom, useRecoilValue, useSetRecoilState } from "recoil";
 
 const snapGridState = atom({
@@ -8,9 +9,12 @@ const snapGridState = atom({
 export const useSetSnapGrid = () => {
   const setSnapGrid = useSetRecoilState(snapGridState);
 
-  const toggleSnapGrid = () => setSnapGrid((prev) => !prev);
-  const snapGridOff = () => setSnapGrid(false);
-  const snapGridOn = () => setSnapGrid(true);
+  const toggleSnapGrid = useCallback(
+    () => setSnapGrid((prev) => !prev),
+    [setSnapGrid]
+  );
+  const snapGridOff = useCallback(() => setSnapGrid(false), [setSnapGrid]);
+  const snapGridOn = useCallback(() => setSnapGrid(true), [setSnapGrid]);
 
   return {
     toggleSnapGrid,

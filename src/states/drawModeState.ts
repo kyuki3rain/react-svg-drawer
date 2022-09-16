@@ -1,3 +1,4 @@
+import { useCallback } from "react";
 import { atom, useRecoilValue, useSetRecoilState } from "recoil";
 
 type DrawModeState = {
@@ -13,9 +14,12 @@ const drawModeState = atom<DrawModeState>({
 export const useSetDrawMode = () => {
   const setDrawMode = useSetRecoilState(drawModeState);
 
-  const changeMode = (mode: DrawMode, param?: SvgObject) => {
-    setDrawMode({ mode, param });
-  };
+  const changeMode = useCallback(
+    (mode: DrawMode, param?: SvgObject) => {
+      setDrawMode((prev) => (prev.mode === mode ? prev : { mode, param }));
+    },
+    [setDrawMode]
+  );
 
   return { changeMode };
 };

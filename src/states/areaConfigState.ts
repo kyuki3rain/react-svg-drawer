@@ -2,6 +2,7 @@ import { atom, useRecoilValue, useSetRecoilState } from "recoil";
 import { getLimitedValue } from "../helpers/limitValue";
 import * as vp from "../helpers/virtualPoint";
 import * as rp from "../helpers/realPoint";
+import { useCallback } from "react";
 
 type AreaConfig = {
   pitch: number;
@@ -20,49 +21,61 @@ const areaConfigState = atom({
 export const useSetAreaConfig = () => {
   const setAreaConfig = useSetRecoilState(areaConfigState);
 
-  const getNewAreaConfig = (
-    prev: AreaConfig,
-    next?: { pitch?: number; upperLeft?: VirtualPoint }
-  ) => ({
-    ...prev,
-    ...next,
-  });
+  const getNewAreaConfig = useCallback(
+    (
+      prev: AreaConfig,
+      next?: { pitch?: number; upperLeft?: VirtualPoint }
+    ) => ({
+      ...prev,
+      ...next,
+    }),
+    []
+  );
 
-  const setPitchRelative = (relativePitch: number) => {
-    setAreaConfig((prev) =>
-      getNewAreaConfig(prev, {
-        pitch: getLimitedValue(
+  const setPitchRelative = useCallback(
+    (relativePitch: number) => {
+      setAreaConfig((prev) =>
+        getNewAreaConfig(prev, {
+          pitch: getLimitedValue(
+            prev.pitch + relativePitch,
+            PITCH_MIN,
+            PITCH_MAX
+          ),
+        })
+      );
+    },
+    [getNewAreaConfig, setAreaConfig]
+  );
+
+  const setPitchRleativeWithCorrect = useCallback(
+    (relativePitch: number, r: RealPoint) => {
+      setAreaConfig((prev) => {
+        const newPitch = getLimitedValue(
           prev.pitch + relativePitch,
           PITCH_MIN,
           PITCH_MAX
-        ),
-      })
-    );
-  };
+        );
+        const oldv = rp.toVirtual(r, prev.pitch, prev.upperLeft);
+        const newv = rp.toVirtual(r, newPitch, prev.upperLeft);
+        return {
+          pitch: newPitch,
+          upperLeft: vp.sub(prev.upperLeft, vp.sub(newv, oldv)),
+        };
+      });
+    },
+    [setAreaConfig]
+  );
 
-  const setPitchRleativeWithCorrect = (relativePitch: number, r: RealPoint) => {
-    setAreaConfig((prev) => {
-      const newPitch = getLimitedValue(
-        prev.pitch + relativePitch,
-        PITCH_MIN,
-        PITCH_MAX
+  const setUpperLeftRelative = useCallback(
+    (v: VirtualPoint) => {
+      setAreaConfig((prev) =>
+        getNewAreaConfig(prev, {
+          upperLeft: vp.add(prev.upperLeft, v),
+        })
       );
-      const oldv = rp.toVirtual(r, prev.pitch, prev.upperLeft);
-      const newv = rp.toVirtual(r, newPitch, prev.upperLeft);
-      return {
-        pitch: newPitch,
-        upperLeft: vp.sub(prev.upperLeft, vp.sub(newv, oldv)),
-      };
-    });
-  };
-
-  const setUpperLeftRelative = (v: VirtualPoint) => {
-    setAreaConfig((prev) =>
-      getNewAreaConfig(prev, {
-        upperLeft: vp.add(prev.upperLeft, v),
-      })
-    );
-  };
+    },
+    [getNewAreaConfig, setAreaConfig]
+  );
 
   return {
     incPitch: () => setPitchRelative(1),
