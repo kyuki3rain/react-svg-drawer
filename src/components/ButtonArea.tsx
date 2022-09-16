@@ -12,6 +12,8 @@ import MoveDownIcon from "@mui/icons-material/MoveDown";
 import LogoDevIcon from "@mui/icons-material/LogoDev";
 import LinkIcon from "@mui/icons-material/Link";
 import LinkOffIcon from "@mui/icons-material/LinkOff";
+import UndoIcon from "@mui/icons-material/Undo";
+import RedoIcon from "@mui/icons-material/Redo";
 import { Fab, SvgIcon, Tooltip } from "@mui/material";
 import React, { useEffect } from "react";
 import { useDrawMode } from "../states/drawModeState";
@@ -20,6 +22,7 @@ import { useResetPreview } from "../hooks/useResetPreview";
 import { useView } from "../hooks/useView";
 import { useSave } from "../hooks/useSave";
 import { useGroupObject } from "../hooks/useGroupObject";
+import { useRoll } from "../states/logState";
 
 const ButtonArea: React.FC = () => {
   const { drawMode, changeMode } = useDrawMode();
@@ -27,6 +30,7 @@ const ButtonArea: React.FC = () => {
   const { importJSON, exportJSON, toJSON } = useView();
   const { save, load, newView } = useSave();
   const { createGroup, removeGroup } = useGroupObject();
+  const { undo, canUndo, redo, canRedo } = useRoll();
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => resetPreview(), [drawMode]);
@@ -140,6 +144,36 @@ const ButtonArea: React.FC = () => {
           flexWrap: "wrap",
         }}
       >
+        <Tooltip title="undo" style={{ marginRight: 5 }} arrow>
+          <Fab
+            color="info"
+            aria-label="undo"
+            onClick={undo}
+            disabled={!canUndo}
+          >
+            <UndoIcon />
+          </Fab>
+        </Tooltip>
+        <Tooltip title="redo" arrow style={{ marginRight: 5 }}>
+          <Fab
+            color="info"
+            aria-label="redo"
+            onClick={redo}
+            disabled={!canRedo}
+          >
+            <RedoIcon />
+          </Fab>
+        </Tooltip>
+        <Tooltip title="grouping" style={{ marginRight: 5 }} arrow>
+          <Fab aria-label="grouping" color="default" onClick={createGroup}>
+            <LinkIcon />
+          </Fab>
+        </Tooltip>
+        <Tooltip title="ungrouping" style={{ marginRight: 5 }} arrow>
+          <Fab aria-label="ungrouping" color="default" onClick={removeGroup}>
+            <LinkOffIcon />
+          </Fab>
+        </Tooltip>
         <Tooltip title="new" style={{ marginRight: 5 }} arrow>
           <Fab aria-label="new" color="default" onClick={newView}>
             <NoteAddIcon />
@@ -163,16 +197,6 @@ const ButtonArea: React.FC = () => {
         <Tooltip title="export" style={{ marginRight: 5 }} arrow>
           <Fab aria-label="export" color="default" onClick={exportJSON}>
             <FileDownloadIcon />
-          </Fab>
-        </Tooltip>
-        <Tooltip title="grouping" style={{ marginRight: 5 }} arrow>
-          <Fab aria-label="grouping" color="default" onClick={createGroup}>
-            <LinkIcon />
-          </Fab>
-        </Tooltip>
-        <Tooltip title="ungrouping" style={{ marginRight: 5 }} arrow>
-          <Fab aria-label="ungrouping" color="default" onClick={removeGroup}>
-            <LinkOffIcon />
           </Fab>
         </Tooltip>
         <Tooltip title="log" style={{ marginRight: 5 }} arrow>

@@ -1,10 +1,18 @@
 import { useAllSvgObject } from "../states/svgObjectState";
 import { useFileUpload } from "./useFileUpload";
 import dayjs from "dayjs";
+import { useEffect } from "react";
+import { useLog } from "../states/logState";
 
 export const useView = () => {
   const [allSvgObject, setAllSvgObject] = useAllSvgObject();
   const { uploadFile } = useFileUpload();
+  const { setLog } = useLog();
+
+  useEffect(() => {
+    setLog();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [allSvgObject]);
 
   const toJSON = () => {
     const s = JSON.stringify(

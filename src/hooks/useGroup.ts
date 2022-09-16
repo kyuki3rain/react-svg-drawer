@@ -21,8 +21,9 @@ export const useGroup = () => {
   const resetPreviewGroup = (obj: GroupObject) => {
     if (!obj.fixedPoint) return;
 
-    if (obj.isCopy) deleteObjects(obj.objectIds);
-    else {
+    if (obj.isCopy) {
+      deleteObjects(obj.objectIds);
+    } else {
       const correction = vp.sub(vp.create(0, 0), obj.firstFixedPoint);
       updateFixedPoint(obj.objectIds, correction);
       addIds(obj.objectIds);
