@@ -2,7 +2,7 @@ import { useSelectedSvgId } from "../states/selectedSvgIdState";
 import { useGroup } from "./useGroup";
 import * as vp from "../helpers/virtualPoint";
 import { nanoid } from "nanoid";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useSvgObjects, useSetSvgObject } from "../states/svgObjectState";
 
 export const useGroupObject = () => {
@@ -12,7 +12,7 @@ export const useGroupObject = () => {
   const { addOrUpdateSvgObject } = useSetSvgObject(id);
   const { getObjects, deleteObjects } = useSvgObjects();
 
-  const createGroup = () => {
+  const createGroup = useCallback(() => {
     grouping(vp.create(0, 0), [...selectedSvgId]);
     addOrUpdateSvgObject({
       type: "group" as const,
@@ -25,9 +25,9 @@ export const useGroupObject = () => {
     setId(nanoid() as SvgId);
     resetSelect();
     select(id);
-  };
+  }, [addOrUpdateSvgObject, grouping, id, resetSelect, select, selectedSvgId]);
 
-  const removeGroup = () => {
+  const removeGroup = useCallback(() => {
     getObjects([...selectedSvgId]).map((obj) => {
       if (!obj || obj.type !== "group") return;
       if (!obj.id || obj.id === "preview") return;
@@ -36,7 +36,7 @@ export const useGroupObject = () => {
       deleteObjects([obj.id]);
       obj.objectIds.map((objId) => select(objId));
     });
-  };
+  }, [deleteObjects, getObjects, select, selectedSvgId, ungrouping]);
 
   return {
     createGroup,

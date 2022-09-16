@@ -1,3 +1,4 @@
+import { useCallback } from "react";
 import { atom, useRecoilValue, useSetRecoilState } from "recoil";
 
 type ConfigModalState = {
@@ -20,22 +21,21 @@ const configModalState = atom<ConfigModalState>({
 export const useSetConfigModal = () => {
   const setConfigModal = useSetRecoilState(configModalState);
 
-  const openModal = (
-    type: ConfigType,
-    id: SvgId | "preview",
-    configList: ObjectConfigs
-  ) => {
-    setConfigModal({ isOpen: true, type, configList, id });
-  };
+  const openModal = useCallback(
+    (type: ConfigType, id: SvgId | "preview", configList: ObjectConfigs) => {
+      setConfigModal({ isOpen: true, type, configList, id });
+    },
+    [setConfigModal]
+  );
 
-  const closeModal = () => {
+  const closeModal = useCallback(() => {
     setConfigModal({
       isOpen: false,
       type: "none",
       id: "preview",
       configList: null,
     });
-  };
+  }, [setConfigModal]);
 
   return {
     openModal,

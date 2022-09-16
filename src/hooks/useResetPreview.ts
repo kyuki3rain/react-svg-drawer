@@ -1,3 +1,4 @@
+import { useCallback } from "react";
 import { useConfigModal } from "../states/configModalState";
 import { useDrawMode } from "../states/drawModeState";
 import { useSetSelectedSvgId } from "../states/selectedSvgIdState";
@@ -12,7 +13,7 @@ export const useResetPreview = () => {
   const { resetSelect } = useSetSelectedSvgId();
   const { resetPreviewGroup } = useGroup();
 
-  const resetPreview = () => {
+  const resetPreview = useCallback(() => {
     if (svgObject && svgObject.type === "group") {
       resetPreviewGroup(svgObject);
     }
@@ -38,7 +39,15 @@ export const useResetPreview = () => {
         resetSelect();
         deleteSvgObject();
     }
-  };
+  }, [
+    addOrUpdateSvgObject,
+    deleteSvgObject,
+    drawMode.mode,
+    openModal,
+    resetPreviewGroup,
+    resetSelect,
+    svgObject,
+  ]);
 
   return {
     resetPreview,
