@@ -48,6 +48,9 @@ const allSvgObjectSelector = selector({
 export const useAllSvgObject = () => {
   return useRecoilState(allSvgObjectSelector);
 };
+export const useSetAllSvgObject = () => {
+  return useSetRecoilState(allSvgObjectSelector);
+};
 
 export const useSetSvgObject = (id = nanoid() as SvgId | "preview") => {
   const setSvgObject = useSetRecoilState(svgObjectStates(id));
@@ -55,11 +58,12 @@ export const useSetSvgObject = (id = nanoid() as SvgId | "preview") => {
 
   const deleteSvgObject = () => {
     setSvgObject(null);
-    if (id !== "preview")
+    if (id !== "preview") {
       setSvgObjectList((prev) => {
         prev.delete(id);
         return new Set(prev);
       });
+    }
   };
 
   const addOrUpdateSvgObject = (obj: SvgObject) => {
@@ -68,7 +72,9 @@ export const useSetSvgObject = (id = nanoid() as SvgId | "preview") => {
 
       return { ...obj, id };
     });
-    if (id !== "preview") setSvgObjectList((prev) => new Set(prev.add(id)));
+    if (id !== "preview") {
+      setSvgObjectList((prev) => new Set(prev.add(id)));
+    }
   };
 
   return {
@@ -89,17 +95,19 @@ export const useSvgObject = (id: SvgId | "preview") => {
 export const useSetSvgObjectList = () => {
   const setSvgObjectList = useSetRecoilState(svgObjectListState);
 
-  const addIds = (ids: SvgId[]) =>
+  const addIds = (ids: SvgId[]) => {
     setSvgObjectList((prev) => {
       ids.map((id) => prev.add(id));
       return new Set(prev);
     });
+  };
 
-  const deleteIds = (ids: SvgId[]) =>
+  const deleteIds = (ids: SvgId[]) => {
     setSvgObjectList((prev) => {
       ids.map((id) => prev.delete(id));
       return new Set(prev);
     });
+  };
 
   return {
     addIds,
@@ -118,18 +126,20 @@ export const useSvgObjects = () => {
   const updateFixedPoint = useRecoilCallback(
     ({ set }) =>
       (ids: SvgId[], correction: VirtualPoint) => {
-        ids.map((id) =>
-          set(svgObjectStates(id), (prev) => {
-            if (!prev) return prev;
-            if (!prev.fixedPoint) return prev;
-            return (
-              prev && {
-                ...prev,
-                fixedPoint: vp.sub(prev.fixedPoint, correction),
-              }
-            );
-          })
-        );
+        {
+          ids.map((id) =>
+            set(svgObjectStates(id), (prev) => {
+              if (!prev) return prev;
+              if (!prev.fixedPoint) return prev;
+              return (
+                prev && {
+                  ...prev,
+                  fixedPoint: vp.sub(prev.fixedPoint, correction),
+                }
+              );
+            })
+          );
+        }
       },
     []
   );
@@ -154,10 +164,11 @@ export const useSvgObjects = () => {
 
   const deleteObjects = useRecoilCallback(
     ({ set }) =>
-      (ids: SvgId[]) =>
+      (ids: SvgId[]) => {
         ids.map((id) => {
           set(svgObjectStates(id), null);
-        }),
+        });
+      },
     []
   );
 
