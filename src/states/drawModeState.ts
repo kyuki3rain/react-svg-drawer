@@ -6,7 +6,7 @@ type DrawModeState = {
   param?: SvgObject;
 };
 
-const drawModeState = atom<DrawModeState>({
+export const drawModeState = atom<DrawModeState>({
   key: "drawModeState",
   default: { mode: "selector" },
 });
