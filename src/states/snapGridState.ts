@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import { atom, useRecoilValue, useSetRecoilState } from "recoil";
 
-const snapGridState = atom({
+export const snapGridState = atom({
   key: "snapGridState",
   default: true,
 });

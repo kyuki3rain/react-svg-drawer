@@ -4,12 +4,11 @@ import LineObject from "./SvgObjectWrapper/LineObject";
 import PolylineObject from "./SvgObjectWrapper/PolylineObject";
 import RectObject from "./SvgObjectWrapper/RectObject";
 import CircleObject from "./SvgObjectWrapper/CircleObject";
-import { usePoint } from "../../hooks/usePoint";
 import GroupObject from "./SvgObjectWrapper/GroupObject";
 
 type Props = {
   svgId: SvgId | "preview";
-  parentPoint?: VirtualPoint;
+  parentPoint: VirtualPoint;
   parentId?: SvgId | "preview";
   isSelected: boolean;
 };
@@ -21,7 +20,6 @@ const SvgObjectWrapper: React.FC<Props> = ({
   parentId,
 }) => {
   const { svgObject: obj } = useSvgObject(svgId);
-  const { rootPoint } = usePoint();
 
   if (!obj) return null;
 
@@ -30,7 +28,7 @@ const SvgObjectWrapper: React.FC<Props> = ({
       return (
         <LineObject
           obj={obj}
-          parentPoint={parentPoint ?? rootPoint}
+          parentPoint={parentPoint}
           isSelected={isSelected}
           parentId={parentId}
         ></LineObject>
@@ -39,7 +37,7 @@ const SvgObjectWrapper: React.FC<Props> = ({
       return (
         <PolylineObject
           obj={obj}
-          parentPoint={parentPoint ?? rootPoint}
+          parentPoint={parentPoint}
           isSelected={isSelected}
           parentId={parentId}
         ></PolylineObject>
@@ -48,7 +46,7 @@ const SvgObjectWrapper: React.FC<Props> = ({
       return (
         <TextObject
           obj={obj}
-          parentPoint={parentPoint ?? rootPoint}
+          parentPoint={parentPoint}
           isSelected={isSelected}
           parentId={parentId}
         ></TextObject>
@@ -57,7 +55,7 @@ const SvgObjectWrapper: React.FC<Props> = ({
       return (
         <RectObject
           obj={obj}
-          parentPoint={parentPoint ?? rootPoint}
+          parentPoint={parentPoint}
           isSelected={isSelected}
           parentId={parentId}
         ></RectObject>
@@ -66,7 +64,7 @@ const SvgObjectWrapper: React.FC<Props> = ({
       return (
         <CircleObject
           obj={obj}
-          parentPoint={parentPoint ?? rootPoint}
+          parentPoint={parentPoint}
           isSelected={isSelected}
           parentId={parentId}
         ></CircleObject>
@@ -75,7 +73,7 @@ const SvgObjectWrapper: React.FC<Props> = ({
       return (
         <GroupObject
           obj={obj}
-          parentPoint={parentPoint ?? rootPoint}
+          parentPoint={parentPoint}
           isSelected={isSelected}
           parentId={parentId}
         ></GroupObject>

@@ -8,7 +8,7 @@ type ConfigModalState = {
   type: ConfigType;
 };
 
-const configModalState = atom<ConfigModalState>({
+export const configModalState = atom<ConfigModalState>({
   key: "configModalState",
   default: {
     isOpen: false,

@@ -1,9 +1,10 @@
 import { useWindowSize } from "./useWindowSize";
 import { useMemo } from "react";
-import { useAreaConfig } from "../states/areaConfigState";
+import { useRecoilValue } from "recoil";
+import { areaConfigState } from "../states/areaConfigState";
 
 export const useGrid = () => {
-  const { pitch, upperLeft } = useAreaConfig();
+  const { pitch, upperLeft } = useRecoilValue(areaConfigState);
   const { width, height } = useWindowSize();
 
   const VerticalGridArray = useMemo(() => {
