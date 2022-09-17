@@ -6,7 +6,7 @@ import { act, renderHook } from "@testing-library/react";
 import { RecoilRoot } from "recoil";
 import { useDrawMode } from "../../states/drawModeState";
 import { useSvgObject } from "../../states/svgObjectState";
-import { useClickController } from "../../operators/useClickController";
+import { useClickController } from "../../operators/controllers/useClickController";
 import { useResetPreview } from "../useResetPreview";
 import * as vp from "../../helpers/virtualPoint";
 import { PITCH_DEFAULT } from "../../states/areaConfigState";
