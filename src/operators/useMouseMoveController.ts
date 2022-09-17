@@ -61,31 +61,17 @@ export const useOnMouseMove = () => {
         return;
       }
 
-      if (diff.vx > 0 && diff.vy > 0) {
-        addOrUpdateSvgObject({
-          ...obj,
-          upperLeft: vp.create(0, 0),
-          size: diff,
-        });
-      } else if (diff.vx > 0) {
-        addOrUpdateSvgObject({
-          ...obj,
-          upperLeft: vp.create(0, diff.vy),
-          size: vp.create(diff.vx, -diff.vy),
-        });
-      } else if (diff.vy > 0) {
-        addOrUpdateSvgObject({
-          ...obj,
-          upperLeft: vp.create(diff.vx, 0),
-          size: vp.create(-diff.vx, diff.vy),
-        });
-      } else {
-        addOrUpdateSvgObject({
-          ...obj,
-          upperLeft: diff,
-          size: vp.create(-diff.vx, -diff.vy),
-        });
-      }
+      addOrUpdateSvgObject({
+        ...obj,
+        upperLeft: vp.create(
+          diff.vx > 0 ? 0 : diff.vx,
+          diff.vy > 0 ? 0 : diff.vy
+        ),
+        size: vp.create(
+          diff.vx > 0 ? diff.vx : -diff.vx,
+          diff.vy > 0 ? diff.vy : -diff.vy
+        ),
+      });
     },
     [addOrUpdateSvgObject]
   );
