@@ -1,22 +1,23 @@
-import { useCallback } from "react";
-import { useDrawMode } from "../states/drawModeState";
+import { useRecoilCallback } from "recoil";
+import { drawModeState } from "../states/drawModeState";
 import { useSetSelectedSvgId } from "../states/selectedSvgIdState";
 
 export const useSelect = () => {
-  const { drawMode } = useDrawMode();
   const { toggleSelect } = useSetSelectedSvgId();
 
-  const onClick = useCallback(
-    (id?: SvgId | "preview") => {
-      if (!id) return false;
-      if (id === "preview") return false;
-      if (drawMode.mode !== "selector") return false;
+  const onClick = useRecoilCallback(
+    ({ snapshot }) =>
+      (id?: SvgId | "preview") => {
+        const drawMode = snapshot.getLoadable(drawModeState).getValue();
+        if (!id) return false;
+        if (id === "preview") return false;
+        if (drawMode.mode !== "selector") return false;
 
-      toggleSelect(id);
+        toggleSelect(id);
 
-      return true;
-    },
-    [drawMode.mode, toggleSelect]
+        return true;
+      },
+    [toggleSelect]
   );
 
   return {

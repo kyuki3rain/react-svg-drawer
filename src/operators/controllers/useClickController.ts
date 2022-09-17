@@ -215,7 +215,7 @@ export const useClickController = () => {
     ({ snapshot }) =>
       (x: number, y: number) => {
         const drawMode = snapshot.getLoadable(drawModeState).getValue();
-        const isOpen = snapshot.getLoadable(configModalState).getValue();
+        const isOpen = snapshot.getLoadable(configModalState).getValue().isOpen;
         const obj = snapshot.getLoadable(svgObjectStates("preview")).getValue();
 
         if (isOpen) return;
@@ -281,7 +281,7 @@ export const useClickController = () => {
     ({ snapshot }) =>
       () => {
         const drawMode = snapshot.getLoadable(drawModeState).getValue();
-        const isOpen = snapshot.getLoadable(configModalState).getValue();
+        const isOpen = snapshot.getLoadable(configModalState).getValue().isOpen;
         const obj = snapshot.getLoadable(svgObjectStates("preview")).getValue();
 
         if (isOpen) return;

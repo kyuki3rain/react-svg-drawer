@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import { useView } from "./useView";
+import { useView } from "./useJSON";
 
 const defaultJSON = JSON.stringify({
   appName: __APP_NAME__,
