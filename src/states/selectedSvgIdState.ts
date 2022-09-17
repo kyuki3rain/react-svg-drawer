@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import { atom, useRecoilValue, useSetRecoilState } from "recoil";
 
-const selectedSvgIdState = atom<Set<SvgId>>({
+export const selectedSvgIdState = atom<Set<SvgId>>({
   key: "selectedSvgIdState",
   default: new Set(),
 });

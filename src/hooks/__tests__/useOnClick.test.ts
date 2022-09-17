@@ -7,7 +7,7 @@ import { RecoilRoot } from "recoil";
 import * as vp from "../../helpers/virtualPoint";
 import { PITCH_DEFAULT } from "../../states/areaConfigState";
 import { useDrawMode } from "../../states/drawModeState";
-import { useOnClick } from "../useOnClick";
+import { useClickController } from "../../operators/useClickController";
 import { useSvgObject } from "../../states/svgObjectState";
 import { useConfig } from "../useConfigModal";
 import { useResetPreview } from "../useResetPreview";
@@ -28,7 +28,7 @@ describe("useOnClick", () => {
           useEffect(() => resetPreview(), [drawMode]);
           return {
             useDrawMode: useDrawMode(),
-            useOnClick: useOnClick(),
+            useOnClick: useClickController(),
             useSvgObject: useSvgObject("test" as SvgId),
             usePreviewObject: useSvgObject("preview"),
           };
@@ -97,7 +97,7 @@ describe("useOnClick", () => {
           useEffect(() => resetPreview(), [drawMode]);
           return {
             useDrawMode: useDrawMode(),
-            useOnClick: useOnClick(),
+            useOnClick: useClickController(),
             useSvgObject: useSvgObject("test" as SvgId),
             usePreviewObject: useSvgObject("preview"),
             useConfig: useConfig(),
@@ -155,7 +155,7 @@ describe("useOnClick", () => {
           useEffect(() => resetPreview(), [drawMode]);
           return {
             useDrawMode: useDrawMode(),
-            useOnClick: useOnClick(),
+            useOnClick: useClickController(),
             useSvgObject: useSvgObject("test" as SvgId),
             usePreviewObject: useSvgObject("preview"),
           };
