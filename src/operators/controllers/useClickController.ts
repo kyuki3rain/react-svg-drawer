@@ -1,20 +1,20 @@
-import { drawModeState } from "../states/drawModeState";
+import { drawModeState } from "../../states/drawModeState";
 import {
   svgObjectStates,
   useSetSvgObject,
   useSvgObjects,
-} from "../states/svgObjectState";
-import { usePoint } from "../hooks/usePoint";
-import * as rp from "../helpers/realPoint";
-import * as vp from "../helpers/virtualPoint";
+} from "../../states/svgObjectState";
+import { usePoint } from "../../hooks/usePoint";
+import * as rp from "../../helpers/realPoint";
+import * as vp from "../../helpers/virtualPoint";
 import { nanoid } from "nanoid";
 import { useCallback, useState } from "react";
-import { configModalState } from "../states/configModalState";
+import { configModalState } from "../../states/configModalState";
 import {
   selectedSvgIdState,
   useSelectedSvgId,
-} from "../states/selectedSvgIdState";
-import { useGroup } from "../hooks/useGroup";
+} from "../../states/selectedSvgIdState";
+import { useGroup } from "../../hooks/useGroup";
 import { useRecoilCallback } from "recoil";
 
 export const useClickController = () => {

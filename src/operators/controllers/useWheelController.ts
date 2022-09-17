@@ -2,12 +2,12 @@ import {
   areaConfigState,
   PITCH_MAX,
   PITCH_MIN,
-} from "../states/areaConfigState";
+} from "../../states/areaConfigState";
 import { useCallback } from "react";
 import { useRecoilCallback } from "recoil";
-import { getLimitedValue } from "../helpers/limitValue";
-import * as vp from "../helpers/virtualPoint";
-import * as rp from "../helpers/realPoint";
+import { getLimitedValue } from "../../helpers/limitValue";
+import * as vp from "../../helpers/virtualPoint";
+import * as rp from "../../helpers/realPoint";
 
 export const useWheelController = () => {
   const setPitchRelative = useRecoilCallback(

@@ -7,7 +7,7 @@ import { RecoilRoot } from "recoil";
 import * as vp from "../../helpers/virtualPoint";
 import { PITCH_DEFAULT } from "../../states/areaConfigState";
 import { useDrawMode } from "../../states/drawModeState";
-import { useClickController } from "../../operators/useClickController";
+import { useClickController } from "../../operators/controllers/useClickController";
 import { useSvgObject } from "../../states/svgObjectState";
 import { useConfig } from "../useConfigModal";
 import { useResetPreview } from "../useResetPreview";
