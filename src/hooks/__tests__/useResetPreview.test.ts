@@ -6,7 +6,7 @@ import { act, renderHook } from "@testing-library/react";
 import { RecoilRoot } from "recoil";
 import { useDrawMode } from "../../states/drawModeState";
 import { useSvgObject } from "../../states/svgObjectState";
-import { useOnClick } from "../useOnClick";
+import { useClickController } from "../../operators/useClickController";
 import { useResetPreview } from "../useResetPreview";
 import * as vp from "../../helpers/virtualPoint";
 import { PITCH_DEFAULT } from "../../states/areaConfigState";
@@ -27,7 +27,7 @@ describe("useRsetPreview", () => {
         return {
           useDrawMode: useDrawMode(),
           useResetPreview: useResetPreview(),
-          useOnClick: useOnClick(),
+          useOnClick: useClickController(),
           usePreviewObject: useSvgObject("preview"),
         };
       },
