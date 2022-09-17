@@ -28,7 +28,7 @@ export const useConfig = () => {
 
         closeModal();
       },
-    [addOrUpdateSvgObject, closeModal]
+    [addOrUpdateSvgObject, closeModal, id]
   );
 
   const closeModalWithoutMode = useCallback(() => {
