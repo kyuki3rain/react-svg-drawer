@@ -1,12 +1,12 @@
 import React from "react";
-import { useKey } from "../hooks/useKey";
+import { useKeyController } from "../operators/useKeyController";
 
 type Props = {
   children: React.ReactNode;
 };
 
 const KeyController: React.FC<Props> = ({ children }) => {
-  const { onKeyDown, onKeyUp } = useKey();
+  const { onKeyDown, onKeyUp } = useKeyController();
 
   return (
     <div

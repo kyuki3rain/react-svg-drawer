@@ -7,7 +7,7 @@ import { useCallback } from "react";
 import { usePoint } from "../hooks/usePoint";
 import { useRecoilCallback } from "recoil";
 
-export const useOnMouseMove = () => {
+export const useOnMouseMoveController = () => {
   const { addOrUpdateSvgObject } = useSetSvgObject("preview");
   const { toVirtual } = usePoint();
 
