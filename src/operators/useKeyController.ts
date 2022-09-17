@@ -1,10 +1,15 @@
 import { useCallback } from "react";
-import { useSetSnapGrid } from "../states/snapGridState";
-import { useResetPreview } from "./useResetPreview";
+import { useSetRecoilState } from "recoil";
+import { useResetPreview } from "../hooks/useResetPreview";
+import { snapGridState } from "../states/snapGridState";
 
-export const useKey = () => {
+export const useKeyController = () => {
   const { resetPreview } = useResetPreview();
-  const { snapGridOff, snapGridOn } = useSetSnapGrid();
+
+  const setSnapGrid = useSetRecoilState(snapGridState);
+
+  const snapGridOff = useCallback(() => setSnapGrid(false), [setSnapGrid]);
+  const snapGridOn = useCallback(() => setSnapGrid(true), [setSnapGrid]);
 
   const onKeyUp = useCallback(
     (key: string) => {
