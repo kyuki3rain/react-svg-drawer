@@ -1,9 +1,7 @@
-import { useGrid } from "../../hooks/useGrid";
-import { useWindowSize } from "../../hooks/useWindowSize";
+import { useGrid } from "../../operators/useGrid";
 
 const Grids: React.FC = () => {
-  const { VerticalGridArray, HorizontalGridArray } = useGrid();
-  const { height, width } = useWindowSize();
+  const { VerticalGridArray, HorizontalGridArray, width, height } = useGrid();
 
   return (
     <svg>

@@ -1,19 +1,12 @@
 import React from "react";
-import { useRecoilValue } from "recoil";
-
-import { useWindowSize } from "../hooks/useWindowSize";
-import { rootPointSelector } from "../states/areaConfigState";
-import { useSelectedSvgId } from "../states/selectedSvgIdState";
-import { useSvgObjectList } from "../states/svgObjectState";
+import { useDrawArea } from "../operators/useDrawArea";
 import DrawAreaController from "./DrawArea/DrawAreaController";
 import Grids from "./DrawArea/Grids";
 import SvgObjectWrapper from "./DrawArea/SvgObjectWrapper";
 
 const DrawArea: React.FC = () => {
-  const { height, width } = useWindowSize();
-  const { svgObjectList } = useSvgObjectList();
-  const { selectedSvgId } = useSelectedSvgId();
-  const rootPoint = useRecoilValue(rootPointSelector);
+  const { svgObjectList, selectedSvgId, rootPoint, width, height } =
+    useDrawArea();
 
   return (
     <DrawAreaController>
@@ -24,7 +17,7 @@ const DrawArea: React.FC = () => {
         viewBox={`0, 0, ${width}, ${height}`}
       >
         <Grids />
-        {[...svgObjectList].map((id) => (
+        {svgObjectList.map((id) => (
           <SvgObjectWrapper
             svgId={id}
             key={id}

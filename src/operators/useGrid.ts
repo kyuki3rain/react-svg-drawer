@@ -1,4 +1,4 @@
-import { useWindowSize } from "./useWindowSize";
+import { useWindowSize } from "../hooks/useWindowSize";
 import { useMemo } from "react";
 import { useRecoilValue } from "recoil";
 import { areaConfigState } from "../states/areaConfigState";
@@ -23,5 +23,7 @@ export const useGrid = () => {
   return {
     VerticalGridArray,
     HorizontalGridArray,
+    width,
+    height,
   };
 };
