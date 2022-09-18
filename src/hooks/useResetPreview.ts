@@ -1,14 +1,41 @@
 import { useRecoilCallback } from "recoil";
-import { useConfigModal } from "../states/configModalState";
+import { configModalState, draftConfigState } from "../states/configModalState";
 import { drawModeState } from "../states/drawModeState";
 import { useSetSelectedSvgId } from "../states/selectedSvgIdState";
-import { useSetSvgObject, useSvgObjects } from "../states/svgObjectState";
+import {
+  svgObjectStates,
+  useSetSvgObject,
+  useSvgObjects,
+} from "../states/svgObjectState";
+
+const textConfig = new Map([["text", ""]]);
 
 export const useResetPreview = () => {
   const { deleteSvgObject, addOrUpdateSvgObject } = useSetSvgObject("preview");
   const { resetPreviewGroup } = useSvgObjects();
-  const { openModal } = useConfigModal();
   const { resetSelect } = useSetSelectedSvgId();
+
+  const openModal = useRecoilCallback(
+    ({ set }) =>
+      (
+        type: ConfigType,
+        id: SvgId | "preview",
+        configMap: Map<string, string>
+      ) => {
+        const configList = [...configMap].map((p) => ({
+          key: p[0],
+          defaultValue: p[1],
+        }));
+        set(configModalState, { isOpen: true, type, id, configList });
+        set(draftConfigState, (prev) => {
+          [...configList]?.map((c) => {
+            prev.set(c.key, c.defaultValue);
+          });
+          return new Map(prev);
+        });
+      },
+    []
+  );
 
   const resetPreview = useRecoilCallback(
     ({ snapshot }) =>
@@ -18,15 +45,15 @@ export const useResetPreview = () => {
 
         switch (drawMode.mode) {
           case "text": {
-            const textConfig = [{ key: "text", defaultValue: "" }];
+            const configMap = snapshot
+              .getLoadable(svgObjectStates("preview"))
+              .getValue()?.configMap;
             addOrUpdateSvgObject({
               type: "text",
-              configMap: new Map(
-                textConfig.map((c) => [c.key, c.defaultValue])
-              ),
+              configMap: configMap ?? new Map(textConfig),
               style: { stroke: "black" },
             });
-            openModal("text", "preview", textConfig);
+            openModal("text", "preview", configMap ?? new Map(textConfig));
             break;
           }
           case "copy":
