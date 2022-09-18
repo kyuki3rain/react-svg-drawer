@@ -1,8 +1,7 @@
 import { Button, TextField } from "@mui/material";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-import { useEffect, useState } from "react";
-import { useConfig } from "../hooks/useConfigModal";
+import { useConfigModal } from "../operators/useConfigModal";
 
 const style = {
   display: "flex",
@@ -21,24 +20,8 @@ const style = {
 };
 
 const ConfigModal = () => {
-  const [state, setState] = useState<Map<string, string>>(new Map());
-  const { isOpen, type, configList, saveConfig, closeModalWithoutMode } =
-    useConfig();
-
-  const handleClose = () => {
-    closeModalWithoutMode();
-    setState(new Map());
-  };
-
-  useEffect(() => {
-    setState((prev) => {
-      configList?.map((c) => {
-        prev.set(c.key, c.defaultValue);
-      });
-      return new Map(prev);
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const { isOpen, type, draftConfigs, onChange, handleClose, saveConfig } =
+    useConfigModal();
 
   return (
     <Modal
@@ -48,18 +31,19 @@ const ConfigModal = () => {
       aria-describedby="modal-modal-description"
     >
       <Box sx={style}>
-        {configList?.map((config) => (
+        {[...draftConfigs].map((config) => (
           <TextField
-            label={config.key}
+            label={config[0]}
             variant="outlined"
-            key={`${type}_${config.key}`}
-            value={state.get(config.key) ?? ""}
-            onChange={(e) => {
-              setState((prev) => new Map(prev.set(config.key, e.target.value)));
-            }}
+            key={`${type}_${config[0]}`}
+            value={draftConfigs.get(config[0]) ?? ""}
+            onChange={(e) => onChange(config[0], e.target.value)}
           />
         ))}
-        <Button onClick={() => saveConfig(state)} style={{ marginTop: 10 }}>
+        <Button
+          onClick={() => saveConfig(draftConfigs)}
+          style={{ marginTop: 10 }}
+        >
           OK
         </Button>
       </Box>
