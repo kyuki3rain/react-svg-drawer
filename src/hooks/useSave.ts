@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import { useView } from "./useJSON";
+import { useJSON } from "./useJSON";
 
 const defaultJSON = JSON.stringify({
   appName: __APP_NAME__,
@@ -8,7 +8,7 @@ const defaultJSON = JSON.stringify({
 });
 
 export const useSave = () => {
-  const { toJSON, fromJSON } = useView();
+  const { toJSON, fromJSON } = useJSON();
 
   const save = useCallback(() => {
     const json = toJSON();

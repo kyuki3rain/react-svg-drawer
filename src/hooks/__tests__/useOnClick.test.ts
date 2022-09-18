@@ -3,15 +3,15 @@
  */
 
 import { act, renderHook } from "@testing-library/react";
-import { RecoilRoot } from "recoil";
+import { RecoilRoot, useRecoilState } from "recoil";
 import * as vp from "../../helpers/virtualPoint";
 import { PITCH_DEFAULT } from "../../states/areaConfigState";
-import { useDrawMode } from "../../states/drawModeState";
 import { useClickController } from "../../operators/controllers/useClickController";
 import { useSvgObject } from "../../states/svgObjectState";
-import { useConfig } from "../useConfigModal";
 import { useResetPreview } from "../useResetPreview";
 import { useEffect } from "react";
+import { drawModeState } from "../../states/drawModeState";
+import { useConfigModal } from "../../operators/useConfigModal";
 
 jest.mock("nanoid", () => ({
   nanoid: () => "test",
@@ -23,11 +23,11 @@ describe("useOnClick", () => {
       const { result } = renderHook(
         () => {
           const { resetPreview } = useResetPreview();
-          const { drawMode } = useDrawMode();
+          const drawMode = useRecoilState(drawModeState);
           // eslint-disable-next-line react-hooks/exhaustive-deps
           useEffect(() => resetPreview(), [drawMode]);
           return {
-            useDrawMode: useDrawMode(),
+            useDrawMode: useRecoilState(drawModeState),
             useOnClick: useClickController(),
             useSvgObject: useSvgObject("test" as SvgId),
             usePreviewObject: useSvgObject("preview"),
@@ -36,15 +36,15 @@ describe("useOnClick", () => {
         { wrapper: RecoilRoot }
       );
 
-      act(() => result.current.useDrawMode.changeMode("line"));
-      expect(result.current.useDrawMode.drawMode.mode).toBe("line");
+      act(() => result.current.useDrawMode[1]({ mode: "line" }));
+      expect(result.current.useDrawMode[0].mode).toBe("line");
       expect(result.current.useSvgObject.svgObject).toBe(null);
       expect(result.current.usePreviewObject.svgObject).toBe(null);
 
       act(() => {
         result.current.useOnClick.onClick(20, 10);
       });
-      expect(result.current.useDrawMode.drawMode.mode).toBe("line");
+      expect(result.current.useDrawMode[0].mode).toBe("line");
       expect(result.current.useSvgObject.svgObject).toBe(null);
       expect(result.current.usePreviewObject.svgObject).toEqual({
         id: "preview",
@@ -57,7 +57,7 @@ describe("useOnClick", () => {
       act(() => {
         result.current.useOnClick.onClick(30, 50);
       });
-      expect(result.current.useDrawMode.drawMode.mode).toBe("line");
+      expect(result.current.useDrawMode[0].mode).toBe("line");
       expect(result.current.useSvgObject.svgObject).toEqual({
         id: "test" as SvgId,
         type: "line",
@@ -78,7 +78,7 @@ describe("useOnClick", () => {
         });
       });
       act(() => result.current.useOnClick.onClick(40, 60));
-      expect(result.current.useDrawMode.drawMode.mode).toBe("line");
+      expect(result.current.useDrawMode[0].mode).toBe("line");
       expect(result.current.usePreviewObject.svgObject).toEqual({
         id: "preview",
         type: "text",
@@ -92,22 +92,22 @@ describe("useOnClick", () => {
       const { result } = renderHook(
         () => {
           const { resetPreview } = useResetPreview();
-          const { drawMode } = useDrawMode();
+          const drawMode = useRecoilState(drawModeState);
           // eslint-disable-next-line react-hooks/exhaustive-deps
           useEffect(() => resetPreview(), [drawMode]);
           return {
-            useDrawMode: useDrawMode(),
+            useDrawMode: useRecoilState(drawModeState),
             useOnClick: useClickController(),
             useSvgObject: useSvgObject("test" as SvgId),
             usePreviewObject: useSvgObject("preview"),
-            useConfig: useConfig(),
+            useConfig: useConfigModal(),
           };
         },
         { wrapper: RecoilRoot }
       );
 
-      act(() => result.current.useDrawMode.changeMode("text"));
-      expect(result.current.useDrawMode.drawMode.mode).toBe("text");
+      act(() => result.current.useDrawMode[1]({ mode: "text" }));
+      expect(result.current.useDrawMode[0].mode).toBe("text");
       expect(result.current.useSvgObject.svgObject).toBe(null);
       expect(result.current.usePreviewObject.svgObject).toEqual({
         id: "preview",
@@ -119,7 +119,7 @@ describe("useOnClick", () => {
       act(() => {
         result.current.useConfig.saveConfig(new Map([["text", "test"]]));
       });
-      expect(result.current.useDrawMode.drawMode.mode).toBe("text");
+      expect(result.current.useDrawMode[0].mode).toBe("text");
       expect(result.current.useSvgObject.svgObject).toBe(null);
       expect(result.current.usePreviewObject.svgObject).toEqual({
         id: "preview",
@@ -129,7 +129,7 @@ describe("useOnClick", () => {
       });
 
       act(() => result.current.useOnClick.onClick(30, 50));
-      expect(result.current.useDrawMode.drawMode.mode).toBe("text");
+      expect(result.current.useDrawMode[0].mode).toBe("text");
       expect(result.current.useSvgObject.svgObject).toEqual({
         id: "test" as SvgId,
         type: "text",
@@ -150,11 +150,11 @@ describe("useOnClick", () => {
       const { result } = renderHook(
         () => {
           const { resetPreview } = useResetPreview();
-          const { drawMode } = useDrawMode();
+          const drawMode = useRecoilState(drawModeState);
           // eslint-disable-next-line react-hooks/exhaustive-deps
           useEffect(() => resetPreview(), [drawMode]);
           return {
-            useDrawMode: useDrawMode(),
+            useDrawMode: useRecoilState(drawModeState),
             useOnClick: useClickController(),
             useSvgObject: useSvgObject("test" as SvgId),
             usePreviewObject: useSvgObject("preview"),
@@ -163,13 +163,13 @@ describe("useOnClick", () => {
         { wrapper: RecoilRoot }
       );
 
-      act(() => result.current.useDrawMode.changeMode("selector"));
-      expect(result.current.useDrawMode.drawMode.mode).toBe("selector");
+      act(() => result.current.useDrawMode[1]({ mode: "selector" }));
+      expect(result.current.useDrawMode[0].mode).toBe("selector");
       expect(result.current.useSvgObject.svgObject).toBe(null);
       expect(result.current.usePreviewObject.svgObject).toBe(null);
 
       act(() => result.current.useOnClick.onClick(30, 50));
-      expect(result.current.useDrawMode.drawMode.mode).toBe("selector");
+      expect(result.current.useDrawMode[0].mode).toBe("selector");
       expect(result.current.useSvgObject.svgObject).toBe(null);
       expect(result.current.usePreviewObject.svgObject).toBe(null);
     });

@@ -2,6 +2,7 @@ import { drawModeState } from "../../states/drawModeState";
 import {
   svgObjectStates,
   useSetSvgObject,
+  useSetSvgObjectList,
   useSvgObjects,
 } from "../../states/svgObjectState";
 import { usePoint } from "../../hooks/usePoint";
@@ -14,7 +15,6 @@ import {
   selectedSvgIdState,
   useSelectedSvgId,
 } from "../../states/selectedSvgIdState";
-import { useGroup } from "../../hooks/useGroup";
 import { useRecoilCallback } from "recoil";
 
 export const useClickController = () => {
@@ -26,8 +26,9 @@ export const useClickController = () => {
   const { addOrUpdateSvgObject: addOrUpdateNew } = useSetSvgObject(id);
   const { toVirtual } = usePoint();
   const { resetSelect } = useSelectedSvgId();
-  const { grouping, ungrouping } = useGroup();
   const { copySvgObjects } = useSvgObjects();
+  const { updateFixedPoint } = useSvgObjects();
+  const { addIds, deleteIds } = useSetSvgObjectList();
 
   const setNewId = useCallback(() => setId(nanoid() as SvgId), []);
 
@@ -154,12 +155,13 @@ export const useClickController = () => {
   const onClickCopy = useRecoilCallback(
     ({ snapshot }) =>
       (obj: GroupObject | null, v: VirtualPoint) => {
-        if (!obj) {
+        if (!obj || !obj.fixedPoint) {
           const selectedSvgId = snapshot
             .getLoadable(selectedSvgIdState)
             .getValue();
           const newIds = copySvgObjects([...selectedSvgId]);
-          grouping(v, newIds);
+          updateFixedPoint([...selectedSvgId], vp.create(0, 0));
+          deleteIds([...selectedSvgId]);
           addOrUpdatePreview({
             type: "group" as const,
             objectIds: newIds,
@@ -171,17 +173,20 @@ export const useClickController = () => {
           return;
         }
 
-        ungrouping(obj);
+        const correction = vp.sub(vp.create(0, 0), obj.fixedPoint);
+        updateFixedPoint(obj.objectIds, correction);
+        addIds(obj.objectIds);
         setNewId();
         deletePreview();
       },
     [
+      addIds,
       addOrUpdatePreview,
       copySvgObjects,
+      deleteIds,
       deletePreview,
-      grouping,
       setNewId,
-      ungrouping,
+      updateFixedPoint,
     ]
   );
 
@@ -191,8 +196,9 @@ export const useClickController = () => {
         const selectedSvgId = snapshot
           .getLoadable(selectedSvgIdState)
           .getValue();
-        if (!obj) {
-          grouping(v, [...selectedSvgId]);
+        if (!obj || !obj.fixedPoint) {
+          updateFixedPoint([...selectedSvgId], vp.create(0, 0));
+          deleteIds([...selectedSvgId]);
           addOrUpdatePreview({
             type: "group" as const,
             objectIds: [...selectedSvgId],
@@ -204,11 +210,20 @@ export const useClickController = () => {
           return;
         }
 
-        ungrouping(obj);
+        const correction = vp.sub(vp.create(0, 0), obj.fixedPoint);
+        updateFixedPoint(obj.objectIds, correction);
+        addIds(obj.objectIds);
         setNewId();
         deletePreview();
       },
-    [addOrUpdatePreview, deletePreview, grouping, setNewId, ungrouping]
+    [
+      addIds,
+      addOrUpdatePreview,
+      deleteIds,
+      deletePreview,
+      setNewId,
+      updateFixedPoint,
+    ]
   );
 
   const onClick = useRecoilCallback(

@@ -1,7 +1,7 @@
 import { nanoid } from "nanoid";
 import { useCallback, useRef } from "react";
 import { useRecoilCallback } from "recoil";
-import { useView } from "../hooks/useJSON";
+import { useJSON } from "../hooks/useJSON";
 import { logIndexAtom, logsAtom, stopLogState } from "../states/logState";
 import {
   selectedSvgIdState,
@@ -24,7 +24,7 @@ const defaultJSON = JSON.stringify({
 });
 
 export const useFunctionButton = () => {
-  const { fromJSON, toJSON } = useView();
+  const { fromJSON, toJSON } = useJSON();
   const { uploadFile } = useFileUpload();
 
   const { resetSelect, select } = useSelectedSvgId();
