@@ -6,7 +6,6 @@ import {
   DefaultValue,
   selector,
   useRecoilCallback,
-  useRecoilState,
   useRecoilValue,
   useSetRecoilState,
 } from "recoil";
@@ -45,13 +44,6 @@ export const allSvgObjectSelector = selector({
     set(svgObjectListState, new Set(idList));
   },
 });
-
-export const useAllSvgObject = () => {
-  return useRecoilState(allSvgObjectSelector);
-};
-export const useSetAllSvgObject = () => {
-  return useSetRecoilState(allSvgObjectSelector);
-};
 
 export const useSetSvgObject = (id = nanoid() as SvgId | "preview") => {
   const setSvgObject = useSetRecoilState(svgObjectStates(id));
@@ -122,13 +114,6 @@ export const useSetSvgObjectList = () => {
   return {
     addIds,
     deleteIds,
-  };
-};
-
-export const useSvgObjectList = () => {
-  const svgObjectList = useRecoilValue(svgObjectListState);
-  return {
-    svgObjectList,
   };
 };
 

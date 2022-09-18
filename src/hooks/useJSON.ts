@@ -1,7 +1,7 @@
 import { allSvgObjectSelector } from "../states/svgObjectState";
 import { useRecoilCallback } from "recoil";
 
-export const useView = () => {
+export const useJSON = () => {
   const toJSON = useRecoilCallback(
     ({ snapshot }) =>
       () => {

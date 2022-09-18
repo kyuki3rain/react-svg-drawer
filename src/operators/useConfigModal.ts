@@ -1,14 +1,26 @@
 import { useCallback } from "react";
-import { useRecoilCallback, useRecoilState, useRecoilValue } from "recoil";
+import {
+  useRecoilCallback,
+  useRecoilState,
+  useRecoilValue,
+  useSetRecoilState,
+} from "recoil";
 import { configModalState, draftConfigState } from "../states/configModalState";
-import { useSetDrawMode } from "../states/drawModeState";
+import { drawModeState } from "../states/drawModeState";
 import { svgObjectStates, useSetSvgObject } from "../states/svgObjectState";
 
 export const useConfigModal = () => {
   const configModal = useRecoilValue(configModalState);
   const { addOrUpdateSvgObject } = useSetSvgObject(configModal.id);
-  const { changeMode } = useSetDrawMode();
   const [draftConfigs, setDraftConfigs] = useRecoilState(draftConfigState);
+  const setDrawMode = useSetRecoilState(drawModeState);
+
+  const changeMode = useCallback(
+    (mode: DrawMode, param?: SvgObject) => {
+      setDrawMode((prev) => (prev.mode === mode ? prev : { mode, param }));
+    },
+    [setDrawMode]
+  );
 
   const closeModal = useRecoilCallback(
     ({ set }) =>
