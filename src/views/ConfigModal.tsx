@@ -1,7 +1,7 @@
 import { Button, TextField } from "@mui/material";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-import { useConfigModal } from "../operators/useConfigModal";
+import { useConfigModal } from "../hooks/useConfigModal";
 
 const style = {
   display: "flex",

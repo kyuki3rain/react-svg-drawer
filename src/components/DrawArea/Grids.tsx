@@ -1,4 +1,4 @@
-import { useGrid } from "../../operators/useGrid";
+import { useGrid } from "../../hooks/useGrid";
 
 const Grids: React.FC = () => {
   const { VerticalGridArray, HorizontalGridArray, width, height } = useGrid();

@@ -1,6 +1,6 @@
-import { usePoint } from "../../../hooks/usePoint";
+import { usePoint } from "../../../operators/usePoint";
 import * as vp from "../../../helpers/virtualPoint";
-import { useSelect } from "../../../hooks/useSelect";
+import { useSelect } from "../../../operators/useSelect";
 
 type Props = {
   obj: CircleObject;

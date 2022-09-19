@@ -8,7 +8,7 @@ import MoveDownIcon from "@mui/icons-material/MoveDown";
 import { Fab, SvgIcon, Tooltip } from "@mui/material";
 import React from "react";
 import { ReactComponent as CursorIcon } from "../../assets/CursorIcon.svg";
-import { useModeButtons } from "../../operators/useModeButtons";
+import { useModeButtons } from "../../hooks/useModeButtons";
 
 const ModeButtons: React.FC = () => {
   const { drawMode, changeMode } = useModeButtons();

@@ -1,4 +1,4 @@
-import KeyController from "../controllers/KeyController";
+import KeyController from "./AreaController/KeyController";
 
 type Props = {
   children: React.ReactNode;

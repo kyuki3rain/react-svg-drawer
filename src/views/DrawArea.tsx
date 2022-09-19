@@ -1,8 +1,8 @@
 import React from "react";
-import { useDrawArea } from "../operators/useDrawArea";
-import DrawAreaController from "./DrawArea/DrawAreaController";
-import Grids from "./DrawArea/Grids";
-import SvgObjectWrapper from "./DrawArea/SvgObjectWrapper";
+import { useDrawArea } from "../hooks/useDrawArea";
+import DrawAreaController from "../components/controllers/DrawAreaController";
+import Grids from "../components/DrawArea/Grids";
+import SvgObjectWrapper from "../components/DrawArea/SvgObjectWrapper";
 
 const DrawArea: React.FC = () => {
   const { svgObjectList, selectedSvgId, rootPoint, width, height } =
