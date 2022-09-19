@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 import { useRecoilState } from "recoil";
-import { drawModeState } from "../states/drawModeState";
+import { drawModeState } from "../../states/drawModeState";
 
 export const useModeButtons = () => {
   const [drawMode, setDrawMode] = useRecoilState(drawModeState);

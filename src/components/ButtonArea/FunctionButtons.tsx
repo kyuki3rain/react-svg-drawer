@@ -11,7 +11,7 @@ import RedoIcon from "@mui/icons-material/Redo";
 import { Fab, Tooltip } from "@mui/material";
 import React from "react";
 import { useRoll } from "../../states/logState";
-import { useFunctionButton } from "../../hooks/useFunctionButton";
+import { useFunctionButton } from "../../hooks/buttons/useFunctionButton";
 
 const FunctionButtons: React.FC = () => {
   const {
