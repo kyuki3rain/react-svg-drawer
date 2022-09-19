@@ -1,5 +1,5 @@
 import { useRecoilCallback } from "recoil";
-import { useResetPreview } from "../../hooks/useResetPreview";
+import { useResetPreview } from "../../operators/useResetPreview";
 import { snapGridState } from "../../states/snapGridState";
 
 export const useKeyController = () => {

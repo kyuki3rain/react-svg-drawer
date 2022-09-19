@@ -1,7 +1,7 @@
 import { nanoid } from "nanoid";
 import { useCallback, useRef } from "react";
 import { useRecoilCallback } from "recoil";
-import { useJSON } from "../hooks/useJSON";
+import { useJSON } from "../operators/useJSON";
 import { logIndexAtom, logsAtom, stopLogState } from "../states/logState";
 import {
   selectedSvgIdState,
@@ -14,7 +14,7 @@ import {
   useSvgObjects,
 } from "../states/svgObjectState";
 import * as vp from "../helpers/virtualPoint";
-import { useFileUpload } from "../hooks/useFileUpload";
+import { useFileUpload } from "../operators/useFileUpload";
 import dayjs from "dayjs";
 
 const defaultJSON = JSON.stringify({

@@ -1,5 +1,5 @@
 import React from "react";
-import { useClickController } from "../operators/controllers/useClickController";
+import { useClickController } from "../../../hooks/controllers/useClickController";
 
 type Props = {
   children: React.ReactNode;

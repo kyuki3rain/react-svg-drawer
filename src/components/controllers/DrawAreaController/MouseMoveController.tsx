@@ -1,5 +1,5 @@
 import React from "react";
-import { useOnMouseMoveController } from "../operators/controllers/useMouseMoveController";
+import { useOnMouseMoveController } from "../../../hooks/controllers/useMouseMoveController";
 
 type Props = {
   children: React.ReactNode;

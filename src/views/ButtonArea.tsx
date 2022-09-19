@@ -1,6 +1,6 @@
 import React from "react";
-import FunctionButtons from "./ButtonArea/FunctionButtons";
-import ModeButtons from "./ButtonArea/ModeButtons";
+import FunctionButtons from "../components/ButtonArea/FunctionButtons";
+import ModeButtons from "../components/ButtonArea/ModeButtons";
 
 const ButtonArea: React.FC = () => {
   return (

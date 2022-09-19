@@ -1,5 +1,5 @@
 import * as vp from "../../../helpers/virtualPoint";
-import { useSelect } from "../../../hooks/useSelect";
+import { useSelect } from "../../../operators/useSelect";
 import SvgObjectWrapper from "../SvgObjectWrapper";
 
 type Props = {

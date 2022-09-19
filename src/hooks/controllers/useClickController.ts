@@ -5,7 +5,7 @@ import {
   useSetSvgObjectList,
   useSvgObjects,
 } from "../../states/svgObjectState";
-import { usePoint } from "../../hooks/usePoint";
+import { usePoint } from "../../operators/usePoint";
 import * as rp from "../../helpers/realPoint";
 import * as vp from "../../helpers/virtualPoint";
 import { nanoid } from "nanoid";

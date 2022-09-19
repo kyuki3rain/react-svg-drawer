@@ -1,4 +1,4 @@
-import { useWindowSize } from "../hooks/useWindowSize";
+import { useWindowSize } from "../operators/useWindowSize";
 import { useMemo } from "react";
 import { useRecoilValue } from "recoil";
 import { areaConfigState } from "../states/areaConfigState";

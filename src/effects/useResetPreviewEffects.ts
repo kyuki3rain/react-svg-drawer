@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useRecoilValue } from "recoil";
-import { useResetPreview } from "../hooks/useResetPreview";
+import { useResetPreview } from "../operators/useResetPreview";
 import { drawModeState } from "../states/drawModeState";
 
 export const useResetPreviewEffects = () => {
