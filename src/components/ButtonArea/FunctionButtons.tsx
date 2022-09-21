@@ -10,11 +10,12 @@ import UndoIcon from "@mui/icons-material/Undo";
 import RedoIcon from "@mui/icons-material/Redo";
 import { Fab, Tooltip } from "@mui/material";
 import React from "react";
-import { useRoll } from "../../states/logState";
 import { useFunctionButton } from "../../hooks/buttons/useFunctionButton";
 
 const FunctionButtons: React.FC = () => {
   const {
+    canUndo,
+    canRedo,
     redo,
     undo,
     grouping,
@@ -26,7 +27,6 @@ const FunctionButtons: React.FC = () => {
     exportFile,
     logFile,
   } = useFunctionButton();
-  const { canUndo, canRedo } = useRoll();
 
   return (
     <div

@@ -3,8 +3,6 @@ import { useCallback } from "react";
 import {
   atom,
   atomFamily,
-  DefaultValue,
-  selector,
   useRecoilCallback,
   useRecoilValue,
   useSetRecoilState,
@@ -20,29 +18,6 @@ export const svgObjectStates = atomFamily<SvgObject | null, SvgId | "preview">({
 export const svgObjectListState = atom<Set<SvgId>>({
   key: "svgObjectListState",
   default: new Set(),
-});
-
-export const allSvgObjectSelector = selector({
-  key: "objectView",
-  get: ({ get }) =>
-    [...get(svgObjectListState)].map((id) => get(svgObjectStates(id))),
-  set: ({ get, set, reset }, newValue) => {
-    if (newValue instanceof DefaultValue) {
-      [...get(svgObjectListState)].map((id) => reset(svgObjectStates(id)));
-      set(svgObjectListState, new Set());
-      return;
-    }
-
-    const idList = newValue
-      .map((obj) => {
-        if (!obj?.id || obj.id == "preview") return;
-        set(svgObjectStates(obj.id), obj);
-        return obj.id;
-      })
-      .flatMap((x) => x ?? []);
-
-    set(svgObjectListState, new Set(idList));
-  },
 });
 
 export const useSetSvgObject = (id = nanoid() as SvgId | "preview") => {

@@ -1,5 +1,5 @@
-import { allSvgObjectSelector } from "../states/svgObjectState";
 import { useRecoilCallback } from "recoil";
+import { allSvgObjectSelector } from "../selectors/objectSelector";
 
 export const useJSON = () => {
   const toJSON = useRecoilCallback(
