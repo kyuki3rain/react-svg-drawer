@@ -1,19 +1,19 @@
 import { useRecoilCallback } from "recoil";
 import { configModalState, draftConfigState } from "../states/configModalState";
 import { drawModeState } from "../states/drawModeState";
-import { useSetSelectedSvgId } from "../states/selectedSvgIdState";
 import {
   svgObjectStates,
   useSetSvgObject,
   useSvgObjects,
 } from "../states/svgObjectState";
+import { useSelect } from "./useSelect";
 
 const textConfig = new Map([["text", ""]]);
 
 export const useResetPreview = () => {
   const { deleteSvgObject, addOrUpdateSvgObject } = useSetSvgObject("preview");
   const { resetPreviewGroup } = useSvgObjects();
-  const { resetSelect } = useSetSelectedSvgId();
+  const { resetSelect } = useSelect();
 
   const openModal = useRecoilCallback(
     ({ set }) =>

@@ -11,11 +11,9 @@ import * as vp from "../../helpers/virtualPoint";
 import { nanoid } from "nanoid";
 import { useCallback, useState } from "react";
 import { configModalState } from "../../states/configModalState";
-import {
-  selectedSvgIdState,
-  useSelectedSvgId,
-} from "../../states/selectedSvgIdState";
+import { selectedSvgIdState } from "../../states/selectedSvgIdState";
 import { useRecoilCallback } from "recoil";
+import { useSelect } from "../../operators/useSelect";
 
 export const useClickController = () => {
   const {
@@ -25,7 +23,7 @@ export const useClickController = () => {
   const [id, setId] = useState(nanoid() as SvgId);
   const { addOrUpdateSvgObject: addOrUpdateNew } = useSetSvgObject(id);
   const { toVirtual } = usePoint();
-  const { resetSelect } = useSelectedSvgId();
+  const { resetSelect } = useSelect();
   const { copySvgObjects } = useSvgObjects();
   const { updateFixedPoint } = useSvgObjects();
   const { addIds, deleteIds } = useSetSvgObjectList();

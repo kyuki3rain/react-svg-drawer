@@ -1,6 +1,6 @@
 import { usePoint } from "../../../operators/usePoint";
 import * as vp from "../../../helpers/virtualPoint";
-import { useSelect } from "../../../operators/useSelect";
+import { useOnClickObject } from "../../../operators/useOnClickObject";
 
 type Props = {
   obj: RectObject;
@@ -16,7 +16,7 @@ const RectObject: React.FC<Props> = ({
   parentId,
 }) => {
   const { toReal } = usePoint();
-  const { onClick } = useSelect();
+  const { onClick } = useOnClickObject();
 
   if (!obj.size || !obj.fixedPoint) return null;
   const r = toReal(
@@ -35,6 +35,8 @@ const RectObject: React.FC<Props> = ({
         strokeWidth={(obj.style.strokeWidth ?? 0) + 10}
         strokeOpacity="0"
         onClick={(e) => {
+          if (!parentId || !obj.id) return;
+          if (parentId ?? obj.id === "preview") return;
           if (onClick(parentId ?? obj.id)) e.stopPropagation();
         }}
       ></rect>

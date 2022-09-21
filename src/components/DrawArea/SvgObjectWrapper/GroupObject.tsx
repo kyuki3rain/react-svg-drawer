@@ -1,5 +1,5 @@
 import * as vp from "../../../helpers/virtualPoint";
-import { useSelect } from "../../../operators/useSelect";
+import { useOnClickObject } from "../../../operators/useOnClickObject";
 import SvgObjectWrapper from "../SvgObjectWrapper";
 
 type Props = {
@@ -15,7 +15,7 @@ const GroupObject: React.FC<Props> = ({
   isSelected,
   parentId,
 }) => {
-  const { onClick } = useSelect();
+  const { onClick } = useOnClickObject();
 
   if (!obj.fixedPoint || obj.objectIds.length === 0) return null;
   const groupPoint = vp.add(obj.fixedPoint, parentPoint);
@@ -23,6 +23,8 @@ const GroupObject: React.FC<Props> = ({
   return (
     <svg
       onClick={(e) => {
+        if (!parentId || !obj.id) return;
+        if (parentId ?? obj.id === "preview") return;
         if (onClick(parentId ?? obj.id)) e.stopPropagation();
       }}
     >

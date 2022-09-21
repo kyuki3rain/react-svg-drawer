@@ -3,10 +3,7 @@ import { useCallback, useRef } from "react";
 import { useRecoilCallback, useRecoilValue } from "recoil";
 import { useJSON } from "../../operators/useJSON";
 import { logIndexState, logsState, stopLogState } from "../../states/logState";
-import {
-  selectedSvgIdState,
-  useSelectedSvgId,
-} from "../../states/selectedSvgIdState";
+import { selectedSvgIdState } from "../../states/selectedSvgIdState";
 import {
   useSetSvgObject,
   useSetSvgObjectList,
@@ -20,6 +17,7 @@ import {
   undoEnableSelector,
 } from "../../selectors/logSelector";
 import { allSvgObjectSelector } from "../../selectors/objectSelector";
+import { useSelect } from "../../operators/useSelect";
 
 const defaultJSON = JSON.stringify({
   appName: __APP_NAME__,
@@ -33,7 +31,7 @@ export const useFunctionButton = () => {
 
   const { fromJSON, toJSON } = useJSON();
   const { uploadFile } = useFileUpload();
-  const { resetSelect, select } = useSelectedSvgId();
+  const { resetSelect, select } = useSelect();
   const id = useRef(nanoid() as SvgId);
   const { addOrUpdateSvgObject } = useSetSvgObject(id.current);
   const { updateFixedPoint, getObjects, deleteObjects } = useSvgObjects();
