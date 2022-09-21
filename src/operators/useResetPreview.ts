@@ -22,17 +22,8 @@ export const useResetPreview = () => {
         id: SvgId | "preview",
         configMap: Map<string, string>
       ) => {
-        const configList = [...configMap].map((p) => ({
-          key: p[0],
-          defaultValue: p[1],
-        }));
-        set(configModalState, { isOpen: true, type, id, configList });
-        set(draftConfigState, (prev) => {
-          [...configList]?.map((c) => {
-            prev.set(c.key, c.defaultValue);
-          });
-          return new Map(prev);
-        });
+        set(configModalState, { isOpen: true, type, id });
+        set(draftConfigState, new Map(configMap));
       },
     []
   );

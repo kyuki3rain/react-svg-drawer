@@ -27,9 +27,8 @@ export const useConfigModal = () => {
       () => {
         set(configModalState, {
           isOpen: false,
-          type: "none",
+          type: "none" as const,
           id: "preview",
-          configList: null,
         });
       },
     []
