@@ -1,13 +1,7 @@
-import { nanoid } from "nanoid";
-import { useCallback, useRef } from "react";
+import { useCallback } from "react";
 import { useRecoilCallback, useRecoilValue } from "recoil";
 import { useJSON } from "../../operators/useJSON";
 import { logIndexState, logsState, stopLogState } from "../../states/logState";
-import { selectedSvgIdState } from "../../states/selectedSvgIdState";
-import {
-  useSetSvgObjectList,
-  useSvgObjects,
-} from "../../states/svgObjectState";
 import * as vp from "../../helpers/virtualPoint";
 import { useFileUpload } from "../../operators/useFileUpload";
 import dayjs from "dayjs";
@@ -16,8 +10,7 @@ import {
   undoEnableSelector,
 } from "../../selectors/logSelector";
 import { allSvgObjectSelector } from "../../selectors/objectSelector";
-import { useSelect } from "../../operators/useSelect";
-import { useSvgObject } from "../../operators/useSvgObject";
+import { useGroupingObject } from "../../operators/useGroupingObject";
 
 const defaultJSON = JSON.stringify({
   appName: __APP_NAME__,
@@ -31,13 +24,8 @@ export const useFunctionButton = () => {
 
   const { fromJSON, toJSON } = useJSON();
   const { uploadFile } = useFileUpload();
-  const { resetSelect, select } = useSelect();
-  const id = useRef(nanoid() as SvgId);
-  const { addObject } = useSvgObject();
-  const { updateFixedPoint, getObjects, deleteObjects } = useSvgObjects();
-  const { addIds, deleteIds } = useSetSvgObjectList();
-
-  const resetId = useCallback(() => (id.current = nanoid() as SvgId), []);
+  const { groupingSelectedObject, ungroupingSelectedObject } =
+    useGroupingObject();
 
   const undo = useRecoilCallback(
     ({ snapshot, set }) =>
@@ -63,49 +51,14 @@ export const useFunctionButton = () => {
     []
   );
 
-  const grouping = useRecoilCallback(
-    ({ snapshot }) =>
-      () => {
-        const selectedSvgId = snapshot
-          .getLoadable(selectedSvgIdState)
-          .getValue();
-        updateFixedPoint([...selectedSvgId], vp.create(0, 0));
-        deleteIds([...selectedSvgId]);
-        addObject({
-          type: "group" as const,
-          objectIds: [...selectedSvgId],
-          fixedPoint: vp.create(0, 0),
-          firstFixedPoint: vp.create(0, 0),
-          style: {},
-          isCopy: false,
-        });
-        resetId();
-        resetSelect();
-        select(id.current);
-      },
-    [addObject, deleteIds, resetId, resetSelect, select, updateFixedPoint]
+  const grouping = useCallback(
+    () => groupingSelectedObject(vp.create(0, 0)),
+    [groupingSelectedObject]
   );
 
-  const ungrouping = useRecoilCallback(
-    ({ snapshot }) =>
-      () => {
-        const selectedSvgId = snapshot
-          .getLoadable(selectedSvgIdState)
-          .getValue();
-        getObjects([...selectedSvgId]).map((obj) => {
-          if (!obj || obj.type !== "group") return;
-          if (!obj.id || obj.id === "preview") return;
-
-          if (!obj.fixedPoint) return;
-
-          const correction = vp.sub(vp.create(0, 0), obj.fixedPoint);
-          updateFixedPoint(obj.objectIds, correction);
-          addIds(obj.objectIds);
-          deleteObjects([obj.id]);
-          obj.objectIds.map((objId) => select(objId));
-        });
-      },
-    [addIds, deleteObjects, getObjects, select, updateFixedPoint]
+  const ungrouping = useCallback(
+    () => ungroupingSelectedObject(),
+    [ungroupingSelectedObject]
   );
 
   const saveFile = useCallback(() => {

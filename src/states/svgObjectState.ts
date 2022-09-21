@@ -14,35 +14,6 @@ export const svgObjectListState = atom<Set<SvgId>>({
   default: new Set(),
 });
 
-export const useSetSvgObjectList = () => {
-  const setSvgObjectList = useSetRecoilState(svgObjectListState);
-
-  const addIds = useCallback(
-    (ids: SvgId[]) => {
-      setSvgObjectList((prev) => {
-        ids.map((id) => prev.add(id));
-        return new Set(prev);
-      });
-    },
-    [setSvgObjectList]
-  );
-
-  const deleteIds = useCallback(
-    (ids: SvgId[]) => {
-      setSvgObjectList((prev) => {
-        ids.map((id) => prev.delete(id));
-        return new Set(prev);
-      });
-    },
-    [setSvgObjectList]
-  );
-
-  return {
-    addIds,
-    deleteIds,
-  };
-};
-
 export const useSvgObjects = () => {
   const updateFixedPoint = useRecoilCallback(
     ({ set }) =>

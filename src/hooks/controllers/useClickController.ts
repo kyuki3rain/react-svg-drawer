@@ -1,28 +1,22 @@
 import { drawModeState } from "../../states/drawModeState";
-import {
-  svgObjectStates,
-  useSetSvgObjectList,
-  useSvgObjects,
-} from "../../states/svgObjectState";
+import { svgObjectStates } from "../../states/svgObjectState";
 import { usePoint } from "../../operators/usePoint";
 import * as rp from "../../helpers/realPoint";
 import * as vp from "../../helpers/virtualPoint";
 import { useCallback } from "react";
 import { configModalState } from "../../states/configModalState";
-import { selectedSvgIdState } from "../../states/selectedSvgIdState";
 import { useRecoilCallback } from "recoil";
 import { useSelect } from "../../operators/useSelect";
 import { usePreview } from "../../operators/usePreview";
 import { useSvgObject } from "../../operators/useSvgObject";
+import { useGroupingObject } from "../../operators/useGroupingObject";
 
 export const useClickController = () => {
   const { updatePreview, deletePreview } = usePreview();
   const { addObject } = useSvgObject();
   const { toVirtual } = usePoint();
   const { resetSelect } = useSelect();
-  const { copySvgObjects } = useSvgObjects();
-  const { updateFixedPoint } = useSvgObjects();
-  const { addIds, deleteIds } = useSetSvgObjectList();
+  const { groupingPreview, ungroupingPreview } = useGroupingObject();
 
   const onClickLine = useCallback(
     (obj: LineObject | null, v: VirtualPoint) => {
@@ -140,68 +134,28 @@ export const useClickController = () => {
     [addObject, updatePreview, deletePreview]
   );
 
-  const onClickCopy = useRecoilCallback(
-    ({ snapshot }) =>
-      (obj: GroupObject | null, v: VirtualPoint) => {
-        if (!obj || !obj.fixedPoint) {
-          const selectedSvgId = snapshot
-            .getLoadable(selectedSvgIdState)
-            .getValue();
-          const newIds = copySvgObjects([...selectedSvgId]);
-          updateFixedPoint([...selectedSvgId], vp.create(0, 0));
-          deleteIds([...selectedSvgId]);
-          updatePreview({
-            type: "group" as const,
-            objectIds: newIds,
-            fixedPoint: v,
-            firstFixedPoint: v,
-            style: {},
-            isCopy: true,
-          });
-          return;
-        }
+  const onClickCopy = useCallback(
+    (obj: GroupObject | null, v: VirtualPoint) => {
+      if (!obj || !obj.fixedPoint) {
+        groupingPreview(v, true);
+        return;
+      }
 
-        const correction = vp.sub(vp.create(0, 0), obj.fixedPoint);
-        updateFixedPoint(obj.objectIds, correction);
-        addIds(obj.objectIds);
-        deletePreview();
-      },
-    [
-      addIds,
-      updatePreview,
-      copySvgObjects,
-      deleteIds,
-      deletePreview,
-      updateFixedPoint,
-    ]
+      ungroupingPreview(v);
+    },
+    [ungroupingPreview, groupingPreview]
   );
 
-  const onClickMove = useRecoilCallback(
-    ({ snapshot }) =>
-      (obj: GroupObject | null, v: VirtualPoint) => {
-        const selectedSvgId = snapshot
-          .getLoadable(selectedSvgIdState)
-          .getValue();
-        if (!obj || !obj.fixedPoint) {
-          updateFixedPoint([...selectedSvgId], vp.create(0, 0));
-          deleteIds([...selectedSvgId]);
-          updatePreview({
-            type: "group" as const,
-            objectIds: [...selectedSvgId],
-            fixedPoint: v,
-            firstFixedPoint: v,
-            style: {},
-            isCopy: false,
-          });
-          return;
-        }
+  const onClickMove = useCallback(
+    (obj: GroupObject | null, v: VirtualPoint) => {
+      if (!obj || !obj.fixedPoint) {
+        groupingPreview(v, false);
+        return;
+      }
 
-        const correction = vp.sub(vp.create(0, 0), obj.fixedPoint);
-        updateFixedPoint(obj.objectIds, correction);
-        addIds(obj.objectIds);
-        deletePreview();
-      },
-    [addIds, updatePreview, deleteIds, deletePreview, updateFixedPoint]
+      ungroupingPreview(v);
+    },
+    [ungroupingPreview, groupingPreview]
   );
 
   const onClick = useRecoilCallback(
