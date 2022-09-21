@@ -1,51 +1,52 @@
 import { drawModeState } from "../../states/drawModeState";
-import { svgObjectStates, useSetSvgObject } from "../../states/svgObjectState";
+import { svgObjectStates } from "../../states/svgObjectState";
 import * as rp from "../../helpers/realPoint";
 import * as vp from "../../helpers/virtualPoint";
 import { configModalState } from "../../states/configModalState";
 import { useCallback } from "react";
 import { usePoint } from "../../operators/usePoint";
 import { useRecoilCallback } from "recoil";
+import { usePreview } from "../../operators/usePreview";
 
 export const useOnMouseMoveController = () => {
-  const { addOrUpdateSvgObject } = useSetSvgObject("preview");
+  const { updatePreview } = usePreview();
   const { toVirtual } = usePoint();
 
   const omMouseMoveLine = useCallback(
     (obj: LineObject | null, v: VirtualPoint) => {
       if (!obj?.fixedPoint) return;
 
-      addOrUpdateSvgObject({
+      updatePreview({
         ...obj,
         point2: vp.sub(v, obj.fixedPoint),
       });
     },
-    [addOrUpdateSvgObject]
+    [updatePreview]
   );
 
   const omMouseMovePolyline = useCallback(
     (obj: PolylineObject | null, v: VirtualPoint) => {
       if (!obj?.fixedPoint) return;
 
-      addOrUpdateSvgObject({
+      updatePreview({
         ...obj,
         previewPoint: vp.sub(v, obj.fixedPoint),
       });
     },
-    [addOrUpdateSvgObject]
+    [updatePreview]
   );
 
   const onMouseMoveText = useCallback(
     (obj: TextObject | null, v: VirtualPoint) => {
       if (!obj) return;
 
-      addOrUpdateSvgObject({
+      updatePreview({
         ...obj,
         fixedPoint: v,
         point: vp.create(0, 0),
       });
     },
-    [addOrUpdateSvgObject]
+    [updatePreview]
   );
 
   const onMouseMoveRect = useCallback(
@@ -54,14 +55,14 @@ export const useOnMouseMoveController = () => {
 
       const diff = vp.sub(v, obj.fixedPoint);
       if (diff.vx == 0 || diff.vy == 0) {
-        addOrUpdateSvgObject({
+        updatePreview({
           ...obj,
           size: undefined,
         });
         return;
       }
 
-      addOrUpdateSvgObject({
+      updatePreview({
         ...obj,
         upperLeft: vp.create(
           diff.vx > 0 ? 0 : diff.vx,
@@ -73,7 +74,7 @@ export const useOnMouseMoveController = () => {
         ),
       });
     },
-    [addOrUpdateSvgObject]
+    [updatePreview]
   );
 
   const onMouseMoveCircle = useCallback(
@@ -83,25 +84,25 @@ export const useOnMouseMoveController = () => {
       const c = vp.divConst(vp.sub(v, obj.fixedPoint), 2);
       const r = vp.abs(c);
 
-      addOrUpdateSvgObject({
+      updatePreview({
         ...obj,
         r,
         c,
       });
     },
-    [addOrUpdateSvgObject]
+    [updatePreview]
   );
 
   const onMouseMoveGroup = useCallback(
     (obj: GroupObject | null, v: VirtualPoint) => {
       if (!obj) return;
 
-      addOrUpdateSvgObject({
+      updatePreview({
         ...obj,
         fixedPoint: v,
       });
     },
-    [addOrUpdateSvgObject]
+    [updatePreview]
   );
 
   const omMouseMove = useRecoilCallback(

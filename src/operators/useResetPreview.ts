@@ -1,18 +1,15 @@
 import { useRecoilCallback } from "recoil";
 import { configModalState, draftConfigState } from "../states/configModalState";
 import { drawModeState } from "../states/drawModeState";
-import {
-  svgObjectStates,
-  useSetSvgObject,
-  useSvgObjects,
-} from "../states/svgObjectState";
+import { svgObjectListState, svgObjectStates } from "../states/svgObjectState";
+import { usePreview } from "./usePreview";
 import { useSelect } from "./useSelect";
+import * as vp from "../helpers/virtualPoint";
 
 const textConfig = new Map([["text", ""]]);
 
 export const useResetPreview = () => {
-  const { deleteSvgObject, addOrUpdateSvgObject } = useSetSvgObject("preview");
-  const { resetPreviewGroup } = useSvgObjects();
+  const { deletePreview, updatePreview } = usePreview();
   const { resetSelect } = useSelect();
 
   const openModal = useRecoilCallback(
@@ -28,6 +25,40 @@ export const useResetPreview = () => {
     []
   );
 
+  const resetPreviewGroup = useRecoilCallback(
+    ({ set, snapshot }) =>
+      () => {
+        const obj = snapshot.getLoadable(svgObjectStates("preview")).getValue();
+
+        if (!obj || obj.type !== "group" || !obj.fixedPoint) return;
+
+        if (obj.isCopy) {
+          obj.objectIds.map((id) => {
+            set(svgObjectStates(id), null);
+          });
+        } else {
+          const correction = vp.sub(vp.create(0, 0), obj.firstFixedPoint);
+          obj.objectIds.map((id) =>
+            set(svgObjectStates(id), (prev) => {
+              if (!prev) return prev;
+              if (!prev.fixedPoint) return prev;
+              return (
+                prev && {
+                  ...prev,
+                  fixedPoint: vp.sub(prev.fixedPoint, correction),
+                }
+              );
+            })
+          );
+          set(svgObjectListState, (prev) => {
+            obj.objectIds.map((id) => prev.add(id));
+            return new Set(prev);
+          });
+        }
+      },
+    []
+  );
+
   const resetPreview = useRecoilCallback(
     ({ snapshot }) =>
       () => {
@@ -39,7 +70,7 @@ export const useResetPreview = () => {
             const configMap = snapshot
               .getLoadable(svgObjectStates("preview"))
               .getValue()?.configMap;
-            addOrUpdateSvgObject({
+            updatePreview({
               type: "text",
               configMap: configMap ?? new Map(textConfig),
               style: { stroke: "black" },
@@ -48,23 +79,17 @@ export const useResetPreview = () => {
             break;
           }
           case "copy":
-            deleteSvgObject();
+            deletePreview();
             break;
           case "move":
-            deleteSvgObject();
+            deletePreview();
             break;
           default:
             resetSelect();
-            deleteSvgObject();
+            deletePreview();
         }
       },
-    [
-      addOrUpdateSvgObject,
-      deleteSvgObject,
-      openModal,
-      resetSelect,
-      resetPreviewGroup,
-    ]
+    [updatePreview, deletePreview, openModal, resetSelect, resetPreviewGroup]
   );
 
   return {

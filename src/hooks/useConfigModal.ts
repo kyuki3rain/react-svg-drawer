@@ -5,13 +5,14 @@ import {
   useRecoilValue,
   useSetRecoilState,
 } from "recoil";
+import { useSvgObject } from "../operators/useSvgObject";
 import { configModalState, draftConfigState } from "../states/configModalState";
 import { drawModeState } from "../states/drawModeState";
-import { svgObjectStates, useSetSvgObject } from "../states/svgObjectState";
+import { svgObjectStates } from "../states/svgObjectState";
 
 export const useConfigModal = () => {
   const configModal = useRecoilValue(configModalState);
-  const { addOrUpdateSvgObject } = useSetSvgObject(configModal.id);
+  const { updateObject } = useSvgObject();
   const [draftConfigs, setDraftConfigs] = useRecoilState(draftConfigState);
   const setDrawMode = useSetRecoilState(drawModeState);
 
@@ -47,14 +48,14 @@ export const useConfigModal = () => {
           console.error("configMap is not matched to obj.configMap!");
           return;
         }
-        addOrUpdateSvgObject({
+        updateObject({
           ...obj,
           configMap: new Map([...obj.configMap, ...configMap]),
         });
 
         closeModal();
       },
-    [addOrUpdateSvgObject, closeModal]
+    [updateObject, closeModal]
   );
 
   const closeModalWithoutMode = useCallback(() => {

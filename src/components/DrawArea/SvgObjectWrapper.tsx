@@ -1,10 +1,11 @@
-import { useSvgObject } from "../../states/svgObjectState";
+import { svgObjectStates } from "../../states/svgObjectState";
 import TextObject from "./SvgObjectWrapper/TextObject";
 import LineObject from "./SvgObjectWrapper/LineObject";
 import PolylineObject from "./SvgObjectWrapper/PolylineObject";
 import RectObject from "./SvgObjectWrapper/RectObject";
 import CircleObject from "./SvgObjectWrapper/CircleObject";
 import GroupObject from "./SvgObjectWrapper/GroupObject";
+import { useRecoilValue } from "recoil";
 
 type Props = {
   svgId: SvgId | "preview";
@@ -19,7 +20,7 @@ const SvgObjectWrapper: React.FC<Props> = ({
   isSelected,
   parentId,
 }) => {
-  const { svgObject: obj } = useSvgObject(svgId);
+  const obj = useRecoilValue(svgObjectStates(svgId));
 
   if (!obj) return null;
 
