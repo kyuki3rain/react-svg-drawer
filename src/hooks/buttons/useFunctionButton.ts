@@ -1,21 +1,23 @@
 import { nanoid } from "nanoid";
 import { useCallback, useRef } from "react";
-import { useRecoilCallback } from "recoil";
-import { useJSON } from "../hooks/useJSON";
-import { logIndexAtom, logsAtom, stopLogState } from "../states/logState";
+import { useRecoilCallback, useRecoilValue } from "recoil";
+import { useJSON } from "../../operators/useJSON";
+import { logIndexState, logsState, stopLogState } from "../../states/logState";
+import { selectedSvgIdState } from "../../states/selectedSvgIdState";
 import {
-  selectedSvgIdState,
-  useSelectedSvgId,
-} from "../states/selectedSvgIdState";
-import {
-  allSvgObjectSelector,
   useSetSvgObject,
   useSetSvgObjectList,
   useSvgObjects,
-} from "../states/svgObjectState";
-import * as vp from "../helpers/virtualPoint";
-import { useFileUpload } from "../hooks/useFileUpload";
+} from "../../states/svgObjectState";
+import * as vp from "../../helpers/virtualPoint";
+import { useFileUpload } from "../../operators/useFileUpload";
 import dayjs from "dayjs";
+import {
+  redoEnableSelector,
+  undoEnableSelector,
+} from "../../selectors/logSelector";
+import { allSvgObjectSelector } from "../../selectors/objectSelector";
+import { useSelect } from "../../operators/useSelect";
 
 const defaultJSON = JSON.stringify({
   appName: __APP_NAME__,
@@ -24,10 +26,12 @@ const defaultJSON = JSON.stringify({
 });
 
 export const useFunctionButton = () => {
+  const canUndo = useRecoilValue(undoEnableSelector);
+  const canRedo = useRecoilValue(redoEnableSelector);
+
   const { fromJSON, toJSON } = useJSON();
   const { uploadFile } = useFileUpload();
-
-  const { resetSelect, select } = useSelectedSvgId();
+  const { resetSelect, select } = useSelect();
   const id = useRef(nanoid() as SvgId);
   const { addOrUpdateSvgObject } = useSetSvgObject(id.current);
   const { updateFixedPoint, getObjects, deleteObjects } = useSvgObjects();
@@ -38,10 +42,10 @@ export const useFunctionButton = () => {
   const undo = useRecoilCallback(
     ({ snapshot, set }) =>
       () => {
-        const logs = snapshot.getLoadable(logsAtom).getValue();
-        const nextIndex = snapshot.getLoadable(logIndexAtom).getValue() - 1;
+        const logs = snapshot.getLoadable(logsState).getValue();
+        const nextIndex = snapshot.getLoadable(logIndexState).getValue() - 1;
         set(allSvgObjectSelector, logs[nextIndex - 1].objects);
-        set(logIndexAtom, nextIndex);
+        set(logIndexState, nextIndex);
         set(stopLogState, true);
       },
     []
@@ -50,10 +54,10 @@ export const useFunctionButton = () => {
   const redo = useRecoilCallback(
     ({ snapshot, set }) =>
       () => {
-        const logs = snapshot.getLoadable(logsAtom).getValue();
-        const nextIndex = snapshot.getLoadable(logIndexAtom).getValue() + 1;
+        const logs = snapshot.getLoadable(logsState).getValue();
+        const nextIndex = snapshot.getLoadable(logIndexState).getValue() + 1;
         set(allSvgObjectSelector, logs[nextIndex - 1].objects);
-        set(logIndexAtom, nextIndex);
+        set(logIndexState, nextIndex);
         set(stopLogState, true);
       },
     []
@@ -156,6 +160,8 @@ export const useFunctionButton = () => {
   const logFile = useCallback(() => console.log(toJSON()), [toJSON]);
 
   return {
+    canUndo,
+    canRedo,
     undo,
     redo,
     grouping,

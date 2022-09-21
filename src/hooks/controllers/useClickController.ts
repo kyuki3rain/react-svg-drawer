@@ -5,17 +5,15 @@ import {
   useSetSvgObjectList,
   useSvgObjects,
 } from "../../states/svgObjectState";
-import { usePoint } from "../../hooks/usePoint";
+import { usePoint } from "../../operators/usePoint";
 import * as rp from "../../helpers/realPoint";
 import * as vp from "../../helpers/virtualPoint";
 import { nanoid } from "nanoid";
 import { useCallback, useState } from "react";
 import { configModalState } from "../../states/configModalState";
-import {
-  selectedSvgIdState,
-  useSelectedSvgId,
-} from "../../states/selectedSvgIdState";
+import { selectedSvgIdState } from "../../states/selectedSvgIdState";
 import { useRecoilCallback } from "recoil";
+import { useSelect } from "../../operators/useSelect";
 
 export const useClickController = () => {
   const {
@@ -25,7 +23,7 @@ export const useClickController = () => {
   const [id, setId] = useState(nanoid() as SvgId);
   const { addOrUpdateSvgObject: addOrUpdateNew } = useSetSvgObject(id);
   const { toVirtual } = usePoint();
-  const { resetSelect } = useSelectedSvgId();
+  const { resetSelect } = useSelect();
   const { copySvgObjects } = useSvgObjects();
   const { updateFixedPoint } = useSvgObjects();
   const { addIds, deleteIds } = useSetSvgObjectList();
@@ -236,7 +234,7 @@ export const useClickController = () => {
         if (isOpen) return;
         const v = toVirtual(rp.create(x, y));
 
-        switch (drawMode.mode) {
+        switch (drawMode) {
           case "line": {
             if (obj && obj.type !== "line") break;
             onClickLine(obj, v);
@@ -300,7 +298,7 @@ export const useClickController = () => {
         const obj = snapshot.getLoadable(svgObjectStates("preview")).getValue();
 
         if (isOpen) return;
-        switch (drawMode.mode) {
+        switch (drawMode) {
           case "polyline": {
             if (obj?.type !== "polyline") break;
             addOrUpdateNew({

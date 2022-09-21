@@ -16,8 +16,8 @@ export const useConfigModal = () => {
   const setDrawMode = useSetRecoilState(drawModeState);
 
   const changeMode = useCallback(
-    (mode: DrawMode, param?: SvgObject) => {
-      setDrawMode((prev) => (prev.mode === mode ? prev : { mode, param }));
+    (mode: DrawMode) => {
+      setDrawMode((prev) => (prev === mode ? prev : mode));
     },
     [setDrawMode]
   );
@@ -27,9 +27,8 @@ export const useConfigModal = () => {
       () => {
         set(configModalState, {
           isOpen: false,
-          type: "none",
+          type: "none" as const,
           id: "preview",
-          configList: null,
         });
       },
     []

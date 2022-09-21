@@ -1,19 +1,19 @@
 import { useRecoilCallback } from "recoil";
 import { configModalState, draftConfigState } from "../states/configModalState";
 import { drawModeState } from "../states/drawModeState";
-import { useSetSelectedSvgId } from "../states/selectedSvgIdState";
 import {
   svgObjectStates,
   useSetSvgObject,
   useSvgObjects,
 } from "../states/svgObjectState";
+import { useSelect } from "./useSelect";
 
 const textConfig = new Map([["text", ""]]);
 
 export const useResetPreview = () => {
   const { deleteSvgObject, addOrUpdateSvgObject } = useSetSvgObject("preview");
   const { resetPreviewGroup } = useSvgObjects();
-  const { resetSelect } = useSetSelectedSvgId();
+  const { resetSelect } = useSelect();
 
   const openModal = useRecoilCallback(
     ({ set }) =>
@@ -22,17 +22,8 @@ export const useResetPreview = () => {
         id: SvgId | "preview",
         configMap: Map<string, string>
       ) => {
-        const configList = [...configMap].map((p) => ({
-          key: p[0],
-          defaultValue: p[1],
-        }));
-        set(configModalState, { isOpen: true, type, id, configList });
-        set(draftConfigState, (prev) => {
-          [...configList]?.map((c) => {
-            prev.set(c.key, c.defaultValue);
-          });
-          return new Map(prev);
-        });
+        set(configModalState, { isOpen: true, type, id });
+        set(draftConfigState, new Map(configMap));
       },
     []
   );
@@ -43,7 +34,7 @@ export const useResetPreview = () => {
         const drawMode = snapshot.getLoadable(drawModeState).getValue();
         resetPreviewGroup();
 
-        switch (drawMode.mode) {
+        switch (drawMode) {
           case "text": {
             const configMap = snapshot
               .getLoadable(svgObjectStates("preview"))

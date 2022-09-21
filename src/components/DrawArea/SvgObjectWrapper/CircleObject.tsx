@@ -1,6 +1,6 @@
-import { usePoint } from "../../../hooks/usePoint";
+import { usePoint } from "../../../operators/usePoint";
 import * as vp from "../../../helpers/virtualPoint";
-import { useSelect } from "../../../hooks/useSelect";
+import { useOnClickObject } from "../../../operators/useOnClickObject";
 
 type Props = {
   obj: CircleObject;
@@ -16,7 +16,7 @@ const CircleObject: React.FC<Props> = ({
   parentId,
 }) => {
   const { toReal } = usePoint();
-  const { onClick } = useSelect();
+  const { onClick } = useOnClickObject();
 
   if (!obj.c || !obj.r || !obj.fixedPoint) return null;
   const c = toReal(vp.add(vp.add(obj.c, obj.fixedPoint), parentPoint), true);
@@ -32,6 +32,8 @@ const CircleObject: React.FC<Props> = ({
         strokeWidth={(obj.style.strokeWidth ?? 0) + 10}
         strokeOpacity="0"
         onClick={(e) => {
+          if (!parentId || !obj.id) return;
+          if (parentId ?? obj.id === "preview") return;
           if (onClick(parentId ?? obj.id)) e.stopPropagation();
         }}
       ></ellipse>

@@ -1,11 +1,6 @@
 import { atom } from "recoil";
 
-type DrawModeState = {
-  mode: DrawMode;
-  param?: SvgObject;
-};
-
-export const drawModeState = atom<DrawModeState>({
+export const drawModeState = atom<DrawMode>({
   key: "drawModeState",
-  default: { mode: "selector" },
+  default: "selector",
 });

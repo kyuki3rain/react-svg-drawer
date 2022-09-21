@@ -8,7 +8,7 @@ import MoveDownIcon from "@mui/icons-material/MoveDown";
 import { Fab, SvgIcon, Tooltip } from "@mui/material";
 import React from "react";
 import { ReactComponent as CursorIcon } from "../../assets/CursorIcon.svg";
-import { useModeButtons } from "../../operators/useModeButtons";
+import { useModeButtons } from "../../hooks/buttons/useModeButtons";
 
 const ModeButtons: React.FC = () => {
   const { drawMode, changeMode } = useModeButtons();
@@ -25,8 +25,8 @@ const ModeButtons: React.FC = () => {
       <Tooltip title="selector" style={{ marginLeft: 5 }} arrow>
         <Fab
           aria-label="selector"
-          color={drawMode.mode === "selector" ? "success" : "primary"}
-          onClick={() => drawMode.mode !== "selector" && changeMode("selector")}
+          color={drawMode === "selector" ? "success" : "primary"}
+          onClick={() => drawMode !== "selector" && changeMode("selector")}
         >
           <SvgIcon>
             <CursorIcon />
@@ -36,8 +36,8 @@ const ModeButtons: React.FC = () => {
       <Tooltip title="line" style={{ marginLeft: 5 }} arrow>
         <Fab
           aria-label="line"
-          color={drawMode.mode === "line" ? "success" : "primary"}
-          onClick={() => drawMode.mode !== "line" && changeMode("line")}
+          color={drawMode === "line" ? "success" : "primary"}
+          onClick={() => drawMode !== "line" && changeMode("line")}
         >
           <HorizontalRuleIcon />
         </Fab>
@@ -45,8 +45,8 @@ const ModeButtons: React.FC = () => {
       <Tooltip title="polyline" style={{ marginLeft: 5 }} arrow>
         <Fab
           aria-label="polyline"
-          color={drawMode.mode === "polyline" ? "success" : "primary"}
-          onClick={() => drawMode.mode !== "polyline" && changeMode("polyline")}
+          color={drawMode === "polyline" ? "success" : "primary"}
+          onClick={() => drawMode !== "polyline" && changeMode("polyline")}
         >
           <ShowChartIcon />
         </Fab>
@@ -54,8 +54,8 @@ const ModeButtons: React.FC = () => {
       <Tooltip title="text" style={{ marginLeft: 5 }} arrow>
         <Fab
           aria-label="text"
-          color={drawMode.mode === "text" ? "success" : "primary"}
-          onClick={() => drawMode.mode !== "text" && changeMode("text")}
+          color={drawMode === "text" ? "success" : "primary"}
+          onClick={() => drawMode !== "text" && changeMode("text")}
         >
           <TextFieldsIcon />
         </Fab>
@@ -63,8 +63,8 @@ const ModeButtons: React.FC = () => {
       <Tooltip title="rect" style={{ marginLeft: 5 }} arrow>
         <Fab
           aria-label="rect"
-          color={drawMode.mode === "rect" ? "success" : "primary"}
-          onClick={() => drawMode.mode !== "rect" && changeMode("rect")}
+          color={drawMode === "rect" ? "success" : "primary"}
+          onClick={() => drawMode !== "rect" && changeMode("rect")}
         >
           <RectangleIcon />
         </Fab>
@@ -72,8 +72,8 @@ const ModeButtons: React.FC = () => {
       <Tooltip title="circle" style={{ marginLeft: 5 }} arrow>
         <Fab
           aria-label="circle"
-          color={drawMode.mode === "circle" ? "success" : "primary"}
-          onClick={() => drawMode.mode !== "circle" && changeMode("circle")}
+          color={drawMode === "circle" ? "success" : "primary"}
+          onClick={() => drawMode !== "circle" && changeMode("circle")}
         >
           <CircleIcon />
         </Fab>
@@ -81,8 +81,8 @@ const ModeButtons: React.FC = () => {
       <Tooltip title="copy" style={{ marginLeft: 5 }} arrow>
         <Fab
           aria-label="copy"
-          color={drawMode.mode === "copy" ? "success" : "primary"}
-          onClick={() => drawMode.mode !== "copy" && changeMode("copy")}
+          color={drawMode === "copy" ? "success" : "primary"}
+          onClick={() => drawMode !== "copy" && changeMode("copy")}
         >
           <ContentCopyIcon />
         </Fab>
@@ -90,8 +90,8 @@ const ModeButtons: React.FC = () => {
       <Tooltip title="move" style={{ marginLeft: 5 }} arrow>
         <Fab
           aria-label="move"
-          color={drawMode.mode === "move" ? "success" : "primary"}
-          onClick={() => drawMode.mode !== "move" && changeMode("move")}
+          color={drawMode === "move" ? "success" : "primary"}
+          onClick={() => drawMode !== "move" && changeMode("move")}
         >
           <MoveDownIcon />
         </Fab>

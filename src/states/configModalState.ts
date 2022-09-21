@@ -3,7 +3,6 @@ import { atom } from "recoil";
 type ConfigModalState = {
   id: SvgId | "preview";
   isOpen: boolean;
-  configList: ObjectConfigs | null;
   type: ConfigType;
 };
 
@@ -13,7 +12,6 @@ export const configModalState = atom<ConfigModalState>({
     isOpen: false,
     type: "none",
     id: "preview",
-    configList: null,
   },
 });
 
