@@ -34,7 +34,7 @@ export const useResetPreview = () => {
         const drawMode = snapshot.getLoadable(drawModeState).getValue();
         resetPreviewGroup();
 
-        switch (drawMode.mode) {
+        switch (drawMode) {
           case "text": {
             const configMap = snapshot
               .getLoadable(svgObjectStates("preview"))

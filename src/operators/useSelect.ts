@@ -11,7 +11,7 @@ export const useSelect = () => {
         const drawMode = snapshot.getLoadable(drawModeState).getValue();
         if (!id) return false;
         if (id === "preview") return false;
-        if (drawMode.mode !== "selector") return false;
+        if (drawMode !== "selector") return false;
 
         toggleSelect(id);
 
