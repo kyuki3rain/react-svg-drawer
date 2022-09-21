@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useRecoilValue } from "recoil";
-import { useLog } from "../states/logState";
-import { allSvgObjectSelector } from "../states/svgObjectState";
+import { useLog } from "../operators/useLog";
+import { allSvgObjectSelector } from "../selectors/objectSelector";
 
 export const useSetLogEffects = () => {
   const { setLog } = useLog();
