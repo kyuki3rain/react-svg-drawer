@@ -1,39 +1,33 @@
 import { drawModeState } from "../../states/drawModeState";
 import {
   svgObjectStates,
-  useSetSvgObject,
   useSetSvgObjectList,
   useSvgObjects,
 } from "../../states/svgObjectState";
 import { usePoint } from "../../operators/usePoint";
 import * as rp from "../../helpers/realPoint";
 import * as vp from "../../helpers/virtualPoint";
-import { nanoid } from "nanoid";
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
 import { configModalState } from "../../states/configModalState";
 import { selectedSvgIdState } from "../../states/selectedSvgIdState";
 import { useRecoilCallback } from "recoil";
 import { useSelect } from "../../operators/useSelect";
+import { usePreview } from "../../operators/usePreview";
+import { useSvgObject } from "../../operators/useSvgObject";
 
 export const useClickController = () => {
-  const {
-    addOrUpdateSvgObject: addOrUpdatePreview,
-    deleteSvgObject: deletePreview,
-  } = useSetSvgObject("preview");
-  const [id, setId] = useState(nanoid() as SvgId);
-  const { addOrUpdateSvgObject: addOrUpdateNew } = useSetSvgObject(id);
+  const { updatePreview, deletePreview } = usePreview();
+  const { addObject } = useSvgObject();
   const { toVirtual } = usePoint();
   const { resetSelect } = useSelect();
   const { copySvgObjects } = useSvgObjects();
   const { updateFixedPoint } = useSvgObjects();
   const { addIds, deleteIds } = useSetSvgObjectList();
 
-  const setNewId = useCallback(() => setId(nanoid() as SvgId), []);
-
   const onClickLine = useCallback(
     (obj: LineObject | null, v: VirtualPoint) => {
       if (!obj?.fixedPoint) {
-        addOrUpdatePreview({
+        updatePreview({
           id: "preview",
           type: "line",
           fixedPoint: v,
@@ -43,20 +37,19 @@ export const useClickController = () => {
         return;
       }
 
-      addOrUpdateNew({
+      addObject({
         ...obj,
         point2: vp.sub(v, obj.fixedPoint),
       });
-      setNewId();
       deletePreview();
     },
-    [addOrUpdateNew, addOrUpdatePreview, deletePreview, setNewId]
+    [addObject, updatePreview, deletePreview]
   );
 
   const onClickPolyline = useCallback(
     (obj: PolylineObject | null, v: VirtualPoint) => {
       if (!obj?.fixedPoint) {
-        addOrUpdatePreview({
+        updatePreview({
           id: "preview",
           type: "polyline",
           fixedPoint: v,
@@ -66,31 +59,30 @@ export const useClickController = () => {
         return;
       }
 
-      addOrUpdatePreview({
+      updatePreview({
         ...obj,
         points: [...obj.points, vp.sub(v, obj.fixedPoint)],
       });
     },
-    [addOrUpdatePreview]
+    [updatePreview]
   );
 
   const onClickText = useCallback(
     (obj: TextObject | null, v: VirtualPoint) => {
       if (!obj) return;
-      addOrUpdateNew({
+      addObject({
         ...obj,
         fixedPoint: v,
         point: vp.create(0, 0),
       });
-      setNewId();
     },
-    [addOrUpdateNew, setNewId]
+    [addObject]
   );
 
   const onClickRect = useCallback(
     (obj: RectObject | null, v: VirtualPoint) => {
       if (!obj?.fixedPoint) {
-        addOrUpdatePreview({
+        updatePreview({
           id: "preview",
           type: "rect",
           upperLeft: vp.create(0, 0),
@@ -106,7 +98,7 @@ export const useClickController = () => {
         return;
       }
 
-      addOrUpdateNew({
+      addObject({
         ...obj,
         upperLeft: vp.create(
           diff.vx > 0 ? 0 : diff.vx,
@@ -118,16 +110,15 @@ export const useClickController = () => {
         ),
       });
 
-      setNewId();
       deletePreview();
     },
-    [addOrUpdateNew, addOrUpdatePreview, deletePreview, setNewId]
+    [addObject, updatePreview, deletePreview]
   );
 
   const onClickCircle = useCallback(
     (obj: CircleObject | null, v: VirtualPoint) => {
       if (!obj?.fixedPoint) {
-        addOrUpdatePreview({
+        updatePreview({
           id: "preview",
           type: "circle",
           fixedPoint: v,
@@ -139,15 +130,14 @@ export const useClickController = () => {
       const c = vp.divConst(vp.sub(v, obj.fixedPoint), 2);
       const r = vp.abs(c);
 
-      addOrUpdateNew({
+      addObject({
         ...obj,
         r,
         c,
       });
-      setNewId();
       deletePreview();
     },
-    [addOrUpdateNew, addOrUpdatePreview, deletePreview, setNewId]
+    [addObject, updatePreview, deletePreview]
   );
 
   const onClickCopy = useRecoilCallback(
@@ -160,7 +150,7 @@ export const useClickController = () => {
           const newIds = copySvgObjects([...selectedSvgId]);
           updateFixedPoint([...selectedSvgId], vp.create(0, 0));
           deleteIds([...selectedSvgId]);
-          addOrUpdatePreview({
+          updatePreview({
             type: "group" as const,
             objectIds: newIds,
             fixedPoint: v,
@@ -174,16 +164,14 @@ export const useClickController = () => {
         const correction = vp.sub(vp.create(0, 0), obj.fixedPoint);
         updateFixedPoint(obj.objectIds, correction);
         addIds(obj.objectIds);
-        setNewId();
         deletePreview();
       },
     [
       addIds,
-      addOrUpdatePreview,
+      updatePreview,
       copySvgObjects,
       deleteIds,
       deletePreview,
-      setNewId,
       updateFixedPoint,
     ]
   );
@@ -197,7 +185,7 @@ export const useClickController = () => {
         if (!obj || !obj.fixedPoint) {
           updateFixedPoint([...selectedSvgId], vp.create(0, 0));
           deleteIds([...selectedSvgId]);
-          addOrUpdatePreview({
+          updatePreview({
             type: "group" as const,
             objectIds: [...selectedSvgId],
             fixedPoint: v,
@@ -211,17 +199,9 @@ export const useClickController = () => {
         const correction = vp.sub(vp.create(0, 0), obj.fixedPoint);
         updateFixedPoint(obj.objectIds, correction);
         addIds(obj.objectIds);
-        setNewId();
         deletePreview();
       },
-    [
-      addIds,
-      addOrUpdatePreview,
-      deleteIds,
-      deletePreview,
-      setNewId,
-      updateFixedPoint,
-    ]
+    [addIds, updatePreview, deleteIds, deletePreview, updateFixedPoint]
   );
 
   const onClick = useRecoilCallback(
@@ -301,18 +281,17 @@ export const useClickController = () => {
         switch (drawMode) {
           case "polyline": {
             if (obj?.type !== "polyline") break;
-            addOrUpdateNew({
+            addObject({
               ...obj,
               previewPoint: undefined,
             });
-            setNewId();
             deletePreview();
             break;
           }
           default:
         }
       },
-    [addOrUpdateNew, deletePreview, setNewId]
+    [addObject, deletePreview]
   );
 
   return { onClick, onContextMenu };

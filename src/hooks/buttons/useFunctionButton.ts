@@ -5,7 +5,6 @@ import { useJSON } from "../../operators/useJSON";
 import { logIndexState, logsState, stopLogState } from "../../states/logState";
 import { selectedSvgIdState } from "../../states/selectedSvgIdState";
 import {
-  useSetSvgObject,
   useSetSvgObjectList,
   useSvgObjects,
 } from "../../states/svgObjectState";
@@ -18,6 +17,7 @@ import {
 } from "../../selectors/logSelector";
 import { allSvgObjectSelector } from "../../selectors/objectSelector";
 import { useSelect } from "../../operators/useSelect";
+import { useSvgObject } from "../../operators/useSvgObject";
 
 const defaultJSON = JSON.stringify({
   appName: __APP_NAME__,
@@ -33,7 +33,7 @@ export const useFunctionButton = () => {
   const { uploadFile } = useFileUpload();
   const { resetSelect, select } = useSelect();
   const id = useRef(nanoid() as SvgId);
-  const { addOrUpdateSvgObject } = useSetSvgObject(id.current);
+  const { addObject } = useSvgObject();
   const { updateFixedPoint, getObjects, deleteObjects } = useSvgObjects();
   const { addIds, deleteIds } = useSetSvgObjectList();
 
@@ -71,7 +71,7 @@ export const useFunctionButton = () => {
           .getValue();
         updateFixedPoint([...selectedSvgId], vp.create(0, 0));
         deleteIds([...selectedSvgId]);
-        addOrUpdateSvgObject({
+        addObject({
           type: "group" as const,
           objectIds: [...selectedSvgId],
           fixedPoint: vp.create(0, 0),
@@ -83,14 +83,7 @@ export const useFunctionButton = () => {
         resetSelect();
         select(id.current);
       },
-    [
-      addOrUpdateSvgObject,
-      deleteIds,
-      resetId,
-      resetSelect,
-      select,
-      updateFixedPoint,
-    ]
+    [addObject, deleteIds, resetId, resetSelect, select, updateFixedPoint]
   );
 
   const ungrouping = useRecoilCallback(

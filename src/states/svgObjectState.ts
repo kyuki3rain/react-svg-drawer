@@ -1,12 +1,6 @@
 import { nanoid } from "nanoid";
 import { useCallback } from "react";
-import {
-  atom,
-  atomFamily,
-  useRecoilCallback,
-  useRecoilValue,
-  useSetRecoilState,
-} from "recoil";
+import { atom, atomFamily, useRecoilCallback, useSetRecoilState } from "recoil";
 import * as vp from "../helpers/virtualPoint";
 
 export const svgObjectStates = atomFamily<SvgObject | null, SvgId | "preview">({
@@ -19,49 +13,6 @@ export const svgObjectListState = atom<Set<SvgId>>({
   key: "svgObjectListState",
   default: new Set(),
 });
-
-export const useSetSvgObject = (id = nanoid() as SvgId | "preview") => {
-  const setSvgObject = useSetRecoilState(svgObjectStates(id));
-  const setSvgObjectList = useSetRecoilState(svgObjectListState);
-
-  const deleteSvgObject = useCallback(() => {
-    setSvgObject(null);
-    if (id !== "preview") {
-      setSvgObjectList((prev) => {
-        prev.delete(id);
-        return new Set(prev);
-      });
-    }
-  }, [id, setSvgObject, setSvgObjectList]);
-
-  const addOrUpdateSvgObject = useCallback(
-    (obj: SvgObject) => {
-      setSvgObject((prev) => {
-        if (prev?.type === obj.type) return { ...prev, ...obj, id };
-
-        return { ...obj, id };
-      });
-      if (id !== "preview") {
-        setSvgObjectList((prev) => new Set(prev.add(id)));
-      }
-    },
-    [id, setSvgObject, setSvgObjectList]
-  );
-
-  return {
-    addOrUpdateSvgObject,
-    deleteSvgObject,
-  };
-};
-
-export const useSvgObject = (id: SvgId | "preview") => {
-  const svgObject = useRecoilValue(svgObjectStates(id));
-  const setSvgObject = useSetSvgObject(id);
-  return {
-    svgObject,
-    ...setSvgObject,
-  };
-};
 
 export const useSetSvgObjectList = () => {
   const setSvgObjectList = useSetRecoilState(svgObjectListState);
