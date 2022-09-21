@@ -1,26 +1,47 @@
-import { useRecoilCallback } from "recoil";
-import { drawModeState } from "../states/drawModeState";
-import { useSetSelectedSvgId } from "../states/selectedSvgIdState";
+import { useCallback } from "react";
+import { useSetRecoilState } from "recoil";
+import { selectedSvgIdState } from "../states/selectedSvgIdState";
 
 export const useSelect = () => {
-  const { toggleSelect } = useSetSelectedSvgId();
+  const setSelectedSvgId = useSetRecoilState(selectedSvgIdState);
 
-  const onClick = useRecoilCallback(
-    ({ snapshot }) =>
-      (id?: SvgId | "preview") => {
-        const drawMode = snapshot.getLoadable(drawModeState).getValue();
-        if (!id) return false;
-        if (id === "preview") return false;
-        if (drawMode !== "selector") return false;
-
-        toggleSelect(id);
-
-        return true;
-      },
-    [toggleSelect]
+  const select = useCallback(
+    (id: SvgId) => {
+      setSelectedSvgId((prev) => new Set(prev.add(id)));
+    },
+    [setSelectedSvgId]
   );
 
+  const unselect = useCallback(
+    (id: SvgId) => {
+      setSelectedSvgId((prev) => {
+        prev.delete(id);
+        return new Set(prev);
+      });
+    },
+    [setSelectedSvgId]
+  );
+
+  const toggleSelect = useCallback(
+    (id: SvgId) => {
+      setSelectedSvgId((prev) => {
+        if (prev.has(id)) {
+          prev.delete(id);
+          return new Set(prev);
+        } else return new Set(prev.add(id));
+      });
+    },
+    [setSelectedSvgId]
+  );
+
+  const resetSelect = useCallback(() => {
+    setSelectedSvgId(new Set());
+  }, [setSelectedSvgId]);
+
   return {
-    onClick,
+    select,
+    unselect,
+    toggleSelect,
+    resetSelect,
   };
 };
