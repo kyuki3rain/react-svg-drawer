@@ -236,7 +236,7 @@ export const useClickController = () => {
         if (isOpen) return;
         const v = toVirtual(rp.create(x, y));
 
-        switch (drawMode.mode) {
+        switch (drawMode) {
           case "line": {
             if (obj && obj.type !== "line") break;
             onClickLine(obj, v);
@@ -300,7 +300,7 @@ export const useClickController = () => {
         const obj = snapshot.getLoadable(svgObjectStates("preview")).getValue();
 
         if (isOpen) return;
-        switch (drawMode.mode) {
+        switch (drawMode) {
           case "polyline": {
             if (obj?.type !== "polyline") break;
             addOrUpdateNew({

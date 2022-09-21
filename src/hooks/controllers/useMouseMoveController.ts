@@ -113,7 +113,7 @@ export const useOnMouseMoveController = () => {
         if (isOpen) return;
         const v = toVirtual(rp.create(x, y));
 
-        switch (drawMode.mode) {
+        switch (drawMode) {
           case "line": {
             if (obj && obj.type !== "line") break;
             omMouseMoveLine(obj, v);
