@@ -23,9 +23,10 @@ const GroupObject: React.FC<Props> = ({
   return (
     <svg
       onClick={(e) => {
-        if (!parentId || !obj.id) return;
-        if (parentId ?? obj.id === "preview") return;
-        if (onClick(parentId ?? obj.id)) e.stopPropagation();
+        const id = parentId ?? obj.id;
+        if (!id) return;
+        if (id === "preview") return;
+        if (onClick(id)) e.stopPropagation();
       }}
     >
       {obj.objectIds.map((id) => (

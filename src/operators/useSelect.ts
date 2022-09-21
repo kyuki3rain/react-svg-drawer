@@ -7,6 +7,7 @@ export const useSelect = () => {
 
   const select = useCallback(
     (id: SvgId) => {
+      console.log(id);
       setSelectedSvgId((prev) => new Set(prev.add(id)));
     },
     [setSelectedSvgId]

@@ -1,6 +1,6 @@
-import { usePoint } from "../../../operators/usePoint";
 import * as vp from "../../../helpers/virtualPoint";
 import { useOnClickObject } from "../../../operators/useOnClickObject";
+import { usePoint } from "../../../operators/usePoint";
 
 type Props = {
   obj: TextObject;
@@ -33,9 +33,10 @@ const TextObject: React.FC<Props> = ({
         {...obj.style}
         stroke={isSelected ? "blue" : "black"}
         onClick={(e) => {
-          if (!parentId || !obj.id) return;
-          if (parentId ?? obj.id === "preview") return;
-          if (onClick(parentId ?? obj.id)) e.stopPropagation();
+          const id = parentId ?? obj.id;
+          if (!id) return;
+          if (id === "preview") return;
+          if (onClick(id)) e.stopPropagation();
         }}
       >
         {text}

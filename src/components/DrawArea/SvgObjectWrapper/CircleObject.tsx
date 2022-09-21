@@ -1,6 +1,6 @@
-import { usePoint } from "../../../operators/usePoint";
 import * as vp from "../../../helpers/virtualPoint";
 import { useOnClickObject } from "../../../operators/useOnClickObject";
+import { usePoint } from "../../../operators/usePoint";
 
 type Props = {
   obj: CircleObject;
@@ -32,9 +32,10 @@ const CircleObject: React.FC<Props> = ({
         strokeWidth={(obj.style.strokeWidth ?? 0) + 10}
         strokeOpacity="0"
         onClick={(e) => {
-          if (!parentId || !obj.id) return;
-          if (parentId ?? obj.id === "preview") return;
-          if (onClick(parentId ?? obj.id)) e.stopPropagation();
+          const id = parentId ?? obj.id;
+          if (!id) return;
+          if (id === "preview") return;
+          if (onClick(id)) e.stopPropagation();
         }}
       ></ellipse>
       <ellipse

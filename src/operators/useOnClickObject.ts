@@ -8,6 +8,8 @@ export const useOnClickObject = () => {
   const onClick = useRecoilCallback(
     ({ snapshot }) =>
       (id: SvgId) => {
+        console.log(id);
+
         const drawMode = snapshot.getLoadable(drawModeState).getValue();
         if (drawMode !== "selector") return false;
 
