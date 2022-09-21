@@ -1,6 +1,6 @@
 import { useRecoilValue } from "recoil";
 import { useWindowSize } from "../operators/useWindowSize";
-import { rootPointSelector } from "../states/areaConfigState";
+import { rootPointSelector } from "../selectors/rootPointSelector";
 import { selectedSvgIdState } from "../states/selectedSvgIdState";
 import { svgObjectListState } from "../states/svgObjectState";
 
