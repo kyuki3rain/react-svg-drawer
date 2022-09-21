@@ -1,15 +1,15 @@
 import { useRecoilCallback } from "recoil";
 import { configModalState, draftConfigState } from "../states/configModalState";
 import { drawModeState } from "../states/drawModeState";
-import { svgObjectStates, useSvgObjects } from "../states/svgObjectState";
+import { svgObjectListState, svgObjectStates } from "../states/svgObjectState";
 import { usePreview } from "./usePreview";
 import { useSelect } from "./useSelect";
+import * as vp from "../helpers/virtualPoint";
 
 const textConfig = new Map([["text", ""]]);
 
 export const useResetPreview = () => {
   const { deletePreview, updatePreview } = usePreview();
-  const { resetPreviewGroup } = useSvgObjects();
   const { resetSelect } = useSelect();
 
   const openModal = useRecoilCallback(
@@ -21,6 +21,40 @@ export const useResetPreview = () => {
       ) => {
         set(configModalState, { isOpen: true, type, id });
         set(draftConfigState, new Map(configMap));
+      },
+    []
+  );
+
+  const resetPreviewGroup = useRecoilCallback(
+    ({ set, snapshot }) =>
+      () => {
+        const obj = snapshot.getLoadable(svgObjectStates("preview")).getValue();
+
+        if (!obj || obj.type !== "group" || !obj.fixedPoint) return;
+
+        if (obj.isCopy) {
+          obj.objectIds.map((id) => {
+            set(svgObjectStates(id), null);
+          });
+        } else {
+          const correction = vp.sub(vp.create(0, 0), obj.firstFixedPoint);
+          obj.objectIds.map((id) =>
+            set(svgObjectStates(id), (prev) => {
+              if (!prev) return prev;
+              if (!prev.fixedPoint) return prev;
+              return (
+                prev && {
+                  ...prev,
+                  fixedPoint: vp.sub(prev.fixedPoint, correction),
+                }
+              );
+            })
+          );
+          set(svgObjectListState, (prev) => {
+            obj.objectIds.map((id) => prev.add(id));
+            return new Set(prev);
+          });
+        }
       },
     []
   );

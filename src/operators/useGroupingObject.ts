@@ -1,6 +1,6 @@
 import { useRecoilCallback } from "recoil";
 import { selectedSvgIdState } from "../states/selectedSvgIdState";
-import { svgObjectStates, useSvgObjects } from "../states/svgObjectState";
+import { svgObjectStates } from "../states/svgObjectState";
 import { useSelect } from "./useSelect";
 import { useSvgObject } from "./useSvgObject";
 import * as vp from "../helpers/virtualPoint";
@@ -12,11 +12,10 @@ import { useCallback } from "react";
 
 export const useGroupingObject = () => {
   const { resetSelect, select } = useSelect();
-  const { addObject, deleteObject } = useSvgObject();
+  const { addObject, deleteObject, copyObject } = useSvgObject();
   const { updateFixedPoints } = useCorrectFixedPoint();
   const { includeIds, excludeIds } = useSvgObjectList();
   const { updatePreview, deletePreview } = usePreview();
-  const { copySvgObjects } = useSvgObjects();
 
   const groupingObject = useCallback(
     (
@@ -79,7 +78,9 @@ export const useGroupingObject = () => {
           .getLoadable(selectedSvgIdState)
           .getValue();
         const newIds = withCopy
-          ? copySvgObjects([...selectedSvgId])
+          ? [...selectedSvgId]
+              .map((id) => copyObject(id))
+              .flatMap((x) => x ?? [])
           : [...selectedSvgId];
         groupingObject(parentPoint, newIds, "preview");
       }

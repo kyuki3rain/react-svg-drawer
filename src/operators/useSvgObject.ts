@@ -36,9 +36,23 @@ export const useSvgObject = () => {
     []
   );
 
+  const copyObject = useRecoilCallback(
+    ({ snapshot, set }) =>
+      (id: SvgId) => {
+        const svgObject = snapshot.getLoadable(svgObjectStates(id)).getValue();
+        if (!svgObject) return;
+
+        const newId = nanoid() as SvgId;
+        set(svgObjectStates(newId), { ...svgObject, id: newId });
+        return newId;
+      },
+    []
+  );
+
   return {
     deleteObject,
     addObject,
     updateObject,
+    copyObject,
   };
 };
