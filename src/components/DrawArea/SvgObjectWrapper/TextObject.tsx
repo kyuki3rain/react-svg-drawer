@@ -1,6 +1,5 @@
-import * as vp from "../../../helpers/virtualPoint";
-import { useOnClickObject } from "../../../operators/useOnClickObject";
-import { usePoint } from "../../../operators/usePoint";
+import { useMemo } from "react";
+import { useObject } from "../../../hooks/useObject";
 
 type Props = {
   obj: TextObject;
@@ -15,16 +14,20 @@ const TextObject: React.FC<Props> = ({
   isSelected,
   parentId,
 }) => {
-  const { toReal } = usePoint();
-  const { onClick } = useOnClickObject();
+  const { toRealAbsolute, onClick } = useObject({
+    obj,
+    parentPoint,
+    parentId,
+  });
 
-  if (!obj.point || !obj.fixedPoint) return null;
-  const text = obj.configMap?.get("text");
-  if (!text) return null;
-  const r = toReal(
-    vp.add(vp.add(obj.point, obj.fixedPoint), parentPoint),
-    true
+  const r = useMemo(
+    () => obj.point && toRealAbsolute(obj.point),
+    [obj.point, toRealAbsolute]
   );
+  const text = useMemo(() => obj.configMap?.get("text"), [obj.configMap]);
+
+  if (!r || !text) return null;
+
   return (
     <>
       <text
@@ -32,12 +35,7 @@ const TextObject: React.FC<Props> = ({
         y={r.y}
         {...obj.style}
         stroke={isSelected ? "blue" : "black"}
-        onClick={(e) => {
-          const id = parentId ?? obj.id;
-          if (!id) return;
-          if (id === "preview") return;
-          if (onClick(id)) e.stopPropagation();
-        }}
+        onClick={(e) => onClick(e.stopPropagation)}
       >
         {text}
       </text>
