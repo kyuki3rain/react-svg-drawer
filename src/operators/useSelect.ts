@@ -1,43 +1,43 @@
 import { useCallback } from "react";
 import { useSetRecoilState } from "recoil";
-import { selectedSvgIdState } from "../states/selectedSvgIdState";
+import { selectedIdListState } from "../states/selectedIdListState";
 
 export const useSelect = () => {
-  const setSelectedSvgId = useSetRecoilState(selectedSvgIdState);
+  const setselectedIdList = useSetRecoilState(selectedIdListState);
 
   const select = useCallback(
     (id: SvgId) => {
       console.log(id);
-      setSelectedSvgId((prev) => new Set(prev.add(id)));
+      setselectedIdList((prev) => new Set(prev.add(id)));
     },
-    [setSelectedSvgId]
+    [setselectedIdList]
   );
 
   const unselect = useCallback(
     (id: SvgId) => {
-      setSelectedSvgId((prev) => {
+      setselectedIdList((prev) => {
         prev.delete(id);
         return new Set(prev);
       });
     },
-    [setSelectedSvgId]
+    [setselectedIdList]
   );
 
   const toggleSelect = useCallback(
     (id: SvgId) => {
-      setSelectedSvgId((prev) => {
+      setselectedIdList((prev) => {
         if (prev.has(id)) {
           prev.delete(id);
           return new Set(prev);
         } else return new Set(prev.add(id));
       });
     },
-    [setSelectedSvgId]
+    [setselectedIdList]
   );
 
   const resetSelect = useCallback(() => {
-    setSelectedSvgId(new Set());
-  }, [setSelectedSvgId]);
+    setselectedIdList(new Set());
+  }, [setselectedIdList]);
 
   return {
     select,
