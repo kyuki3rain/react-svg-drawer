@@ -1,8 +1,6 @@
 import { drawModeState } from "../../states/drawModeState";
 import { svgObjectStates } from "../../states/svgObjectState";
 import { usePoint } from "../../operators/usePoint";
-import * as rp from "../../helpers/realPoint";
-import * as vp from "../../helpers/virtualPoint";
 import { useCallback } from "react";
 import { configModalState } from "../../states/configModalState";
 import { useRecoilCallback } from "recoil";
@@ -10,6 +8,8 @@ import { useSelect } from "../../operators/useSelect";
 import { usePreview } from "../../operators/usePreview";
 import { useSvgObject } from "../../operators/useSvgObject";
 import { useGroupingObject } from "../../operators/useGroupingObject";
+import { vp } from "../../helpers/virtualPoint";
+import { rp } from "../../helpers/realPoint";
 
 export const useClickController = () => {
   const { updatePreview, deletePreview } = usePreview();
@@ -25,7 +25,7 @@ export const useClickController = () => {
           id: "preview",
           type: "line",
           fixedPoint: v,
-          point1: vp.create(0, 0),
+          point1: vp.zero(),
           style: { stroke: "black" },
         });
         return;
@@ -47,7 +47,7 @@ export const useClickController = () => {
           id: "preview",
           type: "polyline",
           fixedPoint: v,
-          points: [vp.create(0, 0)],
+          points: [vp.zero()],
           style: { stroke: "black", fill: "none" },
         });
         return;
@@ -67,7 +67,7 @@ export const useClickController = () => {
       addObject({
         ...obj,
         fixedPoint: v,
-        point: vp.create(0, 0),
+        point: vp.zero(),
       });
     },
     [addObject]
@@ -79,7 +79,7 @@ export const useClickController = () => {
         updatePreview({
           id: "preview",
           type: "rect",
-          upperLeft: vp.create(0, 0),
+          upperLeft: vp.zero(),
           fixedPoint: v,
           style: { stroke: "black", fill: "none" },
         });

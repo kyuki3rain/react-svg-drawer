@@ -1,12 +1,12 @@
 import { drawModeState } from "../../states/drawModeState";
 import { svgObjectStates } from "../../states/svgObjectState";
-import * as rp from "../../helpers/realPoint";
-import * as vp from "../../helpers/virtualPoint";
 import { configModalState } from "../../states/configModalState";
 import { useCallback, useRef } from "react";
 import { usePoint } from "../../operators/usePoint";
 import { useRecoilCallback } from "recoil";
 import { usePreview } from "../../operators/usePreview";
+import { vp } from "../../helpers/virtualPoint";
+import { rp } from "../../helpers/realPoint";
 
 export const useOnMouseMoveController = () => {
   const { updatePreview } = usePreview();
@@ -44,7 +44,7 @@ export const useOnMouseMoveController = () => {
       updatePreview({
         ...obj,
         fixedPoint: v,
-        point: vp.create(0, 0),
+        point: vp.zero(),
       });
     },
     [updatePreview]
@@ -112,8 +112,6 @@ export const useOnMouseMoveController = () => {
         const v = toVirtual(rp.create(x, y));
         if (pointRef.current && vp.eq(v, pointRef.current)) return;
         pointRef.current = v;
-
-        console.log("test2");
 
         const obj = snapshot.getLoadable(svgObjectStates("preview")).getValue();
         const drawMode = snapshot.getLoadable(drawModeState).getValue();

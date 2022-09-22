@@ -2,7 +2,6 @@ import { useCallback } from "react";
 import { useRecoilCallback, useRecoilValue } from "recoil";
 import { useJSON } from "../../operators/useJSON";
 import { logIndexState, logsState, stopLogState } from "../../states/logState";
-import * as vp from "../../helpers/virtualPoint";
 import { useFileUpload } from "../../operators/useFileUpload";
 import dayjs from "dayjs";
 import {
@@ -12,6 +11,7 @@ import {
 import { allSvgObjectSelector } from "../../selectors/objectSelector";
 import { useGroupingObject } from "../../operators/useGroupingObject";
 import { useLog } from "../../operators/useLog";
+import { vp } from "../../helpers/virtualPoint";
 
 const defaultJSON = JSON.stringify({
   appName: __APP_NAME__,
@@ -54,7 +54,7 @@ export const useFunctionButton = () => {
   );
 
   const grouping = useCallback(
-    () => groupingSelectedObject(vp.create(0, 0)),
+    () => groupingSelectedObject(vp.zero()),
     [groupingSelectedObject]
   );
 

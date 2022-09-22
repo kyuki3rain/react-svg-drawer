@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import * as vp from "../../../helpers/virtualPoint";
+import { vp } from "../../../helpers/virtualPoint";
 import { useObject } from "../../../hooks/useObject";
 import SvgObjectWrapper from "../SvgObjectWrapper";
 

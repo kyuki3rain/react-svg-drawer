@@ -1,33 +1,27 @@
-import { create as createVirtualPoint } from "./virtualPoint";
+import { vp } from "./virtualPoint";
 
-export const toVirtual = (
-  r: RealPoint,
-  pitch: number,
-  upperLeft: VirtualPoint,
-  isRelative?: boolean
-) => {
-  if (isRelative) return createVirtualPoint(r.x / pitch, r.y / pitch);
-  return createVirtualPoint(
-    r.x / pitch + upperLeft.vx,
-    r.y / pitch + upperLeft.vy
-  );
+const toVirtual = (r: RealPoint, pitch: number, upperLeft: VirtualPoint) => {
+  return vp.create(r.x / pitch + upperLeft.vx, r.y / pitch + upperLeft.vy);
 };
 
-export const toVirtualWithSnap = (
+const toVirtualWithSnap = (
   r: RealPoint,
   pitch: number,
-  upperLeft: VirtualPoint,
-  isRelative?: boolean
+  upperLeft: VirtualPoint
 ) => {
-  if (isRelative)
-    return createVirtualPoint(Math.round(r.x / pitch), Math.round(r.y / pitch));
-  return createVirtualPoint(
+  return vp.create(
     Math.round(r.x / pitch + upperLeft.vx),
     Math.round(r.y / pitch + upperLeft.vy)
   );
 };
 
-export const create = (x: number, y: number) => ({
+const create = (x: number, y: number) => ({
   x: x as RealNumber,
   y: y as RealNumber,
 });
+
+export const rp = {
+  toVirtual,
+  toVirtualWithSnap,
+  create,
+};
