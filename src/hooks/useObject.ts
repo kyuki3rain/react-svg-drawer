@@ -14,11 +14,14 @@ export const useObject = ({ obj, parentPoint, parentId }: Props) => {
   const { onClickObject } = useOnClickObject();
 
   const toRealAbsolute = useCallback(
-    (a: VirtualPoint) =>
+    (a: VirtualAbsolute) =>
       obj.fixedPoint && toReal(vp.add(vp.add(a, obj.fixedPoint), parentPoint)),
     [obj.fixedPoint, parentPoint, toReal]
   );
-  const toRealRelative = useCallback((r: VirtualPoint) => toReal(r), [toReal]);
+  const toRealRelative = useCallback(
+    (r: VirtualRelative) => toReal(r),
+    [toReal]
+  );
 
   const onClick = useCallback(
     (stopPropagation: () => void) => {
