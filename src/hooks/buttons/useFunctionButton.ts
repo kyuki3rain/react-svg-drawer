@@ -11,6 +11,7 @@ import {
 } from "../../selectors/logSelector";
 import { allSvgObjectSelector } from "../../selectors/objectSelector";
 import { useGroupingObject } from "../../operators/useGroupingObject";
+import { useLog } from "../../operators/useLog";
 
 const defaultJSON = JSON.stringify({
   appName: __APP_NAME__,
@@ -26,6 +27,7 @@ export const useFunctionButton = () => {
   const { uploadFile } = useFileUpload();
   const { groupingSelectedObject, ungroupingSelectedObject } =
     useGroupingObject();
+  const { resetLog } = useLog();
 
   const undo = useRecoilCallback(
     ({ snapshot, set }) =>
@@ -79,7 +81,8 @@ export const useFunctionButton = () => {
 
   const newFile = useCallback(() => {
     fromJSON(defaultJSON);
-  }, [fromJSON]);
+    resetLog();
+  }, [fromJSON, resetLog]);
 
   const importFile = useCallback(() => {
     if (!uploadFile) return;

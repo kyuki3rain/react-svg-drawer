@@ -27,5 +27,14 @@ export const useLog = () => {
     []
   );
 
-  return { setLog };
+  const resetLog = useRecoilCallback(
+    ({ reset }) =>
+      () => {
+        reset(logsState);
+        reset(logIndexState);
+      },
+    []
+  );
+
+  return { setLog, resetLog };
 };
