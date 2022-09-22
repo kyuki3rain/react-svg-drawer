@@ -1,6 +1,6 @@
 import React from "react";
 import { useDrawArea } from "../hooks/useDrawArea";
-import DrawAreaController from "../components/controllers/DrawAreaController";
+import DrawAreaController from "../controllers/DrawAreaController";
 import Grids from "../components/DrawArea/Grids";
 import SvgObjectWrapper from "../components/DrawArea/SvgObjectWrapper";
 

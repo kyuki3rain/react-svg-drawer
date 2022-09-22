@@ -1,6 +1,6 @@
 import React from "react";
-import { useResetPreviewEffects } from "../../effects/useResetPreviewEffects";
-import { useSetLogEffects } from "../../effects/useSetLogEffect";
+import { useResetPreviewEffects } from "../effects/useResetPreviewEffects";
+import { useSetLogEffects } from "../effects/useSetLogEffect";
 
 const EffectController: React.FC = () => {
   useResetPreviewEffects();

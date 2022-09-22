@@ -1,5 +1,5 @@
 import React, { ReactNode, useEffect, useRef } from "react";
-import { useWheelController } from "../../../hooks/controllers/useWheelController";
+import { useWheelController } from "../../hooks/controllers/useWheelController";
 
 type Props = {
   children: ReactNode;

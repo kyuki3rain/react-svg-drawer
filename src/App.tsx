@@ -3,9 +3,9 @@ import React from "react";
 import { RecoilRoot } from "recoil";
 import ButtonArea from "./views/ButtonArea";
 import DrawArea from "./views/DrawArea";
-import AreaController from "./components/controllers/AreaController";
+import AreaController from "./controllers/AreaController";
 import ConfigModal from "./views/ConfigModal";
-import EffectController from "./components/controllers/EffectController";
+import EffectController from "./controllers/EffectController";
 
 const App: React.FC = () => (
   <RecoilRoot>

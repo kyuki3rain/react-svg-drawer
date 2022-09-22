@@ -1,5 +1,5 @@
 import React from "react";
-import { useKeyController } from "../../../hooks/controllers/useKeyController";
+import { useKeyController } from "../../hooks/controllers/useKeyController";
 
 type Props = {
   children: React.ReactNode;
