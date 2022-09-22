@@ -1,6 +1,6 @@
-import * as vp from "../../../helpers/virtualPoint";
-import { useOnClickObject } from "../../../operators/useOnClickObject";
-import { usePoint } from "../../../operators/usePoint";
+import { useMemo } from "react";
+import { CLICK_TARGET_OBJECT } from "../../../helpers/clickTargetObject";
+import { useObject } from "../../../hooks/useObject";
 
 type Props = {
   obj: RectObject;
@@ -15,15 +15,23 @@ const RectObject: React.FC<Props> = ({
   isSelected,
   parentId,
 }) => {
-  const { toReal } = usePoint();
-  const { onClick } = useOnClickObject();
+  const { toRealAbsolute, toRealRelative, onClick } = useObject({
+    obj,
+    parentPoint,
+    parentId,
+  });
 
-  if (!obj.size || !obj.fixedPoint) return null;
-  const r = toReal(
-    vp.add(vp.add(obj.upperLeft, obj.fixedPoint), parentPoint),
-    true
+  const r = useMemo(
+    () => obj.upperLeft && toRealAbsolute(obj.upperLeft),
+    [obj.upperLeft, toRealAbsolute]
   );
-  const s = toReal(obj.size, true);
+  const s = useMemo(
+    () => obj.size && toRealRelative(obj.size),
+    [obj.size, toRealRelative]
+  );
+
+  if (!r || !s) return null;
+
   return (
     <>
       <rect
@@ -32,14 +40,11 @@ const RectObject: React.FC<Props> = ({
         width={s.x}
         height={s.y}
         {...obj.style}
-        strokeWidth={(obj.style.strokeWidth ?? 0) + 10}
+        strokeWidth={
+          (obj.style.strokeWidth ?? 0) + CLICK_TARGET_OBJECT.defaultStrokeWidth
+        }
         strokeOpacity="0"
-        onClick={(e) => {
-          const id = parentId ?? obj.id;
-          if (!id) return;
-          if (id === "preview") return;
-          if (onClick(id)) e.stopPropagation();
-        }}
+        onClick={(e) => onClick(e.stopPropagation)}
       ></rect>
       <rect
         x={r.x}

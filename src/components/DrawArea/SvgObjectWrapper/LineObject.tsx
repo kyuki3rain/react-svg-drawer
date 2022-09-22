@@ -1,6 +1,6 @@
-import * as vp from "../../../helpers/virtualPoint";
-import { useOnClickObject } from "../../../operators/useOnClickObject";
-import { usePoint } from "../../../operators/usePoint";
+import { useMemo } from "react";
+import { CLICK_TARGET_OBJECT } from "../../../helpers/clickTargetObject";
+import { useObject } from "../../../hooks/useObject";
 
 type Props = {
   obj: LineObject;
@@ -15,18 +15,23 @@ const LineObject: React.FC<Props> = ({
   isSelected,
   parentId,
 }) => {
-  const { toReal } = usePoint();
-  const { onClick } = useOnClickObject();
+  const { toRealAbsolute, onClick } = useObject({
+    obj,
+    parentPoint,
+    parentId,
+  });
 
-  if (!obj.point1 || !obj.point2 || !obj.fixedPoint) return null;
-  const r1 = toReal(
-    vp.add(vp.add(obj.point1, obj.fixedPoint), parentPoint),
-    true
+  const r1 = useMemo(
+    () => obj.point1 && toRealAbsolute(obj.point1),
+    [obj.point1, toRealAbsolute]
   );
-  const r2 = toReal(
-    vp.add(vp.add(obj.point2, obj.fixedPoint), parentPoint),
-    true
+  const r2 = useMemo(
+    () => obj.point2 && toRealAbsolute(obj.point2),
+    [obj.point2, toRealAbsolute]
   );
+
+  if (!r1 || !r2) return null;
+
   return (
     <>
       <line
@@ -35,14 +40,11 @@ const LineObject: React.FC<Props> = ({
         x2={r2.x}
         y2={r2.y}
         {...obj.style}
-        strokeWidth={(obj.style.strokeWidth ?? 0) + 10}
-        strokeOpacity="0"
-        onClick={(e) => {
-          const id = parentId ?? obj.id;
-          if (!id) return;
-          if (id === "preview") return;
-          if (onClick(id)) e.stopPropagation();
-        }}
+        strokeWidth={
+          (obj.style.strokeWidth ?? 0) + CLICK_TARGET_OBJECT.defaultStrokeWidth
+        }
+        strokeOpacity={CLICK_TARGET_OBJECT.strokeOpacity}
+        onClick={(e) => onClick(e.stopPropagation)}
       ></line>
       <line
         x1={r1.x}

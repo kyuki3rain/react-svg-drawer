@@ -1,6 +1,6 @@
-import * as vp from "../../../helpers/virtualPoint";
-import { useOnClickObject } from "../../../operators/useOnClickObject";
-import { usePoint } from "../../../operators/usePoint";
+import { useMemo } from "react";
+import { CLICK_TARGET_OBJECT } from "../../../helpers/clickTargetObject";
+import { useObject } from "../../../hooks/useObject";
 
 type Props = {
   obj: PolylineObject;
@@ -15,32 +15,30 @@ const PolylineObject: React.FC<Props> = ({
   isSelected,
   parentId,
 }) => {
-  const { toReal } = usePoint();
-  const { onClick } = useOnClickObject();
+  const { toRealAbsolute, onClick, pointToText } = useObject({
+    obj,
+    parentPoint,
+    parentId,
+  });
 
-  if (!obj.fixedPoint) return null;
-  const fp = obj.fixedPoint;
-  const points = (
-    obj.previewPoint ? [...obj.points, obj.previewPoint] : obj.points
-  )
-    .map((p) => {
-      const r = toReal(vp.add(vp.add(p, fp), parentPoint), true);
-      return `${r.x},${r.y}`;
-    })
-    .join(" ");
+  const points = useMemo(
+    () =>
+      (obj.previewPoint ? [...obj.points, obj.previewPoint] : obj.points)
+        .map((v) => pointToText(toRealAbsolute(v)))
+        .join(" "),
+    [obj.points, obj.previewPoint, pointToText, toRealAbsolute]
+  );
+
   return (
     <>
       <polyline
         points={points}
         {...obj.style}
-        strokeWidth={(obj.style.strokeWidth ?? 0) + 10}
+        strokeWidth={
+          (obj.style.strokeWidth ?? 0) + CLICK_TARGET_OBJECT.defaultStrokeWidth
+        }
         strokeOpacity="0"
-        onClick={(e) => {
-          const id = parentId ?? obj.id;
-          if (!id) return;
-          if (id === "preview") return;
-          if (onClick(id)) e.stopPropagation();
-        }}
+        onClick={(e) => onClick(e.stopPropagation)}
       ></polyline>
       <polyline
         points={points}

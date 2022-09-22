@@ -1,5 +1,6 @@
+import { useMemo } from "react";
 import * as vp from "../../../helpers/virtualPoint";
-import { useOnClickObject } from "../../../operators/useOnClickObject";
+import { useObject } from "../../../hooks/useObject";
 import SvgObjectWrapper from "../SvgObjectWrapper";
 
 type Props = {
@@ -15,20 +16,20 @@ const GroupObject: React.FC<Props> = ({
   isSelected,
   parentId,
 }) => {
-  const { onClick } = useOnClickObject();
+  const { onClick } = useObject({
+    obj,
+    parentPoint,
+    parentId,
+  });
+  const groupPoint = useMemo(
+    () => obj.fixedPoint && vp.add(obj.fixedPoint, parentPoint),
+    [obj.fixedPoint, parentPoint]
+  );
 
-  if (!obj.fixedPoint || obj.objectIds.length === 0) return null;
-  const groupPoint = vp.add(obj.fixedPoint, parentPoint);
+  if (!groupPoint || obj.objectIds.length === 0) return null;
 
   return (
-    <svg
-      onClick={(e) => {
-        const id = parentId ?? obj.id;
-        if (!id) return;
-        if (id === "preview") return;
-        if (onClick(id)) e.stopPropagation();
-      }}
-    >
+    <svg onClick={(e) => onClick(e.stopPropagation)}>
       {obj.objectIds.map((id) => (
         <SvgObjectWrapper
           key={id}

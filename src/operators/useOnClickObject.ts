@@ -5,7 +5,7 @@ import { useSelect } from "./useSelect";
 export const useOnClickObject = () => {
   const { toggleSelect } = useSelect();
 
-  const onClick = useRecoilCallback(
+  const onClickObject = useRecoilCallback(
     ({ snapshot }) =>
       (id: SvgId) => {
         console.log(id);
@@ -21,6 +21,6 @@ export const useOnClickObject = () => {
   );
 
   return {
-    onClick,
+    onClickObject,
   };
 };
