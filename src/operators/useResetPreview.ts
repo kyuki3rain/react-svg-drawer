@@ -1,10 +1,10 @@
 import { useRecoilCallback } from "recoil";
+import { vp } from "../helpers/virtualPoint";
 import { configModalState, draftConfigState } from "../states/configModalState";
 import { drawModeState } from "../states/drawModeState";
 import { svgObjectListState, svgObjectStates } from "../states/svgObjectState";
 import { usePreview } from "./usePreview";
 import { useSelect } from "./useSelect";
-import * as vp from "../helpers/virtualPoint";
 
 const textConfig = new Map([["text", ""]]);
 
@@ -37,7 +37,7 @@ export const useResetPreview = () => {
             set(svgObjectStates(id), null);
           });
         } else {
-          const correction = vp.sub(vp.create(0, 0), obj.firstFixedPoint);
+          const correction = vp.sub(vp.zero(), obj.firstFixedPoint);
           obj.objectIds.map((id) =>
             set(svgObjectStates(id), (prev) => {
               if (!prev) return prev;

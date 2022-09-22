@@ -1,7 +1,7 @@
 import { useCallback } from "react";
+import { vp } from "../helpers/virtualPoint";
 import { useOnClickObject } from "../operators/useOnClickObject";
 import { usePoint } from "../operators/usePoint";
-import * as vp from "../helpers/virtualPoint";
 
 type Props = {
   obj: SvgObject;
@@ -15,14 +15,10 @@ export const useObject = ({ obj, parentPoint, parentId }: Props) => {
 
   const toRealAbsolute = useCallback(
     (a: VirtualPoint) =>
-      obj.fixedPoint &&
-      toReal(vp.add(vp.add(a, obj.fixedPoint), parentPoint), true),
+      obj.fixedPoint && toReal(vp.add(vp.add(a, obj.fixedPoint), parentPoint)),
     [obj.fixedPoint, parentPoint, toReal]
   );
-  const toRealRelative = useCallback(
-    (r: VirtualPoint) => toReal(r, true),
-    [toReal]
-  );
+  const toRealRelative = useCallback((r: VirtualPoint) => toReal(r), [toReal]);
 
   const onClick = useCallback(
     (stopPropagation: () => void) => {

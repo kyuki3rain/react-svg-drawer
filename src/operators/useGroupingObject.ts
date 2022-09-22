@@ -3,12 +3,12 @@ import { selectedIdListState } from "../states/selectedIdListState";
 import { svgObjectStates } from "../states/svgObjectState";
 import { useSelect } from "./useSelect";
 import { useSvgObject } from "./useSvgObject";
-import * as vp from "../helpers/virtualPoint";
 import { useSvgObjectList } from "./useSvgObjectList";
 import { useCorrectFixedPoint } from "./useCorrectFixedPoint";
 import { nanoid } from "nanoid";
 import { usePreview } from "./usePreview";
 import { useCallback } from "react";
+import { vp } from "../helpers/virtualPoint";
 
 export const useGroupingObject = () => {
   const { resetSelect, select } = useSelect();
@@ -53,10 +53,7 @@ export const useGroupingObject = () => {
         if (!obj || obj.type !== "group") return;
         if (!obj.fixedPoint) return;
 
-        const correction = vp.sub(
-          vp.create(0, 0),
-          parentPoint ?? obj.fixedPoint
-        );
+        const correction = vp.sub(vp.zero(), parentPoint ?? obj.fixedPoint);
         updateFixedPoints(obj.objectIds, correction);
         includeIds(obj.objectIds);
 

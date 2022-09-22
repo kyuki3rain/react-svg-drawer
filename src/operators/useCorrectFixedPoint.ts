@@ -1,7 +1,7 @@
 import { useRecoilCallback } from "recoil";
 import { svgObjectStates } from "../states/svgObjectState";
-import * as vp from "../helpers/virtualPoint";
 import { useCallback } from "react";
+import { vp } from "../helpers/virtualPoint";
 
 export const useCorrectFixedPoint = () => {
   const updateFixedPoint = useRecoilCallback(
