@@ -1,29 +1,19 @@
 import { useCallback } from "react";
-import {
-  useRecoilCallback,
-  useRecoilState,
-  useRecoilValue,
-  useSetRecoilState,
-} from "recoil";
+import { useRecoilCallback, useRecoilValue } from "recoil";
+import { useChangeMode } from "../operators/useChangeMode";
+import { useDraftConfig } from "../operators/useDraftConfig";
 import { usePreview } from "../operators/usePreview";
 import { useSvgObject } from "../operators/useSvgObject";
 import { configModalState, draftConfigState } from "../states/configModalState";
-import { drawModeState } from "../states/drawModeState";
 import { svgObjectStates } from "../states/svgObjectState";
 
 export const useConfigModal = () => {
   const configModal = useRecoilValue(configModalState);
+  const draftConfigs = useRecoilValue(draftConfigState);
   const { updateObject } = useSvgObject();
   const { updatePreview } = usePreview();
-  const [draftConfigs, setDraftConfigs] = useRecoilState(draftConfigState);
-  const setDrawMode = useSetRecoilState(drawModeState);
-
-  const changeMode = useCallback(
-    (mode: DrawMode) => {
-      setDrawMode((prev) => (prev === mode ? prev : mode));
-    },
-    [setDrawMode]
-  );
+  const { changeMode } = useChangeMode();
+  const { updateDraft, resetDraft } = useDraftConfig();
 
   const closeModal = useRecoilCallback(
     ({ set }) =>
@@ -74,16 +64,14 @@ export const useConfigModal = () => {
   }, [changeMode, closeModal]);
 
   const onChange = useCallback(
-    (key: string, value: string) => {
-      setDraftConfigs((prev) => new Map(prev.set(key, value)));
-    },
-    [setDraftConfigs]
+    (key: string, value: string) => updateDraft(key, value),
+    [updateDraft]
   );
 
   const handleClose = useCallback(() => {
     closeModalWithoutMode();
-    setDraftConfigs(new Map());
-  }, [closeModalWithoutMode, setDraftConfigs]);
+    resetDraft();
+  }, [closeModalWithoutMode, resetDraft]);
 
   return {
     type: configModal.type,
