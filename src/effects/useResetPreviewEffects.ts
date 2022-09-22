@@ -3,7 +3,7 @@ import { useRecoilValue } from "recoil";
 import { useResetPreview } from "../operators/useResetPreview";
 import { drawModeState } from "../states/drawModeState";
 
-export const useResetPreviewEffects = () => {
+export const useResetPreviewEffect = () => {
   const { resetPreview } = useResetPreview();
   const drawMode = useRecoilValue(drawModeState);
 

@@ -3,7 +3,7 @@ import { useRecoilValue } from "recoil";
 import { useLog } from "../operators/useLog";
 import { allSvgObjectSelector } from "../selectors/objectSelector";
 
-export const useSetLogEffects = () => {
+export const useSetLogEffect = () => {
   const { setLog } = useLog();
   const allSvgObject = useRecoilValue(allSvgObjectSelector);
 

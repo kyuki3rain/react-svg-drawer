@@ -1,10 +1,12 @@
 import React from "react";
-import { useResetPreviewEffects } from "../effects/useResetPreviewEffects";
-import { useSetLogEffects } from "../effects/useSetLogEffect";
+import { useHandleResizeEffect } from "../effects/useHandleResizeEffect";
+import { useResetPreviewEffect } from "../effects/useResetPreviewEffects";
+import { useSetLogEffect } from "../effects/useSetLogEffect";
 
 const EffectController: React.FC = () => {
-  useResetPreviewEffects();
-  useSetLogEffects();
+  useResetPreviewEffect();
+  useSetLogEffect();
+  useHandleResizeEffect();
 
   return <div></div>;
 };
