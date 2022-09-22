@@ -1,16 +1,10 @@
-import { useCallback } from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilValue } from "recoil";
+import { useChangeMode } from "../../operators/useChangeMode";
 import { drawModeState } from "../../states/drawModeState";
 
 export const useModeButtons = () => {
-  const [drawMode, setDrawMode] = useRecoilState(drawModeState);
-
-  const changeMode = useCallback(
-    (mode: DrawMode) => {
-      setDrawMode((prev) => (prev === mode ? prev : mode));
-    },
-    [setDrawMode]
-  );
+  const drawMode = useRecoilValue(drawModeState);
+  const { changeMode } = useChangeMode();
 
   return { drawMode, changeMode };
 };
