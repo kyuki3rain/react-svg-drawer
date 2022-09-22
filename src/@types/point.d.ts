@@ -11,3 +11,6 @@ type VirtualPoint = {
   vx: VirtualNumber;
   vy: VirtualNumber;
 };
+
+type VirtualRelative = VirtualPoint & { _brand: "relative" };
+type VirtualAbsolute = VirtualPoint & { _brand: "absolute" };

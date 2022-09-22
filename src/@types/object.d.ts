@@ -18,42 +18,42 @@ type SvgObjectCommon = {
   id?: SvgId | "preview";
   style: SvgObjectStyle;
   configMap?: Map<string, string>;
-  fixedPoint?: VirtualPoint;
+  fixedPoint?: VirtualAbsolute;
 };
 
 type LineObject = {
   type: "line";
-  point1?: VirtualPoint;
-  point2?: VirtualPoint;
+  point1?: VirtualAbsolute;
+  point2?: VirtualAbsolute;
 } & SvgObjectCommon;
 
 type PolylineObject = {
   type: "polyline";
-  points: VirtualPoint[];
-  previewPoint?: VirtualPoint;
+  points: VirtualAbsolute[];
+  previewPoint?: VirtualAbsolute;
 } & SvgObjectCommon;
 
 type TextObject = {
   type: "text";
-  point?: VirtualPoint;
+  point?: VirtualAbsolute;
 } & SvgObjectCommon;
 
 type RectObject = {
   type: "rect";
-  upperLeft: VirtualPoint;
-  size?: VirtualPoint;
+  upperLeft: VirtualAbsolute;
+  size?: VirtualRelative;
   rx?: number;
 } & SvgObjectCommon;
 
 type CircleObject = {
   type: "circle";
-  c?: VirtualPoint;
-  r?: VirtualPoint;
+  c?: VirtualAbsolute;
+  r?: VirtualRelative;
 } & SvgObjectCommon;
 
 type GroupObject = {
   type: "group";
   objectIds: SvgId[];
   isCopy: boolean;
-  firstFixedPoint: VirtualPoint;
+  firstFixedPoint: VirtualAbsolute;
 } & SvgObjectCommon;
