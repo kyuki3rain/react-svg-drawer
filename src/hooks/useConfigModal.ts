@@ -5,6 +5,7 @@ import {
   useRecoilValue,
   useSetRecoilState,
 } from "recoil";
+import { usePreview } from "../operators/usePreview";
 import { useSvgObject } from "../operators/useSvgObject";
 import { configModalState, draftConfigState } from "../states/configModalState";
 import { drawModeState } from "../states/drawModeState";
@@ -13,6 +14,7 @@ import { svgObjectStates } from "../states/svgObjectState";
 export const useConfigModal = () => {
   const configModal = useRecoilValue(configModalState);
   const { updateObject } = useSvgObject();
+  const { updatePreview } = usePreview();
   const [draftConfigs, setDraftConfigs] = useRecoilState(draftConfigState);
   const setDrawMode = useSetRecoilState(drawModeState);
 
@@ -48,14 +50,22 @@ export const useConfigModal = () => {
           console.error("configMap is not matched to obj.configMap!");
           return;
         }
-        updateObject({
-          ...obj,
-          configMap: new Map([...obj.configMap, ...configMap]),
-        });
+
+        if (id === "preview") {
+          updatePreview({
+            ...obj,
+            configMap: new Map([...obj.configMap, ...configMap]),
+          });
+        } else {
+          updateObject({
+            ...obj,
+            configMap: new Map([...obj.configMap, ...configMap]),
+          });
+        }
 
         closeModal();
       },
-    [updateObject, closeModal]
+    [closeModal, updatePreview, updateObject]
   );
 
   const closeModalWithoutMode = useCallback(() => {
