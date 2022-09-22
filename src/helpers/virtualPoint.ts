@@ -11,6 +11,9 @@ export const divConst = (v1: VirtualPoint, c: number) =>
 export const abs = (v1: VirtualPoint) =>
   create(Math.abs(v1.vx), Math.abs(v1.vy));
 
+export const eq = (v1: VirtualPoint, v2: VirtualPoint) =>
+  v1.vx === v2.vx && v1.vy === v2.vy;
+
 export const toReal = (
   v: VirtualPoint,
   pitch: number,
