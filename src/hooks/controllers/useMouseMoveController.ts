@@ -3,7 +3,7 @@ import { svgObjectStates } from "../../states/svgObjectState";
 import * as rp from "../../helpers/realPoint";
 import * as vp from "../../helpers/virtualPoint";
 import { configModalState } from "../../states/configModalState";
-import { useCallback } from "react";
+import { useCallback, useRef } from "react";
 import { usePoint } from "../../operators/usePoint";
 import { useRecoilCallback } from "recoil";
 import { usePreview } from "../../operators/usePreview";
@@ -11,6 +11,7 @@ import { usePreview } from "../../operators/usePreview";
 export const useOnMouseMoveController = () => {
   const { updatePreview } = usePreview();
   const { toVirtual } = usePoint();
+  const pointRef = useRef<VirtualPoint | null>(null);
 
   const omMouseMoveLine = useCallback(
     (obj: LineObject | null, v: VirtualPoint) => {
@@ -108,11 +109,16 @@ export const useOnMouseMoveController = () => {
   const omMouseMove = useRecoilCallback(
     ({ snapshot }) =>
       (x: number, y: number) => {
+        const v = toVirtual(rp.create(x, y));
+        if (pointRef.current && vp.eq(v, pointRef.current)) return;
+        pointRef.current = v;
+
+        console.log("test2");
+
         const obj = snapshot.getLoadable(svgObjectStates("preview")).getValue();
         const drawMode = snapshot.getLoadable(drawModeState).getValue();
         const isOpen = snapshot.getLoadable(configModalState).getValue().isOpen;
         if (isOpen) return;
-        const v = toVirtual(rp.create(x, y));
 
         switch (drawMode) {
           case "line": {
