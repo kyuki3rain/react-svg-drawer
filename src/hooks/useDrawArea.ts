@@ -1,18 +1,18 @@
 import { useRecoilValue } from "recoil";
 import { rootPointSelector } from "../selectors/rootPointSelector";
-import { selectedSvgIdState } from "../states/selectedSvgIdState";
+import { selectedIdListState } from "../states/selectedIdListState";
 import { svgObjectListState } from "../states/svgObjectState";
 import { windowSizeState } from "../states/windowSizeState";
 
 export const useDrawArea = () => {
   const svgObjectList = useRecoilValue(svgObjectListState);
-  const selectedSvgId = useRecoilValue(selectedSvgIdState);
+  const selectedIdList = useRecoilValue(selectedIdListState);
   const rootPoint = useRecoilValue(rootPointSelector);
   const { width, height } = useRecoilValue(windowSizeState);
 
   return {
     svgObjectList: [...svgObjectList],
-    selectedSvgId,
+    selectedIdList,
     rootPoint,
     width,
     height,

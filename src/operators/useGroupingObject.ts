@@ -1,5 +1,5 @@
 import { useRecoilCallback } from "recoil";
-import { selectedSvgIdState } from "../states/selectedSvgIdState";
+import { selectedIdListState } from "../states/selectedIdListState";
 import { svgObjectStates } from "../states/svgObjectState";
 import { useSelect } from "./useSelect";
 import { useSvgObject } from "./useSvgObject";
@@ -74,14 +74,14 @@ export const useGroupingObject = () => {
   const groupingPreview = useRecoilCallback(
     ({ snapshot }) =>
       (parentPoint: VirtualPoint, withCopy?: boolean) => {
-        const selectedSvgId = snapshot
-          .getLoadable(selectedSvgIdState)
+        const selectedIdList = snapshot
+          .getLoadable(selectedIdListState)
           .getValue();
         const newIds = withCopy
-          ? [...selectedSvgId]
+          ? [...selectedIdList]
               .map((id) => copyObject(id))
               .flatMap((x) => x ?? [])
-          : [...selectedSvgId];
+          : [...selectedIdList];
         groupingObject(parentPoint, newIds, "preview");
       }
   );
@@ -91,12 +91,12 @@ export const useGroupingObject = () => {
   const groupingSelectedObject = useRecoilCallback(
     ({ snapshot }) =>
       (parentPoint: VirtualPoint) => {
-        const selectedSvgId = snapshot
-          .getLoadable(selectedSvgIdState)
+        const selectedIdList = snapshot
+          .getLoadable(selectedIdListState)
           .getValue();
 
         const newId = nanoid() as SvgId;
-        groupingObject(parentPoint, [...selectedSvgId], newId);
+        groupingObject(parentPoint, [...selectedIdList], newId);
 
         resetSelect();
         select(newId);
@@ -107,18 +107,18 @@ export const useGroupingObject = () => {
   const ungroupingSelectedObject = useRecoilCallback(
     ({ snapshot }) =>
       () => {
-        const selectedSvgId = snapshot
-          .getLoadable(selectedSvgIdState)
+        const selectedIdList = snapshot
+          .getLoadable(selectedIdListState)
           .getValue();
 
-        selectedSvgId.forEach((id) => {
+        selectedIdList.forEach((id) => {
           const obj = snapshot.getLoadable(svgObjectStates(id)).getValue();
           if (!obj || !obj.fixedPoint) return;
           ungroupingObject(id);
         });
 
         resetSelect();
-        selectedSvgId.forEach((id) => {
+        selectedIdList.forEach((id) => {
           const obj = snapshot.getLoadable(svgObjectStates(id)).getValue();
           if (!obj || !obj.id || obj.id === "preview" || !obj.fixedPoint)
             return;
