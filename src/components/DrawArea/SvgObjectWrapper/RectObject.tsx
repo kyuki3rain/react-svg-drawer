@@ -1,6 +1,5 @@
-import { useMemo } from "react";
 import { CLICK_TARGET_OBJECT } from "../../../helpers/clickTargetObject";
-import { useObject } from "../../../hooks/useObject";
+import { useRect } from "../../../hooks/objects/useRect";
 
 type Props = {
   obj: RectObject;
@@ -15,21 +14,11 @@ const RectObject: React.FC<Props> = ({
   isSelected,
   parentId,
 }) => {
-  const { toRealAbsolute, toRealRelative, onClick } = useObject({
+  const { r, s, onClick } = useRect({
     obj,
     parentPoint,
     parentId,
   });
-
-  const r = useMemo(
-    () => obj.upperLeft && toRealAbsolute(obj.upperLeft),
-    [obj.upperLeft, toRealAbsolute]
-  );
-  const s = useMemo(
-    () => obj.size && toRealRelative(obj.size),
-    [obj.size, toRealRelative]
-  );
-
   if (!r || !s) return null;
 
   return (

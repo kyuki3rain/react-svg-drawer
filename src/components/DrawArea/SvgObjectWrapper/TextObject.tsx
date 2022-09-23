@@ -1,5 +1,4 @@
-import { useMemo } from "react";
-import { useObject } from "../../../hooks/useObject";
+import { useText } from "../../../hooks/objects/useText";
 
 type Props = {
   obj: TextObject;
@@ -14,18 +13,7 @@ const TextObject: React.FC<Props> = ({
   isSelected,
   parentId,
 }) => {
-  const { toRealAbsolute, onClick } = useObject({
-    obj,
-    parentPoint,
-    parentId,
-  });
-
-  const r = useMemo(
-    () => obj.point && toRealAbsolute(obj.point),
-    [obj.point, toRealAbsolute]
-  );
-  const text = useMemo(() => obj.configMap?.get("text"), [obj.configMap]);
-
+  const { r, text, onClick } = useText({ obj, parentPoint, parentId });
   if (!r || !text) return null;
 
   return (
