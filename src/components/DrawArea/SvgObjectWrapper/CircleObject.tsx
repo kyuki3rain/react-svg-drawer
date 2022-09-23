@@ -1,6 +1,5 @@
-import { useMemo } from "react";
 import { CLICK_TARGET_OBJECT } from "../../../helpers/clickTargetObject";
-import { useObject } from "../../../hooks/useObject";
+import { useCircle } from "../../../hooks/objects/useCircle";
 
 type Props = {
   obj: CircleObject;
@@ -15,21 +14,7 @@ const CircleObject: React.FC<Props> = ({
   isSelected,
   parentId,
 }) => {
-  const { toRealAbsolute, toRealRelative, onClick } = useObject({
-    obj,
-    parentPoint,
-    parentId,
-  });
-
-  const c = useMemo(
-    () => obj.c && toRealAbsolute(obj.c),
-    [obj.c, toRealAbsolute]
-  );
-  const r = useMemo(
-    () => obj.r && toRealRelative(obj.r),
-    [obj.r, toRealRelative]
-  );
-
+  const { c, r, onClick } = useCircle({ obj, parentPoint, parentId });
   if (!c || !r) return null;
 
   return (

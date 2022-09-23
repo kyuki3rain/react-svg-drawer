@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import { vp } from "../helpers/virtualPoint";
-import { useOnClickObject } from "../operators/useOnClickObject";
-import { usePoint } from "../operators/usePoint";
+import { useOnClickObject } from "./useOnClickObject";
+import { usePoint } from "./usePoint";
 
 type Props = {
   obj: SvgObject;

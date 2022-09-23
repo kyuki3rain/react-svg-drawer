@@ -1,6 +1,5 @@
-import { useMemo } from "react";
 import { CLICK_TARGET_OBJECT } from "../../../helpers/clickTargetObject";
-import { useObject } from "../../../hooks/useObject";
+import { usePolyline } from "../../../hooks/objects/usePolyline";
 
 type Props = {
   obj: PolylineObject;
@@ -15,19 +14,8 @@ const PolylineObject: React.FC<Props> = ({
   isSelected,
   parentId,
 }) => {
-  const { toRealAbsolute, onClick, pointToText } = useObject({
-    obj,
-    parentPoint,
-    parentId,
-  });
-
-  const points = useMemo(
-    () =>
-      (obj.previewPoint ? [...obj.points, obj.previewPoint] : obj.points)
-        .map((v) => pointToText(toRealAbsolute(v)))
-        .join(" "),
-    [obj.points, obj.previewPoint, pointToText, toRealAbsolute]
-  );
+  const { points, draw, onClick } = usePolyline({ obj, parentPoint, parentId });
+  if (!draw) return null;
 
   return (
     <>

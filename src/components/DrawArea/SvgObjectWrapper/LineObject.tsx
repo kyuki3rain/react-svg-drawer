@@ -1,6 +1,5 @@
-import { useMemo } from "react";
 import { CLICK_TARGET_OBJECT } from "../../../helpers/clickTargetObject";
-import { useObject } from "../../../hooks/useObject";
+import { useLine } from "../../../hooks/objects/useLine";
 
 type Props = {
   obj: LineObject;
@@ -15,21 +14,11 @@ const LineObject: React.FC<Props> = ({
   isSelected,
   parentId,
 }) => {
-  const { toRealAbsolute, onClick } = useObject({
+  const { r1, r2, onClick } = useLine({
     obj,
     parentPoint,
     parentId,
   });
-
-  const r1 = useMemo(
-    () => obj.point1 && toRealAbsolute(obj.point1),
-    [obj.point1, toRealAbsolute]
-  );
-  const r2 = useMemo(
-    () => obj.point2 && toRealAbsolute(obj.point2),
-    [obj.point2, toRealAbsolute]
-  );
-
   if (!r1 || !r2) return null;
 
   return (
