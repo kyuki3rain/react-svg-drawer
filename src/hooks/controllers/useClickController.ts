@@ -24,8 +24,8 @@ export const useClickController = () => {
         updatePreview({
           id: "preview",
           type: "line",
-          fixedPoint: v,
-          point1: vp.zero(),
+          fixedPoint: v as VirtualAbsolute,
+          point1: vp.zero() as VirtualAbsolute,
           style: { stroke: "black" },
         });
         return;
@@ -33,7 +33,7 @@ export const useClickController = () => {
 
       addObject({
         ...obj,
-        point2: vp.sub(v, obj.fixedPoint),
+        point2: vp.sub(v, obj.fixedPoint) as VirtualAbsolute,
       });
       deletePreview();
     },
@@ -46,8 +46,8 @@ export const useClickController = () => {
         updatePreview({
           id: "preview",
           type: "polyline",
-          fixedPoint: v,
-          points: [vp.zero()],
+          fixedPoint: v as VirtualAbsolute,
+          points: [vp.zero() as VirtualAbsolute],
           style: { stroke: "black", fill: "none" },
         });
         return;
@@ -55,7 +55,7 @@ export const useClickController = () => {
 
       updatePreview({
         ...obj,
-        points: [...obj.points, vp.sub(v, obj.fixedPoint)],
+        points: [...obj.points, vp.sub(v, obj.fixedPoint) as VirtualAbsolute],
       });
     },
     [updatePreview]
@@ -66,8 +66,8 @@ export const useClickController = () => {
       if (!obj) return;
       addObject({
         ...obj,
-        fixedPoint: v,
-        point: vp.zero(),
+        fixedPoint: v as VirtualAbsolute,
+        point: vp.zero() as VirtualAbsolute,
       });
     },
     [addObject]
@@ -79,8 +79,8 @@ export const useClickController = () => {
         updatePreview({
           id: "preview",
           type: "rect",
-          upperLeft: vp.zero(),
-          fixedPoint: v,
+          upperLeft: vp.zero() as VirtualAbsolute,
+          fixedPoint: v as VirtualAbsolute,
           style: { stroke: "black", fill: "none" },
         });
         return;
@@ -97,11 +97,11 @@ export const useClickController = () => {
         upperLeft: vp.create(
           diff.vx > 0 ? 0 : diff.vx,
           diff.vy > 0 ? 0 : diff.vy
-        ),
+        ) as VirtualAbsolute,
         size: vp.create(
           diff.vx > 0 ? diff.vx : -diff.vx,
           diff.vy > 0 ? diff.vy : -diff.vy
-        ),
+        ) as VirtualRelative,
       });
 
       deletePreview();
@@ -115,14 +115,14 @@ export const useClickController = () => {
         updatePreview({
           id: "preview",
           type: "circle",
-          fixedPoint: v,
+          fixedPoint: v as VirtualAbsolute,
           style: { stroke: "black", fill: "none" },
         });
         return;
       }
 
-      const c = vp.divConst(vp.sub(v, obj.fixedPoint), 2);
-      const r = vp.abs(c);
+      const c = vp.divConst(vp.sub(v, obj.fixedPoint), 2) as VirtualAbsolute;
+      const r = vp.abs(c) as VirtualRelative;
 
       addObject({
         ...obj,

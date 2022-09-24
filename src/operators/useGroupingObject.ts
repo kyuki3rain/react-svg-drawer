@@ -29,8 +29,8 @@ export const useGroupingObject = () => {
       const groupObject = {
         type: "group" as const,
         objectIds: ids,
-        fixedPoint: parentPoint,
-        firstFixedPoint: parentPoint,
+        fixedPoint: parentPoint as VirtualAbsolute,
+        firstFixedPoint: parentPoint as VirtualAbsolute,
         style: {},
         isCopy: false,
       };

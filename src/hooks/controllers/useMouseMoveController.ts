@@ -19,7 +19,7 @@ export const useOnMouseMoveController = () => {
 
       updatePreview({
         ...obj,
-        point2: vp.sub(v, obj.fixedPoint),
+        point2: vp.sub(v, obj.fixedPoint) as VirtualAbsolute,
       });
     },
     [updatePreview]
@@ -31,7 +31,7 @@ export const useOnMouseMoveController = () => {
 
       updatePreview({
         ...obj,
-        previewPoint: vp.sub(v, obj.fixedPoint),
+        previewPoint: vp.sub(v, obj.fixedPoint) as VirtualAbsolute,
       });
     },
     [updatePreview]
@@ -43,8 +43,8 @@ export const useOnMouseMoveController = () => {
 
       updatePreview({
         ...obj,
-        fixedPoint: v,
-        point: vp.zero(),
+        fixedPoint: v as VirtualAbsolute,
+        point: vp.zero() as VirtualAbsolute,
       });
     },
     [updatePreview]
@@ -68,11 +68,11 @@ export const useOnMouseMoveController = () => {
         upperLeft: vp.create(
           diff.vx > 0 ? 0 : diff.vx,
           diff.vy > 0 ? 0 : diff.vy
-        ),
+        ) as VirtualAbsolute,
         size: vp.create(
           diff.vx > 0 ? diff.vx : -diff.vx,
           diff.vy > 0 ? diff.vy : -diff.vy
-        ),
+        ) as VirtualRelative,
       });
     },
     [updatePreview]
@@ -82,8 +82,8 @@ export const useOnMouseMoveController = () => {
     (obj: CircleObject | null, v: VirtualPoint) => {
       if (!obj?.fixedPoint) return;
 
-      const c = vp.divConst(vp.sub(v, obj.fixedPoint), 2);
-      const r = vp.abs(c);
+      const c = vp.divConst(vp.sub(v, obj.fixedPoint), 2) as VirtualAbsolute;
+      const r = vp.abs(c) as VirtualRelative;
 
       updatePreview({
         ...obj,
@@ -100,7 +100,7 @@ export const useOnMouseMoveController = () => {
 
       updatePreview({
         ...obj,
-        fixedPoint: v,
+        fixedPoint: v as VirtualAbsolute,
       });
     },
     [updatePreview]
