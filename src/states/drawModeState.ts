@@ -1,27 +1,6 @@
-import { atom, useRecoilValue, useSetRecoilState } from "recoil";
+import { atom } from "recoil";
 
-type DrawModeState = {
-  mode: DrawMode;
-  param?: SvgObject;
-};
-
-const drawModeState = atom<DrawModeState>({
+export const drawModeState = atom<DrawMode>({
   key: "drawModeState",
-  default: { mode: "selector" },
+  default: "selector",
 });
-
-export const useSetDrawMode = () => {
-  const setDrawMode = useSetRecoilState(drawModeState);
-
-  const changeMode = (mode: DrawMode, param?: SvgObject) => {
-    setDrawMode({ mode, param });
-  };
-
-  return { changeMode };
-};
-
-export const useDrawMode = () => {
-  const drawMode = useRecoilValue(drawModeState);
-  const setDrawMode = useSetDrawMode();
-  return { drawMode, ...setDrawMode };
-};

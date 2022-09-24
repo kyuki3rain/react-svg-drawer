@@ -1,21 +1,33 @@
-import { usePoint } from "../../../hooks/usePoint";
-import * as vp from "../../../helpers/virtualPoint";
+import { useText } from "../../../hooks/objects/useText";
 
 type Props = {
   obj: TextObject;
+  parentPoint: VirtualPoint;
+  isSelected: boolean;
+  parentId?: SvgId | "preview";
 };
 
-const TextObject: React.FC<Props> = ({ obj }) => {
-  const { toReal } = usePoint();
+const TextObject: React.FC<Props> = ({
+  obj,
+  parentPoint,
+  isSelected,
+  parentId,
+}) => {
+  const { r, text, onClick } = useText({ obj, parentPoint, parentId });
+  if (!r || !text) return null;
 
-  if (!obj.point || !obj.fixedPoint) return null;
-  const text = obj.configMap?.get("text");
-  if (!text) return null;
-  const r = toReal(vp.add(obj.point, obj.fixedPoint));
   return (
-    <text x={r.x} y={r.y} {...obj.style}>
-      {text}
-    </text>
+    <>
+      <text
+        x={r.x}
+        y={r.y}
+        {...obj.style}
+        stroke={isSelected ? "blue" : "black"}
+        onClick={(e) => onClick(e.stopPropagation)}
+      >
+        {text}
+      </text>
+    </>
   );
 };
 

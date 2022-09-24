@@ -1,10 +1,11 @@
 import CssBaseline from "@mui/material/CssBaseline";
 import React from "react";
 import { RecoilRoot } from "recoil";
-import ButtonArea from "./components/ButtonArea";
-import DrawArea from "./components/DrawArea";
-import AreaController from "./components/AreaController";
-import ConfigModal from "./components/ConfigModal";
+import ButtonArea from "./views/ButtonArea";
+import DrawArea from "./views/DrawArea";
+import AreaController from "./controllers/AreaController";
+import ConfigModal from "./views/ConfigModal";
+import EffectController from "./controllers/EffectController";
 
 const App: React.FC = () => (
   <RecoilRoot>
@@ -13,6 +14,7 @@ const App: React.FC = () => (
       <DrawArea />
       <ButtonArea />
     </AreaController>
+    <EffectController />
     <ConfigModal />
   </RecoilRoot>
 );
