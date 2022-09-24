@@ -30,7 +30,7 @@ export const useObject = ({ obj, parentPoint, parentId }: Props) => {
       const id = parentId ?? obj.id;
       if (!id) return;
       if (id === "preview") return;
-      if (onClickObject(id)) stopPropagation;
+      if (onClickObject(id)) stopPropagation();
     },
     [obj.id, onClickObject, parentId]
   );
