@@ -33,7 +33,7 @@ const RectObject: React.FC<Props> = ({
           (obj.style.strokeWidth ?? 0) + CLICK_TARGET_OBJECT.defaultStrokeWidth
         }
         strokeOpacity="0"
-        onClick={(e) => onClick(e.stopPropagation)}
+        onClick={(e) => onClick(() => e.stopPropagation())}
       ></rect>
       <rect
         x={r.x}
