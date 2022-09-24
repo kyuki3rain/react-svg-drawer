@@ -15,7 +15,10 @@ export const useCorrectFixedPoint = () => {
           return (
             prev && {
               ...prev,
-              fixedPoint: vp.sub(prev.fixedPoint, correction),
+              fixedPoint: vp.sub(
+                prev.fixedPoint,
+                correction
+              ) as VirtualAbsolute,
             }
           );
         });

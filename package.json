@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "lint": "eslint .",
+    "lint": "tsc --noEmit && eslint .",
     "check": "prettier --check .",
     "prepare": "husky install",
     "test": "jest"
