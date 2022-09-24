@@ -12,6 +12,7 @@ export const useGrid = () => {
       (_, i) => (i + Math.ceil(upperLeft.vx) - upperLeft.vx) * pitch
     );
   }, [pitch, upperLeft.vx, width]);
+
   const HorizontalGridArray = useMemo(
     () =>
       [...Array(Math.ceil(height / pitch))].map(
