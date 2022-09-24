@@ -21,7 +21,7 @@ export const useGroup = ({ obj, parentPoint, parentId }: Props) => {
 
   return {
     groupPoint,
-    draw: obj.objectIds.length === 0,
+    draw: obj.objectIds.length !== 0,
     onClick,
   };
 };

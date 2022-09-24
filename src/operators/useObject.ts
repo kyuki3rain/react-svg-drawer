@@ -1,7 +1,8 @@
 import { useCallback } from "react";
+import { useRecoilValue } from "recoil";
 import { vp } from "../helpers/virtualPoint";
+import { areaConfigState } from "../states/areaConfigState";
 import { useOnClickObject } from "./useOnClickObject";
-import { usePoint } from "./usePoint";
 
 type Props = {
   obj: SvgObject;
@@ -10,17 +11,18 @@ type Props = {
 };
 
 export const useObject = ({ obj, parentPoint, parentId }: Props) => {
-  const { toReal } = usePoint();
   const { onClickObject } = useOnClickObject();
+  const { pitch } = useRecoilValue(areaConfigState);
 
   const toRealAbsolute = useCallback(
     (a: VirtualAbsolute) =>
-      obj.fixedPoint && toReal(vp.add(vp.add(a, obj.fixedPoint), parentPoint)),
-    [obj.fixedPoint, parentPoint, toReal]
+      obj.fixedPoint &&
+      vp.toReal(vp.add(vp.add(a, obj.fixedPoint), parentPoint), pitch),
+    [obj.fixedPoint, parentPoint, pitch]
   );
   const toRealRelative = useCallback(
-    (r: VirtualRelative) => toReal(r),
-    [toReal]
+    (r: VirtualRelative) => vp.toReal(r, pitch),
+    [pitch]
   );
 
   const onClick = useCallback(
@@ -28,7 +30,7 @@ export const useObject = ({ obj, parentPoint, parentId }: Props) => {
       const id = parentId ?? obj.id;
       if (!id) return;
       if (id === "preview") return;
-      if (onClickObject(id)) stopPropagation;
+      if (onClickObject(id)) stopPropagation();
     },
     [obj.id, onClickObject, parentId]
   );
