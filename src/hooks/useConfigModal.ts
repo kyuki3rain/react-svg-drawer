@@ -29,13 +29,16 @@ export const useConfigModal = () => {
 
   const saveConfig = useRecoilCallback(
     ({ snapshot }) =>
-      (configMap: Map<string, string>) => {
+      () => {
         const id = snapshot.getLoadable(configModalState).getValue().id;
         const obj = snapshot.getLoadable(svgObjectStates(id)).getValue();
+        const draftConfigs = snapshot.getLoadable(draftConfigState).getValue();
         if (!obj || !obj.configMap) return;
 
         if (
-          ![...configMap].every((c) => obj.configMap?.get(c[0]) !== undefined)
+          ![...draftConfigs].every(
+            (c) => obj.configMap?.get(c[0]) !== undefined
+          )
         ) {
           console.error("configMap is not matched to obj.configMap!");
           return;
@@ -44,15 +47,14 @@ export const useConfigModal = () => {
         if (id === "preview") {
           updatePreview({
             ...obj,
-            configMap: new Map([...obj.configMap, ...configMap]),
+            configMap: new Map([...obj.configMap, ...draftConfigs]),
           });
         } else {
           updateObject({
             ...obj,
-            configMap: new Map([...obj.configMap, ...configMap]),
+            configMap: new Map([...obj.configMap, ...draftConfigs]),
           });
         }
-
         closeModal();
       },
     [closeModal, updatePreview, updateObject]

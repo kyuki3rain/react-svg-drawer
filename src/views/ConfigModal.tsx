@@ -40,10 +40,7 @@ const ConfigModal = () => {
             onChange={(e) => onChange(config[0], e.target.value)}
           />
         ))}
-        <Button
-          onClick={() => saveConfig(draftConfigs)}
-          style={{ marginTop: 10 }}
-        >
+        <Button onClick={saveConfig} style={{ marginTop: 10 }}>
           OK
         </Button>
       </Box>
