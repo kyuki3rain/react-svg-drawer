@@ -42,17 +42,31 @@ second click のとき、その点と一つ目の点に接する楕円を描画�
 
 ## undo
 
+一つ前の状態に遷移する
+
 ## redo
+
+（undo 後に）一つ後の状態に遷移する
 
 ## grouping
 
+選択された object を group 化する
+
 ## ungrouping
+
+group 化された object の group 化を解除する
 
 ## newFile
 
+ファイル（状態）をリセットする
+
 ## saveFile
 
+ファイル（状態）をローカルに保存する
+
 ## loadFile
+
+ファイル（状態）をローカルから復元する
 
 ## importFile
 
