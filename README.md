@@ -1,6 +1,6 @@
 # react-svg-drawer
 
-# mode 一覧
+# mode
 
 ## selector
 
@@ -38,13 +38,45 @@ first click で一箇所確定
 そこから mousemove に対応して preview を表示
 second click のとき、その点と一つ目の点に接する楕円を描画して初期状態に戻る
 
-## import
+# Function
+
+## undo
+
+一つ前の状態に遷移する
+
+## redo
+
+（undo 後に）一つ後の状態に遷移する
+
+## grouping
+
+選択された object を group 化する
+
+## ungrouping
+
+group 化された object の group 化を解除する
+
+## newFile
+
+ファイル（状態）をリセットする
+
+## saveFile
+
+ファイル（状態）をローカルに保存する
+
+## loadFile
+
+ファイル（状態）をローカルから復元する
+
+## importFile
 
 対応する json ファイルを渡せば、読み込み可能
 
-## export
+## exportFile
 
 画面上にあるオブジェクトの情報を全て吐き出す
+
+## console.log
 
 # その他
 
