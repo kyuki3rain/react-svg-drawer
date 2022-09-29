@@ -2,6 +2,7 @@ import { useCallback } from "react";
 import { useRecoilCallback, useRecoilValue } from "recoil";
 import { useChangeMode } from "../operators/useChangeMode";
 import { useDraftConfig } from "../operators/useDraftConfig";
+import { useHandleConfigModal } from "../operators/useHandleConfigModal";
 import { usePreview } from "../operators/usePreview";
 import { useSvgObject } from "../operators/useSvgObject";
 import { configModalState, draftConfigState } from "../states/configModalState";
@@ -14,18 +15,7 @@ export const useConfigModal = () => {
   const { updatePreview } = usePreview();
   const { changeMode } = useChangeMode();
   const { updateDraft, resetDraft } = useDraftConfig();
-
-  const closeModal = useRecoilCallback(
-    ({ set }) =>
-      () => {
-        set(configModalState, {
-          isOpen: false,
-          type: "none" as const,
-          id: "preview",
-        });
-      },
-    []
-  );
+  const { closeModal } = useHandleConfigModal();
 
   const saveConfig = useRecoilCallback(
     ({ snapshot }) =>
@@ -60,20 +50,16 @@ export const useConfigModal = () => {
     [closeModal, updatePreview, updateObject]
   );
 
-  const closeModalWithoutMode = useCallback(() => {
-    closeModal();
-    changeMode("selector");
-  }, [changeMode, closeModal]);
-
   const onChange = useCallback(
     (key: string, value: string) => updateDraft(key, value),
     [updateDraft]
   );
 
   const handleClose = useCallback(() => {
-    closeModalWithoutMode();
+    closeModal();
+    changeMode("selector");
     resetDraft();
-  }, [closeModalWithoutMode, resetDraft]);
+  }, [changeMode, closeModal, resetDraft]);
 
   return {
     type: configModal.type,
