@@ -22,7 +22,11 @@ const GroupObject: React.FC<Props> = ({
   if (!groupPoint || !draw) return null;
 
   return (
-    <svg onClick={(e) => onClick(() => e.stopPropagation(), isSelected)}>
+    <svg
+      onClick={(e) =>
+        onClick(() => e.stopPropagation(), isSelected, e.shiftKey)
+      }
+    >
       {obj.objectIds.map((id) => (
         <SvgObjectWrapper
           key={id}

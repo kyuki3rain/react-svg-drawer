@@ -7,12 +7,12 @@ export const useOnClickObject = () => {
 
   const onClickObject = useRecoilCallback(
     ({ snapshot }) =>
-      (id: SvgId, isSelected: boolean) => {
+      (id: SvgId, isSelected: boolean, isShift: boolean) => {
         const drawMode = snapshot.getLoadable(drawModeState).getValue();
         if (drawMode !== "selector") return false;
 
         if (isSelected) unselect(id);
-        else select(id);
+        else select(id, isShift);
 
         return true;
       },

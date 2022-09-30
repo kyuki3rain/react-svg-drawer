@@ -1,7 +1,6 @@
 import { useRecoilCallback, useSetRecoilState } from "recoil";
 import { vp } from "../helpers/virtualPoint";
 import { selectObjectSelector } from "../selectors/selectObjectSelector";
-import { mulSelectState } from "../states/drawModeState";
 import { svgObjectListState, svgObjectStates } from "../states/svgObjectState";
 
 export const useSelectObject = () => {
@@ -21,10 +20,9 @@ export const useSelectObject = () => {
   );
 
   const addSelectObject = useRecoilCallback(
-    ({ set, snapshot }) =>
-      (id: SvgId) => {
-        const mulSelect = snapshot.getLoadable(mulSelectState).getValue();
-        if (!mulSelect) resetSelectObject();
+    ({ set }) =>
+      (id: SvgId, isShift?: boolean) => {
+        if (!isShift) resetSelectObject();
 
         set(svgObjectStates("select"), (prev) => {
           if (prev && prev.type !== "group") return null;

@@ -26,7 +26,9 @@ const PolylineObject: React.FC<Props> = ({
           (obj.style.strokeWidth ?? 0) + CLICK_TARGET_OBJECT.defaultStrokeWidth
         }
         strokeOpacity="0"
-        onClick={(e) => onClick(() => e.stopPropagation(), isSelected)}
+        onClick={(e) =>
+          onClick(() => e.stopPropagation(), isSelected, e.shiftKey)
+        }
       ></polyline>
       <polyline
         points={points}

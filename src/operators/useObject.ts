@@ -26,11 +26,11 @@ export const useObject = ({ obj, parentPoint, parentId }: Props) => {
   );
 
   const onClick = useCallback(
-    (stopPropagation: () => void, isSelected: boolean) => {
+    (stopPropagation: () => void, isSelected: boolean, isShift: boolean) => {
       const id = parentId ?? obj.id;
       if (!id) return;
       if (id === "preview" || id === "select") return;
-      if (onClickObject(id, isSelected)) stopPropagation();
+      if (onClickObject(id, isSelected, isShift)) stopPropagation();
     },
     [obj.id, onClickObject, parentId]
   );
