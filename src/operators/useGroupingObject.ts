@@ -1,5 +1,4 @@
 import { useRecoilCallback } from "recoil";
-import { selectedIdListState } from "../states/selectedIdListState";
 import { svgObjectStates } from "../states/svgObjectState";
 import { useSelect } from "./useSelect";
 import { useSvgObject } from "./useSvgObject";
@@ -9,6 +8,7 @@ import { nanoid } from "nanoid";
 import { usePreview } from "./usePreview";
 import { useCallback } from "react";
 import { vp } from "../helpers/virtualPoint";
+import { selectObjectSelector } from "../selectors/selectObjectSelector";
 
 export const useGroupingObject = () => {
   const { resetSelect, select } = useSelect();
@@ -73,13 +73,11 @@ export const useGroupingObject = () => {
     ({ snapshot }) =>
       (parentPoint: VirtualPoint, withCopy?: boolean) => {
         const selectedIdList = snapshot
-          .getLoadable(selectedIdListState)
+          .getLoadable(selectObjectSelector)
           .getValue();
         const newIds = withCopy
-          ? [...selectedIdList]
-              .map((id) => copyObject(id))
-              .flatMap((x) => x ?? [])
-          : [...selectedIdList];
+          ? selectedIdList.map((id) => copyObject(id)).flatMap((x) => x ?? [])
+          : selectedIdList;
         groupingObject(parentPoint, newIds, "preview");
       }
   );
@@ -90,11 +88,11 @@ export const useGroupingObject = () => {
     ({ snapshot }) =>
       (parentPoint: VirtualPoint) => {
         const selectedIdList = snapshot
-          .getLoadable(selectedIdListState)
+          .getLoadable(selectObjectSelector)
           .getValue();
 
         const newId = nanoid() as SvgId;
-        groupingObject(parentPoint, [...selectedIdList], newId);
+        groupingObject(parentPoint, selectedIdList, newId);
 
         resetSelect();
         select(newId);
@@ -106,7 +104,7 @@ export const useGroupingObject = () => {
     ({ snapshot }) =>
       () => {
         const selectedIdList = snapshot
-          .getLoadable(selectedIdListState)
+          .getLoadable(selectObjectSelector)
           .getValue();
 
         selectedIdList.forEach((id) => {
