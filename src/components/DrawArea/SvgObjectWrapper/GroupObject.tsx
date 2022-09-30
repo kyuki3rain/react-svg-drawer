@@ -5,7 +5,7 @@ type Props = {
   obj: GroupObject;
   parentPoint: VirtualPoint;
   isSelected: boolean;
-  parentId?: SvgId | "preview";
+  parentId?: SvgId | "preview" | "select";
 };
 
 const GroupObject: React.FC<Props> = ({
@@ -22,7 +22,7 @@ const GroupObject: React.FC<Props> = ({
   if (!groupPoint || !draw) return null;
 
   return (
-    <svg onClick={(e) => onClick(() => e.stopPropagation())}>
+    <svg onClick={(e) => onClick(() => e.stopPropagation(), isSelected)}>
       {obj.objectIds.map((id) => (
         <SvgObjectWrapper
           key={id}

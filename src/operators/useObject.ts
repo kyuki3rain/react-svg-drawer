@@ -7,7 +7,7 @@ import { useOnClickObject } from "./useOnClickObject";
 type Props = {
   obj: SvgObject;
   parentPoint: VirtualPoint;
-  parentId?: SvgId | "preview";
+  parentId?: SvgId | "preview" | "select";
 };
 
 export const useObject = ({ obj, parentPoint, parentId }: Props) => {
@@ -26,11 +26,11 @@ export const useObject = ({ obj, parentPoint, parentId }: Props) => {
   );
 
   const onClick = useCallback(
-    (stopPropagation: () => void) => {
+    (stopPropagation: () => void, isSelected: boolean) => {
       const id = parentId ?? obj.id;
       if (!id) return;
-      if (id === "preview") return;
-      if (onClickObject(id)) stopPropagation();
+      if (id === "preview" || id === "select") return;
+      if (onClickObject(id, isSelected)) stopPropagation();
     },
     [obj.id, onClickObject, parentId]
   );

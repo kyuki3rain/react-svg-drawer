@@ -4,7 +4,7 @@ type Props = {
   obj: TextObject;
   parentPoint: VirtualPoint;
   isSelected: boolean;
-  parentId?: SvgId | "preview";
+  parentId?: SvgId | "preview" | "select";
 };
 
 const TextObject: React.FC<Props> = ({
@@ -23,7 +23,7 @@ const TextObject: React.FC<Props> = ({
         y={r.y}
         {...obj.style}
         stroke={isSelected ? "blue" : "black"}
-        onClick={(e) => onClick(() => e.stopPropagation())}
+        onClick={(e) => onClick(() => e.stopPropagation(), isSelected)}
       >
         {text}
       </text>

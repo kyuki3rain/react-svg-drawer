@@ -4,7 +4,7 @@ import { useObject } from "../../operators/useObject";
 type Props = {
   obj: PolylineObject;
   parentPoint: VirtualPoint;
-  parentId?: SvgId | "preview";
+  parentId?: SvgId | "preview" | "select";
 };
 
 export const usePolyline = ({ obj, parentPoint, parentId }: Props) => {

@@ -21,8 +21,9 @@ export const useGroupingObject = () => {
     (
       parentPoint: VirtualPoint,
       ids: SvgId[],
-      id: SvgId | "preview" = nanoid() as SvgId
+      id: SvgId | "preview" | "select" = nanoid() as SvgId
     ) => {
+      if (id === "select") return;
       updateFixedPoints(ids, parentPoint);
       excludeIds(ids);
 
@@ -117,7 +118,13 @@ export const useGroupingObject = () => {
         resetSelect();
         selectedIdList.forEach((id) => {
           const obj = snapshot.getLoadable(svgObjectStates(id)).getValue();
-          if (!obj || !obj.id || obj.id === "preview" || !obj.fixedPoint)
+          if (
+            !obj ||
+            !obj.id ||
+            obj.id === "preview" ||
+            obj.id === "select" ||
+            !obj.fixedPoint
+          )
             return;
           if (obj.type !== "group") select(obj.id);
           else obj.objectIds.map((objId) => select(objId));

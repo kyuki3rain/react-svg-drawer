@@ -4,7 +4,7 @@ import { useObject } from "../../operators/useObject";
 type Props = {
   obj: RectObject;
   parentPoint: VirtualPoint;
-  parentId?: SvgId | "preview";
+  parentId?: SvgId | "preview" | "select";
 };
 
 export const useRect = ({ obj, parentPoint, parentId }: Props) => {

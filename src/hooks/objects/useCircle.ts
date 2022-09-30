@@ -4,7 +4,7 @@ import { useObject } from "../../operators/useObject";
 type Props = {
   obj: CircleObject;
   parentPoint: VirtualPoint;
-  parentId?: SvgId | "preview";
+  parentId?: SvgId | "preview" | "select";
 };
 
 export const useCircle = ({ obj, parentPoint, parentId }: Props) => {

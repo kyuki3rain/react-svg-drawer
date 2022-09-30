@@ -1,6 +1,9 @@
 import { atom, atomFamily } from "recoil";
 
-export const svgObjectStates = atomFamily<SvgObject | null, SvgId | "preview">({
+export const svgObjectStates = atomFamily<
+  SvgObject | null,
+  SvgId | "preview" | "select"
+>({
   key: "svgObjectStates",
   default: () => {
     return null;

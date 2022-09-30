@@ -14,7 +14,7 @@ export const allSvgObjectSelector = selector({
 
     const idList = newValue
       .map((obj) => {
-        if (!obj?.id || obj.id == "preview") return;
+        if (!obj?.id || obj.id === "preview" || obj.id === "select") return;
         set(svgObjectStates(obj.id), obj);
         return obj.id;
       })

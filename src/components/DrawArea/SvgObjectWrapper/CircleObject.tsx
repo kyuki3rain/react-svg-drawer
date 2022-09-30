@@ -5,7 +5,7 @@ type Props = {
   obj: CircleObject;
   parentPoint: VirtualPoint;
   isSelected: boolean;
-  parentId?: SvgId | "preview";
+  parentId?: SvgId | "preview" | "select";
 };
 
 const CircleObject: React.FC<Props> = ({
@@ -29,7 +29,7 @@ const CircleObject: React.FC<Props> = ({
           (obj.style.strokeWidth ?? 0) + CLICK_TARGET_OBJECT.defaultStrokeWidth
         }
         strokeOpacity={CLICK_TARGET_OBJECT.strokeOpacity}
-        onClick={(e) => onClick(() => e.stopPropagation())}
+        onClick={(e) => onClick(() => e.stopPropagation(), isSelected)}
       ></ellipse>
       <ellipse
         cx={c.x}

@@ -15,7 +15,7 @@ type SvgObjectStyle = {
 };
 
 type SvgObjectCommon = {
-  id?: SvgId | "preview";
+  id?: SvgId | "preview" | "select";
   style: SvgObjectStyle;
   configMap?: Map<string, string>;
   fixedPoint?: VirtualAbsolute;

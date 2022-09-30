@@ -3,19 +3,20 @@ import { drawModeState } from "../states/drawModeState";
 import { useSelect } from "./useSelect";
 
 export const useOnClickObject = () => {
-  const { toggleSelect } = useSelect();
+  const { select, unselect } = useSelect();
 
   const onClickObject = useRecoilCallback(
     ({ snapshot }) =>
-      (id: SvgId) => {
+      (id: SvgId, isSelected: boolean) => {
         const drawMode = snapshot.getLoadable(drawModeState).getValue();
         if (drawMode !== "selector") return false;
 
-        toggleSelect(id);
+        if (isSelected) unselect(id);
+        else select(id);
 
         return true;
       },
-    [toggleSelect]
+    [select, unselect]
   );
 
   return {

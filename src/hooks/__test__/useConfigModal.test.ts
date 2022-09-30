@@ -11,7 +11,7 @@ import { useConfigModal } from "../useConfigModal";
 
 type InitialValue = {
   configModal?: {
-    id: SvgId | "preview";
+    id: SvgId | "preview" | "select";
     isOpen: boolean;
     type: ConfigType;
   };

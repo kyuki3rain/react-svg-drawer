@@ -5,7 +5,7 @@ type Props = {
   obj: RectObject;
   parentPoint: VirtualPoint;
   isSelected: boolean;
-  parentId?: SvgId | "preview";
+  parentId?: SvgId | "preview" | "select";
 };
 
 const RectObject: React.FC<Props> = ({
@@ -33,7 +33,7 @@ const RectObject: React.FC<Props> = ({
           (obj.style.strokeWidth ?? 0) + CLICK_TARGET_OBJECT.defaultStrokeWidth
         }
         strokeOpacity="0"
-        onClick={(e) => onClick(() => e.stopPropagation())}
+        onClick={(e) => onClick(() => e.stopPropagation(), isSelected)}
       ></rect>
       <rect
         x={r.x}

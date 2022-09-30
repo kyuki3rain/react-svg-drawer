@@ -5,7 +5,7 @@ import { useObject } from "../../operators/useObject";
 type Props = {
   obj: GroupObject;
   parentPoint: VirtualPoint;
-  parentId?: SvgId | "preview";
+  parentId?: SvgId | "preview" | "select";
 };
 
 export const useGroup = ({ obj, parentPoint, parentId }: Props) => {

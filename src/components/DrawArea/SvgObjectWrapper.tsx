@@ -8,9 +8,9 @@ import GroupObject from "./SvgObjectWrapper/GroupObject";
 import { useRecoilValue } from "recoil";
 
 type Props = {
-  svgId: SvgId | "preview";
+  svgId: SvgId | "preview" | "select";
   parentPoint: VirtualPoint;
-  parentId?: SvgId | "preview";
+  parentId?: SvgId | "preview" | "select";
   isSelected: boolean;
 };
 

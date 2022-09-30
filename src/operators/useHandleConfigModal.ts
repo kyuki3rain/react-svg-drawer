@@ -6,7 +6,7 @@ export const useHandleConfigModal = () => {
     ({ set }) =>
       (
         type: ConfigType,
-        id: SvgId | "preview",
+        id: SvgId | "preview" | "select",
         configMap: Map<string, string>
       ) => {
         set(configModalState, { isOpen: true, type, id });

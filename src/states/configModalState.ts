@@ -1,7 +1,7 @@
 import { atom } from "recoil";
 
 type ConfigModalState = {
-  id: SvgId | "preview";
+  id: SvgId | "preview" | "select";
   isOpen: boolean;
   type: ConfigType;
 };

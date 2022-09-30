@@ -5,7 +5,7 @@ type Props = {
   obj: LineObject;
   parentPoint: VirtualPoint;
   isSelected: boolean;
-  parentId?: SvgId | "preview";
+  parentId?: SvgId | "preview" | "select";
 };
 
 const LineObject: React.FC<Props> = ({
@@ -33,7 +33,7 @@ const LineObject: React.FC<Props> = ({
           (obj.style.strokeWidth ?? 0) + CLICK_TARGET_OBJECT.defaultStrokeWidth
         }
         strokeOpacity={CLICK_TARGET_OBJECT.strokeOpacity}
-        onClick={(e) => onClick(() => e.stopPropagation())}
+        onClick={(e) => onClick(() => e.stopPropagation(), isSelected)}
       ></line>
       <line
         x1={r1.x}

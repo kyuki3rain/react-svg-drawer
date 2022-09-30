@@ -5,8 +5,7 @@ import Grids from "../components/DrawArea/Grids";
 import SvgObjectWrapper from "../components/DrawArea/SvgObjectWrapper";
 
 const DrawArea: React.FC = () => {
-  const { svgObjectList, selectedIdList, rootPoint, width, height } =
-    useDrawArea();
+  const { svgObjectList, rootPoint, width, height } = useDrawArea();
 
   return (
     <DrawAreaController>
@@ -21,13 +20,18 @@ const DrawArea: React.FC = () => {
           <SvgObjectWrapper
             svgId={id}
             key={id}
-            isSelected={selectedIdList.has(id)}
+            isSelected={false}
             parentPoint={rootPoint}
           ></SvgObjectWrapper>
         ))}
         <SvgObjectWrapper
           svgId="preview"
           isSelected={false}
+          parentPoint={rootPoint}
+        ></SvgObjectWrapper>
+        <SvgObjectWrapper
+          svgId="select"
+          isSelected={true}
           parentPoint={rootPoint}
         ></SvgObjectWrapper>
       </svg>
