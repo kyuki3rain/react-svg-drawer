@@ -21,8 +21,8 @@ export const useSelectObject = () => {
 
   const addSelectObject = useRecoilCallback(
     ({ set }) =>
-      (id: SvgId, isShift?: boolean) => {
-        if (!isShift) resetSelectObject();
+      (id: SvgId, multiple?: boolean) => {
+        if (!multiple) resetSelectObject();
 
         set(svgObjectStates("select"), (prev) => {
           if (prev && prev.type !== "group") return null;

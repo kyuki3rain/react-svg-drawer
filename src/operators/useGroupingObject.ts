@@ -95,7 +95,7 @@ export const useGroupingObject = () => {
         groupingObject(parentPoint, selectedIdList, newId);
 
         resetSelect();
-        select(newId);
+        select(newId, false);
       },
     [groupingObject, resetSelect, select]
   );
@@ -124,8 +124,8 @@ export const useGroupingObject = () => {
             !obj.fixedPoint
           )
             return;
-          if (obj.type !== "group") select(obj.id);
-          else obj.objectIds.map((objId) => select(objId));
+          if (obj.type !== "group") select(obj.id, true);
+          else obj.objectIds.map((objId) => select(objId, true));
         });
       },
     [resetSelect, select, ungroupingObject]

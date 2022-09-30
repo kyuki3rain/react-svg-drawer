@@ -11,8 +11,9 @@ export const useOnClickObject = () => {
         const drawMode = snapshot.getLoadable(drawModeState).getValue();
         if (drawMode !== "selector") return false;
 
-        if (isSelected) unselect(id);
-        else select(id, isShift);
+        if (isSelected) {
+          if (isShift) unselect(id);
+        } else select(id, isShift);
 
         return true;
       },
