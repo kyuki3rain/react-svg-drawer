@@ -8,6 +8,8 @@ import LinkIcon from "@mui/icons-material/Link";
 import LinkOffIcon from "@mui/icons-material/LinkOff";
 import UndoIcon from "@mui/icons-material/Undo";
 import RedoIcon from "@mui/icons-material/Redo";
+import FitScreenIcon from "@mui/icons-material/FitScreen";
+import Crop32Icon from "@mui/icons-material/Crop32";
 import { Fab, Tooltip } from "@mui/material";
 import React from "react";
 import { useFunctionButton } from "../../hooks/buttons/useFunctionButton";
@@ -16,6 +18,7 @@ const FunctionButtons: React.FC = () => {
   const {
     canUndo,
     canRedo,
+    isSnap,
     redo,
     undo,
     grouping,
@@ -26,6 +29,7 @@ const FunctionButtons: React.FC = () => {
     importFile,
     exportFile,
     logFile,
+    toggleSnap,
   } = useFunctionButton();
 
   return (
@@ -55,6 +59,11 @@ const FunctionButtons: React.FC = () => {
       <Tooltip title="ungrouping" style={{ marginRight: 5 }} arrow>
         <Fab aria-label="ungrouping" color="default" onClick={ungrouping}>
           <LinkOffIcon />
+        </Fab>
+      </Tooltip>
+      <Tooltip title="snap" arrow style={{ marginRight: 5 }}>
+        <Fab color="default" aria-label="snap" onClick={toggleSnap}>
+          {isSnap ? <FitScreenIcon /> : <Crop32Icon />}
         </Fab>
       </Tooltip>
       <Tooltip title="new" style={{ marginRight: 5 }} arrow>

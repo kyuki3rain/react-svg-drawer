@@ -1,36 +1,29 @@
 import { useRecoilCallback } from "recoil";
 import { useResetPreview } from "../../operators/useResetPreview";
-import { snapGridState } from "../../states/snapGridState";
 
 export const useKeyController = () => {
   const { resetPreview } = useResetPreview();
 
   const onKeyUp = useRecoilCallback(
-    ({ set }) =>
-      (key: string) => {
-        switch (key) {
-          case "Alt":
-            set(snapGridState, true);
-            break;
-          default:
-        }
-      },
+    () => (key: string) => {
+      switch (key) {
+        case "Alt":
+        default:
+      }
+    },
     []
   );
 
   const onKeyDown = useRecoilCallback(
-    ({ set }) =>
-      (key: string) => {
-        switch (key) {
-          case "Escape":
-            resetPreview();
-            break;
-          case "Alt":
-            set(snapGridState, false);
-            break;
-          default:
-        }
-      },
+    () => (key: string) => {
+      switch (key) {
+        case "Escape":
+          resetPreview();
+          break;
+        case "Alt":
+        default:
+      }
+    },
     [resetPreview]
   );
 

@@ -12,6 +12,8 @@ import { allSvgObjectSelector } from "../../selectors/objectSelector";
 import { useGroupingObject } from "../../operators/useGroupingObject";
 import { useLog } from "../../operators/useLog";
 import { vp } from "../../helpers/virtualPoint";
+import { snapGridState } from "../../states/snapGridState";
+import { useSnap } from "../../operators/useSnap";
 
 const defaultJSON = JSON.stringify({
   appName: __APP_NAME__,
@@ -22,12 +24,14 @@ const defaultJSON = JSON.stringify({
 export const useFunctionButton = () => {
   const canUndo = useRecoilValue(undoEnableSelector);
   const canRedo = useRecoilValue(redoEnableSelector);
+  const isSnap = useRecoilValue(snapGridState);
 
   const { fromJSON, toJSON } = useJSON();
   const { uploadFile } = useFileUpload();
   const { groupingSelectedObject, ungroupingSelectedObject } =
     useGroupingObject();
   const { resetLog } = useLog();
+  const { toggleSnap } = useSnap();
 
   const undo = useRecoilCallback(
     ({ snapshot, set }) =>
@@ -111,6 +115,7 @@ export const useFunctionButton = () => {
   return {
     canUndo,
     canRedo,
+    isSnap,
     undo,
     redo,
     grouping,
@@ -121,5 +126,6 @@ export const useFunctionButton = () => {
     importFile,
     exportFile,
     logFile,
+    toggleSnap,
   };
 };
