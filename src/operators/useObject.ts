@@ -11,7 +11,8 @@ type Props = {
 };
 
 export const useObject = ({ obj, parentPoint, parentId }: Props) => {
-  const { onClickObject } = useOnClickObject();
+  const { onClickObject, onMouseDownObject, onMouseUpObject } =
+    useOnClickObject();
   const { pitch } = useRecoilValue(areaConfigState);
 
   const toRealAbsolute = useCallback(
@@ -27,6 +28,8 @@ export const useObject = ({ obj, parentPoint, parentId }: Props) => {
 
   const onClick = useCallback(
     (stopPropagation: () => void, isSelected: boolean, isShift: boolean) => {
+      console.log("onClick ", obj.id);
+
       const id = obj.id;
       if (!id) return;
       if (id === "preview" || id === "select") return;
@@ -34,6 +37,28 @@ export const useObject = ({ obj, parentPoint, parentId }: Props) => {
       if (onClickObject(id, isSelected, isShift)) stopPropagation();
     },
     [obj.id, onClickObject, parentId]
+  );
+
+  const onMouseDown = useCallback(
+    (
+      stopPropagation: () => void,
+      isSelected: boolean,
+      x: number,
+      y: number
+    ) => {
+      console.log("onMouseDown", obj.id);
+      if (onMouseDownObject(isSelected, x, y)) stopPropagation();
+    },
+    [obj.id, onMouseDownObject]
+  );
+
+  const onMouseUp = useCallback(
+    (stopPropagation: () => void) => {
+      console.log("onMouseUp", obj.id);
+
+      if (onMouseUpObject()) stopPropagation();
+    },
+    [obj.id, onMouseUpObject]
   );
 
   const pointToText = useCallback(
@@ -45,6 +70,8 @@ export const useObject = ({ obj, parentPoint, parentId }: Props) => {
     toRealAbsolute,
     toRealRelative,
     onClick,
+    onMouseDown,
+    onMouseUp,
     pointToText,
   };
 };

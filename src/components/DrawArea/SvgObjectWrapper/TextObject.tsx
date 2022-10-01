@@ -13,7 +13,11 @@ const TextObject: React.FC<Props> = ({
   isSelected,
   parentId,
 }) => {
-  const { r, text, onClick } = useText({ obj, parentPoint, parentId });
+  const { r, text, onClick, onMouseDown, onMouseUp } = useText({
+    obj,
+    parentPoint,
+    parentId,
+  });
   if (!r || !text) return null;
 
   return (
@@ -26,6 +30,15 @@ const TextObject: React.FC<Props> = ({
         onClick={(e) =>
           onClick(() => e.stopPropagation(), isSelected, e.shiftKey)
         }
+        onMouseDown={(e) =>
+          onMouseDown(
+            () => e.stopPropagation(),
+            isSelected,
+            e.clientX,
+            e.clientY
+          )
+        }
+        // onMouseUp={(e) => onMouseUp(() => e.stopPropagation())}
       >
         {text}
       </text>

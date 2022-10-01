@@ -14,7 +14,7 @@ const GroupObject: React.FC<Props> = ({
   isSelected,
   parentId,
 }) => {
-  const { groupPoint, draw, onClick } = useGroup({
+  const { groupPoint, draw, onClick, onMouseDown, onMouseUp } = useGroup({
     obj,
     parentPoint,
     parentId,
@@ -26,6 +26,10 @@ const GroupObject: React.FC<Props> = ({
       onClick={(e) =>
         onClick(() => e.stopPropagation(), isSelected, e.shiftKey)
       }
+      onMouseDown={(e) =>
+        onMouseDown(() => e.stopPropagation(), isSelected, e.clientX, e.clientY)
+      }
+      // onMouseUp={(e) => onMouseUp(() => e.stopPropagation())}
     >
       {obj.objectIds.map((id) => (
         <SvgObjectWrapper

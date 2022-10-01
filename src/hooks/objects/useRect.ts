@@ -8,11 +8,12 @@ type Props = {
 };
 
 export const useRect = ({ obj, parentPoint, parentId }: Props) => {
-  const { toRealAbsolute, toRealRelative, onClick } = useObject({
-    obj,
-    parentPoint,
-    parentId,
-  });
+  const { toRealAbsolute, toRealRelative, onClick, onMouseDown, onMouseUp } =
+    useObject({
+      obj,
+      parentPoint,
+      parentId,
+    });
 
   const r = useMemo(
     () => obj.upperLeft && toRealAbsolute(obj.upperLeft),
@@ -27,5 +28,7 @@ export const useRect = ({ obj, parentPoint, parentId }: Props) => {
     r,
     s,
     onClick,
+    onMouseDown,
+    onMouseUp,
   };
 };

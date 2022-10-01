@@ -7,16 +7,16 @@ import { useRecoilCallback } from "recoil";
 import { useSelect } from "../../operators/useSelect";
 import { usePreview } from "../../operators/usePreview";
 import { useSvgObject } from "../../operators/useSvgObject";
-import { useGroupingObject } from "../../operators/useGroupingObject";
 import { vp } from "../../helpers/virtualPoint";
 import { rp } from "../../helpers/realPoint";
+import { useOnClickObject } from "../../operators/useOnClickObject";
 
 export const useClickController = () => {
   const { updatePreview, deletePreview } = usePreview();
   const { addObject } = useSvgObject();
   const { toVirtual } = usePoint();
   const { resetSelect } = useSelect();
-  const { groupingPreview, ungroupingPreview } = useGroupingObject();
+  const { onMouseUpObject } = useOnClickObject();
 
   const onClickLine = useCallback(
     (obj: LineObject | null, v: VirtualPoint) => {
@@ -134,30 +134,6 @@ export const useClickController = () => {
     [addObject, updatePreview, deletePreview]
   );
 
-  const onClickCopy = useCallback(
-    (obj: GroupObject | null, v: VirtualPoint) => {
-      if (!obj || !obj.fixedPoint) {
-        groupingPreview(v, true);
-        return;
-      }
-
-      ungroupingPreview(v);
-    },
-    [ungroupingPreview, groupingPreview]
-  );
-
-  const onClickMove = useCallback(
-    (obj: GroupObject | null, v: VirtualPoint) => {
-      if (!obj || !obj.fixedPoint) {
-        groupingPreview(v, false);
-        return;
-      }
-
-      ungroupingPreview(v);
-    },
-    [ungroupingPreview, groupingPreview]
-  );
-
   const onClick = useRecoilCallback(
     ({ snapshot }) =>
       (x: number, y: number) => {
@@ -194,16 +170,6 @@ export const useClickController = () => {
             onClickCircle(obj, v);
             break;
           }
-          case "copy": {
-            if (obj && obj.type !== "group") break;
-            onClickCopy(obj, v);
-            break;
-          }
-          case "move": {
-            if (obj && obj.type !== "group") break;
-            onClickMove(obj, v);
-            break;
-          }
           case "selector": {
             resetSelect();
             break;
@@ -213,9 +179,7 @@ export const useClickController = () => {
       },
     [
       onClickCircle,
-      onClickCopy,
       onClickLine,
-      onClickMove,
       onClickPolyline,
       onClickRect,
       onClickText,
@@ -248,5 +212,5 @@ export const useClickController = () => {
     [addObject, deletePreview]
   );
 
-  return { onClick, onContextMenu };
+  return { onClick, onContextMenu, onMouseUpObject };
 };

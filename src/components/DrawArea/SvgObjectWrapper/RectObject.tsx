@@ -14,7 +14,7 @@ const RectObject: React.FC<Props> = ({
   isSelected,
   parentId,
 }) => {
-  const { r, s, onClick } = useRect({
+  const { r, s, onClick, onMouseDown, onMouseUp } = useRect({
     obj,
     parentPoint,
     parentId,
@@ -36,6 +36,15 @@ const RectObject: React.FC<Props> = ({
         onClick={(e) =>
           onClick(() => e.stopPropagation(), isSelected, e.shiftKey)
         }
+        onMouseDown={(e) =>
+          onMouseDown(
+            () => e.stopPropagation(),
+            isSelected,
+            e.clientX,
+            e.clientY
+          )
+        }
+        // onMouseUp={(e) => onMouseUp(() => e.stopPropagation())}
       ></rect>
       <rect
         x={r.x}

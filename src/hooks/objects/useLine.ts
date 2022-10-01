@@ -8,7 +8,7 @@ type Props = {
 };
 
 export const useLine = ({ obj, parentPoint, parentId }: Props) => {
-  const { toRealAbsolute, onClick } = useObject({
+  const { toRealAbsolute, onClick, onMouseDown, onMouseUp } = useObject({
     obj,
     parentPoint,
     parentId,
@@ -27,5 +27,7 @@ export const useLine = ({ obj, parentPoint, parentId }: Props) => {
     r1,
     r2,
     onClick,
+    onMouseDown,
+    onMouseUp,
   };
 };

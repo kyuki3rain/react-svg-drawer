@@ -14,7 +14,7 @@ const LineObject: React.FC<Props> = ({
   isSelected,
   parentId,
 }) => {
-  const { r1, r2, onClick } = useLine({
+  const { r1, r2, onClick, onMouseDown, onMouseUp } = useLine({
     obj,
     parentPoint,
     parentId,
@@ -36,6 +36,15 @@ const LineObject: React.FC<Props> = ({
         onClick={(e) =>
           onClick(() => e.stopPropagation(), isSelected, e.shiftKey)
         }
+        onMouseDown={(e) =>
+          onMouseDown(
+            () => e.stopPropagation(),
+            isSelected,
+            e.clientX,
+            e.clientY
+          )
+        }
+        // onMouseUp={(e) => onMouseUp(() => e.stopPropagation())}
       ></line>
       <line
         x1={r1.x}

@@ -8,12 +8,13 @@ export const useSelectObject = () => {
 
   const resetSelectObject = useRecoilCallback(
     ({ snapshot, set }) =>
-      () => {
+      (noSave?: boolean) => {
         const list = snapshot.getLoadable(selectObjectSelector).getValue();
-        set(svgObjectListState, (prev) => {
-          list.forEach((id) => prev.add(id));
-          return new Set(prev);
-        });
+        if (!noSave)
+          set(svgObjectListState, (prev) => {
+            list.forEach((id) => prev.add(id));
+            return new Set(prev);
+          });
         setSvgObject(null);
       },
     [setSvgObject]

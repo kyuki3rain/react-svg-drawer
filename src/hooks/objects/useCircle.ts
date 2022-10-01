@@ -8,11 +8,12 @@ type Props = {
 };
 
 export const useCircle = ({ obj, parentPoint, parentId }: Props) => {
-  const { toRealAbsolute, toRealRelative, onClick } = useObject({
-    obj,
-    parentPoint,
-    parentId,
-  });
+  const { toRealAbsolute, toRealRelative, onClick, onMouseDown, onMouseUp } =
+    useObject({
+      obj,
+      parentPoint,
+      parentId,
+    });
 
   const c = useMemo(
     () => obj.c && toRealAbsolute(obj.c),
@@ -27,5 +28,7 @@ export const useCircle = ({ obj, parentPoint, parentId }: Props) => {
     c,
     r,
     onClick,
+    onMouseDown,
+    onMouseUp,
   };
 };

@@ -98,6 +98,8 @@ export const useOnMouseMoveController = () => {
     (obj: GroupObject | null, v: VirtualPoint) => {
       if (!obj) return;
 
+      console.log(obj);
+
       updatePreview({
         ...obj,
         fixedPoint: v as VirtualAbsolute,

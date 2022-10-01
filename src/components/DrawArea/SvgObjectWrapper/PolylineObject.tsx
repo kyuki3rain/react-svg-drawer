@@ -14,7 +14,11 @@ const PolylineObject: React.FC<Props> = ({
   isSelected,
   parentId,
 }) => {
-  const { points, draw, onClick } = usePolyline({ obj, parentPoint, parentId });
+  const { points, draw, onClick, onMouseDown, onMouseUp } = usePolyline({
+    obj,
+    parentPoint,
+    parentId,
+  });
   if (!draw) return null;
 
   return (
@@ -29,6 +33,15 @@ const PolylineObject: React.FC<Props> = ({
         onClick={(e) =>
           onClick(() => e.stopPropagation(), isSelected, e.shiftKey)
         }
+        onMouseDown={(e) =>
+          onMouseDown(
+            () => e.stopPropagation(),
+            isSelected,
+            e.clientX,
+            e.clientY
+          )
+        }
+        // onMouseUp={(e) => onMouseUp(() => e.stopPropagation())}
       ></polyline>
       <polyline
         points={points}

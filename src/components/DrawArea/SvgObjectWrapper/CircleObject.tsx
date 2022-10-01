@@ -14,7 +14,11 @@ const CircleObject: React.FC<Props> = ({
   isSelected,
   parentId,
 }) => {
-  const { c, r, onClick } = useCircle({ obj, parentPoint, parentId });
+  const { c, r, onClick, onMouseDown, onMouseUp } = useCircle({
+    obj,
+    parentPoint,
+    parentId,
+  });
   if (!c || !r) return null;
 
   return (
@@ -32,6 +36,15 @@ const CircleObject: React.FC<Props> = ({
         onClick={(e) =>
           onClick(() => e.stopPropagation(), isSelected, e.shiftKey)
         }
+        onMouseDown={(e) =>
+          onMouseDown(
+            () => e.stopPropagation(),
+            isSelected,
+            e.clientX,
+            e.clientY
+          )
+        }
+        // onMouseUp={(e) => onMouseUp(() => e.stopPropagation())}
       ></ellipse>
       <ellipse
         cx={c.x}
