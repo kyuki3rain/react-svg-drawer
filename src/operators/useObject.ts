@@ -11,7 +11,7 @@ type Props = {
 };
 
 export const useObject = ({ obj, parentPoint, parentId }: Props) => {
-  const { onClickObject } = useOnClickObject();
+  const { onClickObject, onMouseDownObject } = useOnClickObject();
   const { pitch } = useRecoilValue(areaConfigState);
 
   const toRealAbsolute = useCallback(
@@ -35,6 +35,16 @@ export const useObject = ({ obj, parentPoint, parentId }: Props) => {
     [obj.id, onClickObject, parentId]
   );
 
+  const onMouseDown = useCallback(
+    (stopPropagation: () => void, isSelected: boolean) => {
+      const id = parentId ?? obj.id;
+      if (!id) return;
+      if (id === "preview") return;
+      if (onMouseDownObject(isSelected)) stopPropagation();
+    },
+    [obj.id, onMouseDownObject, parentId]
+  );
+
   const pointToText = useCallback(
     (r?: RealPoint) => (r ? `${r.x},${r.y}` : ""),
     []
@@ -44,6 +54,7 @@ export const useObject = ({ obj, parentPoint, parentId }: Props) => {
     toRealAbsolute,
     toRealRelative,
     onClick,
+    onMouseDown,
     pointToText,
   };
 };
