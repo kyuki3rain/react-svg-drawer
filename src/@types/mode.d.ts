@@ -7,3 +7,6 @@ type DrawMode =
   | "circle"
   | "copy"
   | "move";
+
+type SelectMode = "normal" | "range" | "move";
+type MoveMode = "move" | "copy";
