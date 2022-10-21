@@ -6,6 +6,7 @@ import DrawArea from "./views/DrawArea";
 import AreaController from "./controllers/AreaController";
 import ConfigModal from "./views/ConfigModal";
 import EffectController from "./controllers/EffectController";
+import DebugController from "./controllers/DebugController";
 
 const App: React.FC = () => (
   <RecoilRoot>
@@ -15,6 +16,7 @@ const App: React.FC = () => (
       <ButtonArea />
     </AreaController>
     <EffectController />
+    {import.meta.env.DEV && <DebugController />}
     <ConfigModal />
   </RecoilRoot>
 );

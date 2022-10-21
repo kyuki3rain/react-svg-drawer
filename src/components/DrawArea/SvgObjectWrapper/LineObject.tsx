@@ -14,7 +14,7 @@ const LineObject: React.FC<Props> = ({
   isSelected,
   parentId,
 }) => {
-  const { r1, r2, onClick } = useLine({
+  const { r1, r2, onClick, onMouseDown } = useLine({
     obj,
     parentPoint,
     parentId,
@@ -34,6 +34,7 @@ const LineObject: React.FC<Props> = ({
         }
         strokeOpacity={CLICK_TARGET_OBJECT.strokeOpacity}
         onClick={(e) => onClick(() => e.stopPropagation())}
+        onMouseDown={(e) => onMouseDown(() => e.stopPropagation(), isSelected)}
       ></line>
       <line
         x1={r1.x}

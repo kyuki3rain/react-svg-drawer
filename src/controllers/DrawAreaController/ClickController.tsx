@@ -6,7 +6,8 @@ type Props = {
 };
 
 const ClickController: React.FC<Props> = ({ children }) => {
-  const { onClick, onContextMenu } = useClickController();
+  const { onClick, onContextMenu, onMousedown, onMouseup } =
+    useClickController();
 
   return (
     <div
@@ -16,6 +17,12 @@ const ClickController: React.FC<Props> = ({ children }) => {
       onContextMenu={(e) => {
         e.preventDefault();
         onContextMenu();
+      }}
+      onMouseDown={(e) => {
+        onMousedown(e.clientX, e.clientY);
+      }}
+      onMouseUp={(e) => {
+        onMouseup(e.clientX, e.clientY);
       }}
     >
       {children}
