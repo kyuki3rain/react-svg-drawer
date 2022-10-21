@@ -43,7 +43,14 @@ export const useSvgObject = () => {
         if (!svgObject) return;
 
         const newId = nanoid() as SvgId;
-        set(svgObjectStates(newId), { ...svgObject, id: newId });
+        if (svgObject.type === "group") {
+          const objectIds = svgObject.objectIds.flatMap(
+            (id) => copyObject(id) ?? []
+          );
+          set(svgObjectStates(newId), { ...svgObject, id: newId, objectIds });
+        } else {
+          set(svgObjectStates(newId), { ...svgObject, id: newId });
+        }
         return newId;
       },
     []
