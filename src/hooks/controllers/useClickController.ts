@@ -10,6 +10,7 @@ import { useSvgObject } from "../../operators/useSvgObject";
 import { useGroupingObject } from "../../operators/useGroupingObject";
 import { vp } from "../../helpers/virtualPoint";
 import { rp } from "../../helpers/realPoint";
+import { useSelectMode } from "../../operators/useSelectMode";
 
 export const useClickController = () => {
   const { updatePreview, deletePreview } = usePreview();
@@ -17,6 +18,7 @@ export const useClickController = () => {
   const { toVirtual } = usePoint();
   const { resetSelect } = useSelect();
   const { groupingPreview, ungroupingPreview } = useGroupingObject();
+  const { toRangeSelectMode, resetSelectMode } = useSelectMode();
 
   const onClickLine = useCallback(
     (obj: LineObject | null, v: VirtualPoint) => {
@@ -248,5 +250,31 @@ export const useClickController = () => {
     [addObject, deletePreview]
   );
 
-  return { onClick, onContextMenu };
+  const onMousedown = useRecoilCallback(
+    ({ snapshot }) =>
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      (x: number, y: number) => {
+        const drawMode = snapshot.getLoadable(drawModeState).getValue();
+        const isOpen = snapshot.getLoadable(configModalState).getValue().isOpen;
+        if (drawMode !== "selector" || isOpen) return;
+
+        toRangeSelectMode();
+      },
+    [toRangeSelectMode]
+  );
+
+  const onMouseup = useRecoilCallback(
+    ({ snapshot }) =>
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      (x: number, y: number) => {
+        const drawMode = snapshot.getLoadable(drawModeState).getValue();
+        const isOpen = snapshot.getLoadable(configModalState).getValue().isOpen;
+        if (drawMode !== "selector" || isOpen) return;
+
+        resetSelectMode();
+      },
+    [resetSelectMode]
+  );
+
+  return { onClick, onContextMenu, onMousedown, onMouseup };
 };
