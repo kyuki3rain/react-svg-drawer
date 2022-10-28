@@ -1,5 +1,6 @@
 import { useCallback } from "react";
 import { useRecoilCallback, useSetRecoilState } from "recoil";
+import { drawModeState } from "../states/drawModeState";
 import { moveModeState, selectModeState } from "../states/selectModeState";
 
 export const useSelectMode = () => {
@@ -11,20 +12,28 @@ export const useSelectMode = () => {
     setMoveMode("move");
   }, [setMoveMode, setSelectMode]);
 
-  const toRangeSelectMode = useCallback(
-    () => setSelectMode("range"),
+  const toRangeSelectMode = useRecoilCallback(
+    ({ snapshot }) =>
+      () => {
+        if (snapshot.getLoadable(drawModeState).getValue() === "selector")
+          setSelectMode("range");
+      },
     [setSelectMode]
   );
 
-  const toMoveSelectMode = useCallback(
-    () => setSelectMode("move"),
+  const toMoveSelectMode = useRecoilCallback(
+    ({ snapshot }) =>
+      () => {
+        if (snapshot.getLoadable(drawModeState).getValue() === "selector")
+          setSelectMode("move");
+      },
     [setSelectMode]
   );
 
   const toMoveMode = useRecoilCallback(
     ({ snapshot }) =>
       () => {
-        if (snapshot.getLoadable(moveModeState).getValue() == "move")
+        if (snapshot.getLoadable(selectModeState).getValue() === "move")
           setMoveMode("move");
       },
     [setMoveMode]
@@ -33,7 +42,7 @@ export const useSelectMode = () => {
   const toCopyMode = useRecoilCallback(
     ({ snapshot }) =>
       () => {
-        if (snapshot.getLoadable(moveModeState).getValue() == "move")
+        if (snapshot.getLoadable(selectModeState).getValue() === "move")
           setMoveMode("copy");
       },
     [setMoveMode]
