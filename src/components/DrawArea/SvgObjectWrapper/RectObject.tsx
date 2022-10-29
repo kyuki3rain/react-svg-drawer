@@ -34,7 +34,14 @@ const RectObject: React.FC<Props> = ({
         }
         strokeOpacity="0"
         onClick={(e) => onClick(() => e.stopPropagation())}
-        onMouseDown={(e) => onMouseDown(() => e.stopPropagation(), isSelected)}
+        onMouseDown={(e) =>
+          onMouseDown(
+            () => e.stopPropagation(),
+            e.clientX,
+            e.clientY,
+            isSelected
+          )
+        }
       ></rect>
       <rect
         x={r.x}

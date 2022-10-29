@@ -26,6 +26,7 @@ export const useKeyController = () => {
   const onKeyDown = useRecoilCallback(
     ({ set }) =>
       (key: string) => {
+        console.log(key);
         switch (key) {
           case "Escape":
             resetPreview();

@@ -36,11 +36,16 @@ export const useObject = ({ obj, parentPoint, parentId }: Props) => {
   );
 
   const onMouseDown = useCallback(
-    (stopPropagation: () => void, isSelected: boolean) => {
+    (
+      stopPropagation: () => void,
+      x: number,
+      y: number,
+      isSelected: boolean
+    ) => {
       const id = parentId ?? obj.id;
       if (!id) return;
       if (id === "preview") return;
-      if (onMouseDownObject(isSelected)) stopPropagation();
+      if (onMouseDownObject(x, y, isSelected)) stopPropagation();
     },
     [obj.id, onMouseDownObject, parentId]
   );

@@ -45,7 +45,7 @@ export const useSvgObject = () => {
 
   const copyObject = useRecoilCallback(
     ({ snapshot, set }) =>
-      (id: SvgId, setNewId?: boolean) => {
+      (id: SvgId, setNewId?: boolean, withSave?: boolean) => {
         const svgObject = snapshot.getLoadable(svgObjectStates(id)).getValue();
         if (!svgObject) return;
 
@@ -58,6 +58,10 @@ export const useSvgObject = () => {
         } else {
           set(svgObjectStates(newId), { ...svgObject, id: newId });
         }
+
+        if (withSave)
+          set(svgObjectListState, (prev) => new Set(prev.add(newId)));
+
         return newId;
       },
     []

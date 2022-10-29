@@ -6,6 +6,6 @@ export const useDebugInfoEffect = () => {
   const selectMode = useRecoilValue(selectModeState);
   const moveMode = useRecoilValue(moveModeState);
 
-  useEffect(() => console.log(selectMode), [selectMode]);
-  useEffect(() => console.log(moveMode), [moveMode]);
+  useEffect(() => console.log("selectMode: ", selectMode), [selectMode]);
+  useEffect(() => console.log("moveMode: ", moveMode), [moveMode]);
 };

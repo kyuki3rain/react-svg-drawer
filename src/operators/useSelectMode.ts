@@ -15,8 +15,11 @@ export const useSelectMode = () => {
   const toRangeSelectMode = useRecoilCallback(
     ({ snapshot }) =>
       () => {
-        if (snapshot.getLoadable(drawModeState).getValue() === "selector")
+        if (snapshot.getLoadable(drawModeState).getValue() === "selector") {
           setSelectMode("range");
+          return true;
+        }
+        return false;
       },
     [setSelectMode]
   );
@@ -24,8 +27,11 @@ export const useSelectMode = () => {
   const toMoveSelectMode = useRecoilCallback(
     ({ snapshot }) =>
       () => {
-        if (snapshot.getLoadable(drawModeState).getValue() === "selector")
+        if (snapshot.getLoadable(drawModeState).getValue() === "selector") {
           setSelectMode("move");
+          return true;
+        }
+        return false;
       },
     [setSelectMode]
   );
@@ -33,8 +39,11 @@ export const useSelectMode = () => {
   const toMoveMode = useRecoilCallback(
     ({ snapshot }) =>
       () => {
-        if (snapshot.getLoadable(selectModeState).getValue() === "move")
+        if (snapshot.getLoadable(selectModeState).getValue() === "move") {
           setMoveMode("move");
+          return true;
+        }
+        return false;
       },
     [setMoveMode]
   );
@@ -42,8 +51,11 @@ export const useSelectMode = () => {
   const toCopyMode = useRecoilCallback(
     ({ snapshot }) =>
       () => {
-        if (snapshot.getLoadable(selectModeState).getValue() === "move")
+        if (snapshot.getLoadable(selectModeState).getValue() === "move") {
           setMoveMode("copy");
+          return true;
+        }
+        return false;
       },
     [setMoveMode]
   );

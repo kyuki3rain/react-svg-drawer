@@ -11,14 +11,20 @@ import { useGroupingObject } from "../../operators/useGroupingObject";
 import { vp } from "../../helpers/virtualPoint";
 import { rp } from "../../helpers/realPoint";
 import { useSelectMode } from "../../operators/useSelectMode";
+import { moveModeState } from "../../states/selectModeState";
+import {
+  copyingIdsState,
+  selectedIdListState,
+} from "../../states/selectedIdListState";
 
 export const useClickController = () => {
   const { updatePreview, deletePreview } = usePreview();
   const { addObject } = useSvgObject();
   const { toVirtual } = usePoint();
-  const { resetSelect } = useSelect();
+  const { resetSelect, select } = useSelect();
   const { groupingPreview, ungroupingPreview } = useGroupingObject();
   const { toRangeSelectMode, resetSelectMode } = useSelectMode();
+  const { deleteObject, copyObject, removeTagFromId } = useSvgObject();
 
   const onClickLine = useCallback(
     (obj: LineObject | null, v: VirtualPoint) => {
@@ -264,16 +270,46 @@ export const useClickController = () => {
   );
 
   const onMouseup = useRecoilCallback(
-    ({ snapshot }) =>
+    ({ snapshot, set }) =>
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       (x: number, y: number) => {
         const drawMode = snapshot.getLoadable(drawModeState).getValue();
         const isOpen = snapshot.getLoadable(configModalState).getValue().isOpen;
         if (drawMode !== "selector" || isOpen) return;
 
+        const moveMode = snapshot.getLoadable(moveModeState).getValue();
+        const v = toVirtual(rp.create(x, y));
+        ungroupingPreview(v);
+
+        if (moveMode === "move") {
+          set(copyingIdsState, new Set());
+        } else {
+          const selectedIdList = [
+            ...snapshot.getLoadable(selectedIdListState).getValue(),
+          ];
+          const newIds = selectedIdList.flatMap(
+            (id) => copyObject(id, true, true) ?? []
+          );
+          resetSelect();
+          newIds.map((id) => select(id));
+
+          const copyingIds = [
+            ...snapshot.getLoadable(copyingIdsState).getValue(),
+          ];
+          copyingIds.map((id) => removeTagFromId(id, "copy"));
+        }
+
         resetSelectMode();
       },
-    [resetSelectMode]
+    [
+      copyObject,
+      removeTagFromId,
+      resetSelect,
+      resetSelectMode,
+      select,
+      toVirtual,
+      ungroupingPreview,
+    ]
   );
 
   return { onClick, onContextMenu, onMousedown, onMouseup };
