@@ -4,8 +4,15 @@ import { svgObjectListState, svgObjectStates } from "../states/svgObjectState";
 
 export const useSvgObject = () => {
   const deleteObject = useRecoilCallback(
-    ({ set }) =>
+    ({ snapshot, set }) =>
       (id: SvgId) => {
+        const svgObject = snapshot.getLoadable(svgObjectStates(id)).getValue();
+        if (!svgObject) return;
+
+        if (svgObject.type === "group") {
+          svgObject.objectIds.map((cid) => deleteObject(cid));
+        }
+
         set(svgObjectStates(id), null);
         set(svgObjectListState, (prev) => {
           prev.delete(id);
@@ -38,14 +45,37 @@ export const useSvgObject = () => {
 
   const copyObject = useRecoilCallback(
     ({ snapshot, set }) =>
-      (id: SvgId) => {
+      (id: SvgId, setNewId?: boolean) => {
         const svgObject = snapshot.getLoadable(svgObjectStates(id)).getValue();
         if (!svgObject) return;
 
-        const newId = nanoid() as SvgId;
+        const newId = (setNewId ? nanoid() : `copy_${id}`) as SvgId;
         if (svgObject.type === "group") {
           const objectIds = svgObject.objectIds.flatMap(
-            (id) => copyObject(id) ?? []
+            (id) => copyObject(id, setNewId) ?? []
+          );
+          set(svgObjectStates(newId), { ...svgObject, id: newId, objectIds });
+        } else {
+          set(svgObjectStates(newId), { ...svgObject, id: newId });
+        }
+        return newId;
+      },
+    []
+  );
+
+  const removeTagFromId = useRecoilCallback(
+    ({ snapshot, set }) =>
+      (id: SvgId, tagType: "copy") => {
+        const [tag, beforeId] = id.split("_");
+        if (tag !== tagType) return;
+
+        const svgObject = snapshot.getLoadable(svgObjectStates(id)).getValue();
+        if (!svgObject) return;
+
+        const newId = beforeId as SvgId;
+        if (svgObject.type === "group") {
+          const objectIds = svgObject.objectIds.flatMap(
+            (id) => removeTagFromId(id, tagType) ?? []
           );
           set(svgObjectStates(newId), { ...svgObject, id: newId, objectIds });
         } else {
@@ -61,5 +91,6 @@ export const useSvgObject = () => {
     addObject,
     updateObject,
     copyObject,
+    removeTagFromId,
   };
 };
