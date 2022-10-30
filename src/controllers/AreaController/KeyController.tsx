@@ -14,6 +14,7 @@ const KeyController: React.FC<Props> = ({ children }) => {
       tabIndex={-1}
       onKeyDown={(e) => onKeyDown(e.key)}
       onKeyUp={(e) => onKeyUp(e.key)}
+      id="keyController"
     >
       {children}
     </div>

@@ -36,12 +36,14 @@ const RectObject: React.FC<Props> = ({
         onClick={(e) => onClick(() => e.stopPropagation())}
         onMouseDown={(e) =>
           onMouseDown(
-            () => e.stopPropagation(),
+            () => e.preventDefault(),
             e.clientX,
             e.clientY,
             isSelected
           )
         }
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        onKeyDown={() => {}} // keyControllerのイベント発火に必須
       ></rect>
       <rect
         x={r.x}

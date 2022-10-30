@@ -119,6 +119,11 @@ export const useOnMouseMoveController = () => {
         if (isOpen) return;
 
         switch (drawMode) {
+          case "selector": {
+            if (obj && obj.type !== "group") break;
+            onMouseMoveGroup(obj, v);
+            break;
+          }
           case "line": {
             if (obj && obj.type !== "line") break;
             omMouseMoveLine(obj, v);
