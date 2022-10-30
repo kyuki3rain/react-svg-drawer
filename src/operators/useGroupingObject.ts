@@ -32,7 +32,6 @@ export const useGroupingObject = () => {
         fixedPoint: parentPoint as VirtualAbsolute,
         firstFixedPoint: parentPoint as VirtualAbsolute,
         style: {},
-        isCopy: false,
       };
 
       if (id === "preview") {
