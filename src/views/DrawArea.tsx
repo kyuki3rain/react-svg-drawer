@@ -28,7 +28,7 @@ const DrawArea: React.FC = () => {
         ))}
         <SvgObjectWrapper
           svgId="preview"
-          isSelected={false}
+          isSelected={true}
           parentPoint={rootPoint}
         ></SvgObjectWrapper>
         {moveMode === "copy" && <CopyingObjects></CopyingObjects>}
