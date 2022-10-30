@@ -24,7 +24,7 @@ export const useClickController = () => {
   const { resetSelect, select } = useSelect();
   const { groupingPreview, ungroupingPreview } = useGroupingObject();
   const { toRangeSelectMode, resetSelectMode } = useSelectMode();
-  const { deleteObject, copyObject, removeTagFromId } = useSvgObject();
+  const { copyObject, removeTagFromId } = useSvgObject();
 
   const onClickLine = useCallback(
     (obj: LineObject | null, v: VirtualPoint) => {

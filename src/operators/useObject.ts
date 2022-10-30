@@ -2,6 +2,7 @@ import { useCallback } from "react";
 import { useRecoilValue } from "recoil";
 import { vp } from "../helpers/virtualPoint";
 import { areaConfigState } from "../states/areaConfigState";
+import { useKeyControllerRef } from "./useKeyControllerRef";
 import { useOnClickObject } from "./useOnClickObject";
 
 type Props = {
@@ -13,6 +14,7 @@ type Props = {
 export const useObject = ({ obj, parentPoint, parentId }: Props) => {
   const { onClickObject, onMouseDownObject } = useOnClickObject();
   const { pitch } = useRecoilValue(areaConfigState);
+  const { focus } = useKeyControllerRef();
 
   const toRealAbsolute = useCallback(
     (a: VirtualAbsolute) =>
@@ -30,9 +32,12 @@ export const useObject = ({ obj, parentPoint, parentId }: Props) => {
       const id = parentId ?? obj.id;
       if (!id) return;
       if (id === "preview") return;
-      if (onClickObject(id)) stopPropagation();
+      if (onClickObject(id)) {
+        stopPropagation();
+        focus();
+      }
     },
-    [obj.id, onClickObject, parentId]
+    [focus, obj.id, onClickObject, parentId]
   );
 
   const onMouseDown = useCallback(
@@ -45,9 +50,12 @@ export const useObject = ({ obj, parentPoint, parentId }: Props) => {
       const id = parentId ?? obj.id;
       if (!id) return;
       if (id === "preview") return;
-      if (onMouseDownObject(x, y, isSelected)) stopPropagation();
+      if (onMouseDownObject(x, y, isSelected)) {
+        stopPropagation();
+        focus();
+      }
     },
-    [obj.id, onMouseDownObject, parentId]
+    [focus, obj.id, onMouseDownObject, parentId]
   );
 
   const pointToText = useCallback(

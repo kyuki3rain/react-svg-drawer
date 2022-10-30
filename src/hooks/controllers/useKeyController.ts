@@ -1,11 +1,18 @@
-import { useRecoilCallback } from "recoil";
+import { useEffect, useRef } from "react";
+import { useRecoilCallback, useSetRecoilState } from "recoil";
 import { useResetPreview } from "../../operators/useResetPreview";
 import { useSelectMode } from "../../operators/useSelectMode";
+import { keyControllerRefState } from "../../states/keyControllerRefState";
 import { snapGridState } from "../../states/snapGridState";
 
 export const useKeyController = () => {
   const { resetPreview } = useResetPreview();
   const { toMoveMode, toCopyMode } = useSelectMode();
+
+  const ref = useRef<HTMLDivElement>(null);
+  const setRef = useSetRecoilState(keyControllerRefState);
+
+  useEffect(() => setRef(ref), [setRef]);
 
   const onKeyUp = useRecoilCallback(
     ({ set }) =>
@@ -46,5 +53,6 @@ export const useKeyController = () => {
   return {
     onKeyDown,
     onKeyUp,
+    ref,
   };
 };

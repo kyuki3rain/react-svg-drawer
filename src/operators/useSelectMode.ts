@@ -15,7 +15,10 @@ export const useSelectMode = () => {
   const toRangeSelectMode = useRecoilCallback(
     ({ snapshot }) =>
       () => {
-        if (snapshot.getLoadable(drawModeState).getValue() === "selector") {
+        if (
+          snapshot.getLoadable(drawModeState).getValue() === "selector" &&
+          snapshot.getLoadable(selectModeState).getValue() === "normal"
+        ) {
           setSelectMode("range");
           return true;
         }
@@ -27,7 +30,10 @@ export const useSelectMode = () => {
   const toMoveSelectMode = useRecoilCallback(
     ({ snapshot }) =>
       () => {
-        if (snapshot.getLoadable(drawModeState).getValue() === "selector") {
+        if (
+          snapshot.getLoadable(drawModeState).getValue() === "selector" &&
+          snapshot.getLoadable(selectModeState).getValue() === "normal"
+        ) {
           setSelectMode("move");
           return true;
         }
