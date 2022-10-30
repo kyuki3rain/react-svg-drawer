@@ -1,6 +1,7 @@
 import { useRecoilCallback } from "recoil";
 import { rp } from "../helpers/realPoint";
 import { drawModeState } from "../states/drawModeState";
+import { stopLogState } from "../states/logState";
 import {
   copyingIdsState,
   selectedIdListState,
@@ -51,6 +52,7 @@ export const useOnClickObject = () => {
 
           const v = toVirtual(rp.create(x, y));
           groupingObject(v, ids, "preview");
+          set(stopLogState, true);
         }
 
         return true;

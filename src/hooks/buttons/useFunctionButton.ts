@@ -12,6 +12,7 @@ import { allSvgObjectSelector } from "../../selectors/objectSelector";
 import { useGroupingObject } from "../../operators/useGroupingObject";
 import { useLog } from "../../operators/useLog";
 import { vp } from "../../helpers/virtualPoint";
+import { useSelect } from "../../operators/useSelect";
 
 const defaultJSON = JSON.stringify({
   appName: __APP_NAME__,
@@ -28,6 +29,7 @@ export const useFunctionButton = () => {
   const { groupingSelectedObject, ungroupingSelectedObject } =
     useGroupingObject();
   const { resetLog } = useLog();
+  const { resetSelect } = useSelect();
 
   const undo = useRecoilCallback(
     ({ snapshot, set }) =>
@@ -37,8 +39,9 @@ export const useFunctionButton = () => {
         set(allSvgObjectSelector, logs[nextIndex - 1].objects);
         set(logIndexState, nextIndex);
         set(stopLogState, true);
+        resetSelect();
       },
-    []
+    [resetSelect]
   );
 
   const redo = useRecoilCallback(
@@ -49,8 +52,9 @@ export const useFunctionButton = () => {
         set(allSvgObjectSelector, logs[nextIndex - 1].objects);
         set(logIndexState, nextIndex);
         set(stopLogState, true);
+        resetSelect();
       },
-    []
+    [resetSelect]
   );
 
   const grouping = useCallback(
