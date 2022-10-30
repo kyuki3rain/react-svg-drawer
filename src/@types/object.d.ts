@@ -54,6 +54,5 @@ type CircleObject = {
 type GroupObject = {
   type: "group";
   objectIds: SvgId[];
-  isCopy: boolean;
   firstFixedPoint: VirtualAbsolute;
 } & SvgObjectCommon;

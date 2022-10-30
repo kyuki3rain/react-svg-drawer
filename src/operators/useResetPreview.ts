@@ -20,32 +20,26 @@ export const useResetPreview = () => {
 
         if (!obj || obj.type !== "group" || !obj.fixedPoint) return;
 
-        if (obj.isCopy) {
-          obj.objectIds.map((id) => {
-            set(svgObjectStates(id), null);
-          });
-        } else {
-          const correction = vp.sub(vp.zero(), obj.firstFixedPoint);
-          obj.objectIds.map((id) =>
-            set(svgObjectStates(id), (prev) => {
-              if (!prev) return prev;
-              if (!prev.fixedPoint) return prev;
-              return (
-                prev && {
-                  ...prev,
-                  fixedPoint: vp.sub(
-                    prev.fixedPoint,
-                    correction
-                  ) as VirtualAbsolute,
-                }
-              );
-            })
-          );
-          set(svgObjectListState, (prev) => {
-            obj.objectIds.map((id) => prev.add(id));
-            return new Set(prev);
-          });
-        }
+        const correction = vp.sub(vp.zero(), obj.firstFixedPoint);
+        obj.objectIds.map((id) =>
+          set(svgObjectStates(id), (prev) => {
+            if (!prev) return prev;
+            if (!prev.fixedPoint) return prev;
+            return (
+              prev && {
+                ...prev,
+                fixedPoint: vp.sub(
+                  prev.fixedPoint,
+                  correction
+                ) as VirtualAbsolute,
+              }
+            );
+          })
+        );
+        set(svgObjectListState, (prev) => {
+          obj.objectIds.map((id) => prev.add(id));
+          return new Set(prev);
+        });
       },
     []
   );
@@ -69,12 +63,6 @@ export const useResetPreview = () => {
             openModal("text", "preview", configMap ?? new Map(textConfig));
             break;
           }
-          case "copy":
-            deletePreview();
-            break;
-          case "move":
-            deletePreview();
-            break;
           default:
             resetSelect();
             deletePreview();

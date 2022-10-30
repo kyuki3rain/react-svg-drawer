@@ -149,16 +149,6 @@ export const useOnMouseMoveController = () => {
             onMouseMoveCircle(obj, v);
             break;
           }
-          case "copy": {
-            if (obj && obj.type !== "group") break;
-            onMouseMoveGroup(obj, v);
-            break;
-          }
-          case "move": {
-            if (obj && obj.type !== "group") break;
-            onMouseMoveGroup(obj, v);
-            break;
-          }
           default:
         }
       },

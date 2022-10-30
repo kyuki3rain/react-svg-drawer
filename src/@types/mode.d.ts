@@ -1,12 +1,4 @@
-type DrawMode =
-  | "selector"
-  | "line"
-  | "polyline"
-  | "text"
-  | "rect"
-  | "circle"
-  | "copy"
-  | "move";
+type DrawMode = "selector" | "line" | "polyline" | "text" | "rect" | "circle";
 
 type SelectMode = "normal" | "range" | "move";
 type MoveMode = "move" | "copy";

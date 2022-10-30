@@ -3,8 +3,6 @@ import HorizontalRuleIcon from "@mui/icons-material/HorizontalRule";
 import ShowChartIcon from "@mui/icons-material/ShowChart";
 import RectangleIcon from "@mui/icons-material/Rectangle";
 import CircleIcon from "@mui/icons-material/Circle";
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import MoveDownIcon from "@mui/icons-material/MoveDown";
 import { Fab, SvgIcon, Tooltip } from "@mui/material";
 import React from "react";
 import { ReactComponent as CursorIcon } from "../../assets/CursorIcon.svg";
@@ -76,24 +74,6 @@ const ModeButtons: React.FC = () => {
           onClick={() => drawMode !== "circle" && changeMode("circle")}
         >
           <CircleIcon />
-        </Fab>
-      </Tooltip>
-      <Tooltip title="copy" style={{ marginLeft: 5 }} arrow>
-        <Fab
-          aria-label="copy"
-          color={drawMode === "copy" ? "success" : "primary"}
-          onClick={() => drawMode !== "copy" && changeMode("copy")}
-        >
-          <ContentCopyIcon />
-        </Fab>
-      </Tooltip>
-      <Tooltip title="move" style={{ marginLeft: 5 }} arrow>
-        <Fab
-          aria-label="move"
-          color={drawMode === "move" ? "success" : "primary"}
-          onClick={() => drawMode !== "move" && changeMode("move")}
-        >
-          <MoveDownIcon />
         </Fab>
       </Tooltip>
     </div>
