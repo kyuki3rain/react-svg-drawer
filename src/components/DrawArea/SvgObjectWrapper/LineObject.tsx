@@ -34,7 +34,14 @@ const LineObject: React.FC<Props> = ({
         }
         strokeOpacity={CLICK_TARGET_OBJECT.strokeOpacity}
         onClick={(e) => onClick(() => e.stopPropagation())}
-        onMouseDown={(e) => onMouseDown(() => e.stopPropagation(), isSelected)}
+        onMouseDown={(e) =>
+          onMouseDown(
+            () => e.stopPropagation(),
+            e.clientX,
+            e.clientY,
+            isSelected
+          )
+        }
       ></line>
       <line
         x1={r1.x}

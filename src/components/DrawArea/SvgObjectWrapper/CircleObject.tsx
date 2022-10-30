@@ -34,7 +34,14 @@ const CircleObject: React.FC<Props> = ({
         }
         strokeOpacity={CLICK_TARGET_OBJECT.strokeOpacity}
         onClick={(e) => onClick(() => e.stopPropagation())}
-        onMouseDown={(e) => onMouseDown(() => e.stopPropagation(), isSelected)}
+        onMouseDown={(e) =>
+          onMouseDown(
+            () => e.stopPropagation(),
+            e.clientX,
+            e.clientY,
+            isSelected
+          )
+        }
       ></ellipse>
       <ellipse
         cx={c.x}
