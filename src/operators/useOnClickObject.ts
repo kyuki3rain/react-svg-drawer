@@ -6,6 +6,7 @@ import {
   copyingIdsState,
   selectedIdListState,
 } from "../states/selectedIdListState";
+import { multiSelectModeState } from "../states/selectModeState";
 import { useGroupingObject } from "./useGroupingObject";
 import { usePoint } from "./usePoint";
 import { useSelect } from "./useSelect";
@@ -38,6 +39,11 @@ export const useOnClickObject = () => {
         const drawMode = snapshot.getLoadable(drawModeState).getValue();
         if (drawMode !== "selector") return false;
         if (!isSelected) return false;
+
+        const multiSelectMode = snapshot
+          .getLoadable(multiSelectModeState)
+          .getValue();
+        if (multiSelectMode) return false;
 
         if (!toMoveSelectMode()) return false;
 
