@@ -19,10 +19,7 @@ type SvgObjectCommon = {
   style: SvgObjectStyle;
   configMap?: Map<string, string>;
   fixedPoint?: VirtualAbsolute;
-  area: {
-    upperLeft: VirtualAbsolute;
-    bottomRight: VirtualAbsolute;
-  };
+  area: Area;
 };
 
 type LineObject = {

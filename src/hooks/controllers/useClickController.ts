@@ -21,6 +21,8 @@ import {
   selectedIdListState,
 } from "../../states/selectedIdListState";
 import { useResetPreview } from "../../operators/useResetPreview";
+import { allSvgObjectSelector } from "../../selectors/objectSelector";
+import { correctArea, include } from "../../helpers/areaHelper";
 
 export const useClickController = () => {
   const { updatePreview, deletePreview } = usePreview();
@@ -221,10 +223,6 @@ export const useClickController = () => {
             onClickCircle(obj, v);
             break;
           }
-          case "selector": {
-            resetSelect();
-            break;
-          }
           default:
         }
       },
@@ -234,7 +232,6 @@ export const useClickController = () => {
       onClickPolyline,
       onClickRect,
       onClickText,
-      resetSelect,
       toVirtual,
     ]
   );
@@ -298,9 +295,45 @@ export const useClickController = () => {
         const v = toVirtual(rp.create(x, y));
 
         if (selectMode === "range") {
-          resetPreview();
           if (!snapshot.getLoadable(multiSelectModeState).getValue())
             resetSelect();
+          const range = snapshot
+            .getLoadable(svgObjectStates("preview"))
+            .getValue();
+          resetPreview();
+
+          if (range?.fixedPoint) {
+            const diff = vp.sub(v, range.fixedPoint);
+            if (diff.vx !== 0 && diff.vy !== 0) {
+              const upperLeft = vp.create(
+                diff.vx > 0 ? 0 : diff.vx,
+                diff.vy > 0 ? 0 : diff.vy
+              ) as VirtualAbsolute;
+              const bottomRight = vp.create(
+                diff.vx > 0 ? diff.vx : 0,
+                diff.vy > 0 ? diff.vy : 0
+              ) as VirtualAbsolute;
+
+              const area = correctArea(
+                { upperLeft, bottomRight },
+                range.fixedPoint
+              );
+
+              const allSvgObject = snapshot
+                .getLoadable(allSvgObjectSelector)
+                .getValue();
+
+              // 重たいかも？？改善の余地あり
+              allSvgObject.map((obj) => {
+                if (obj?.id && obj.id !== "preview" && obj.fixedPoint) {
+                  const objArea = correctArea(obj.area, obj.fixedPoint);
+                  if (include(area, objArea)) {
+                    select(obj.id);
+                  }
+                }
+              });
+            }
+          }
         } else if (selectMode == "move") {
           const moveMode = snapshot.getLoadable(moveModeState).getValue();
           ungroupingPreview(v);
