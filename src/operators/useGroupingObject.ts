@@ -37,8 +37,8 @@ export const useGroupingObject = () => {
             };
           },
           {
-            upperLeft: vp.zero() as VirtualAbsolute,
-            bottomRight: vp.zero() as VirtualAbsolute,
+            upperLeft: vp.maxVec() as VirtualAbsolute,
+            bottomRight: vp.minVec() as VirtualAbsolute,
           }
         );
       },

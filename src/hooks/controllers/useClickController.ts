@@ -11,7 +11,11 @@ import { useGroupingObject } from "../../operators/useGroupingObject";
 import { vp } from "../../helpers/virtualPoint";
 import { rp } from "../../helpers/realPoint";
 import { useSelectMode } from "../../operators/useSelectMode";
-import { moveModeState, selectModeState } from "../../states/selectModeState";
+import {
+  moveModeState,
+  multiSelectModeState,
+  selectModeState,
+} from "../../states/selectModeState";
 import {
   copyingIdsState,
   selectedIdListState,
@@ -295,6 +299,8 @@ export const useClickController = () => {
 
         if (selectMode === "range") {
           resetPreview();
+          if (!snapshot.getLoadable(multiSelectModeState).getValue())
+            resetSelect();
         } else if (selectMode == "move") {
           const moveMode = snapshot.getLoadable(moveModeState).getValue();
           ungroupingPreview(v);

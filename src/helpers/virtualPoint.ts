@@ -22,6 +22,8 @@ const toReal = (v: VirtualPoint, pitch: number) => {
 };
 
 const zero = () => create(0, 0);
+const maxVec = () => create(Number.MAX_SAFE_INTEGER, Number.MAX_SAFE_INTEGER);
+const minVec = () => create(Number.MIN_SAFE_INTEGER, Number.MIN_SAFE_INTEGER);
 
 const create = (x: number, y: number) => ({
   vx: x as VirtualNumber,
@@ -40,4 +42,6 @@ export const vp = {
   toReal,
   create,
   zero,
+  maxVec,
+  minVec,
 };
