@@ -49,7 +49,7 @@ export const useSvgObject = () => {
         const svgObject = snapshot.getLoadable(svgObjectStates(id)).getValue();
         if (!svgObject) return;
 
-        const newId = (setNewId ? nanoid() : `copy_${id}`) as SvgId;
+        const newId = (setNewId ? nanoid() : `copy/${id}`) as SvgId;
         if (svgObject.type === "group") {
           const objectIds = svgObject.objectIds.flatMap(
             (id) => copyObject(id, setNewId) ?? []
@@ -70,7 +70,7 @@ export const useSvgObject = () => {
   const removeTagFromId = useRecoilCallback(
     ({ snapshot, set }) =>
       (id: SvgId, tagType: "copy") => {
-        const [tag, beforeId] = id.split("_");
+        const [tag, beforeId] = id.split("/");
         if (tag !== tagType) return;
 
         const svgObject = snapshot.getLoadable(svgObjectStates(id)).getValue();
