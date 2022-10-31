@@ -2,11 +2,9 @@
 import { useEffect } from "react";
 import { useRecoilValue } from "recoil";
 import { selectedIdListState } from "../states/selectedIdListState";
+import { svgObjectListState } from "../states/svgObjectState";
 
 export const useDebugInfoEffect = () => {
-  // const selectedIdList = useRecoilValue(selectedIdListState);
-  // useEffect(
-  //   () => console.log("selectedIdListState: ", selectedIdList),
-  //   [selectedIdList]
-  // );
+  const ids = useRecoilValue(svgObjectListState);
+  useEffect(() => console.log("svgObjectListState: ", ids), [ids]);
 };

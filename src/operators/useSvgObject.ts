@@ -5,11 +5,11 @@ import { svgObjectListState, svgObjectStates } from "../states/svgObjectState";
 export const useSvgObject = () => {
   const deleteObject = useRecoilCallback(
     ({ snapshot, set }) =>
-      (id: SvgId) => {
+      (id: SvgId, deep?: boolean) => {
         const svgObject = snapshot.getLoadable(svgObjectStates(id)).getValue();
         if (!svgObject) return;
 
-        if (svgObject.type === "group") {
+        if (deep && svgObject.type === "group") {
           svgObject.objectIds.map((cid) => deleteObject(cid));
         }
 
