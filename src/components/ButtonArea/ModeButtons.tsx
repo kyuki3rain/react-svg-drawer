@@ -3,6 +3,7 @@ import HorizontalRuleIcon from "@mui/icons-material/HorizontalRule";
 import ShowChartIcon from "@mui/icons-material/ShowChart";
 import RectangleIcon from "@mui/icons-material/Rectangle";
 import CircleIcon from "@mui/icons-material/Circle";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { Fab, SvgIcon, Tooltip } from "@mui/material";
 import React from "react";
 import { ReactComponent as CursorIcon } from "../../assets/CursorIcon.svg";
@@ -74,6 +75,15 @@ const ModeButtons: React.FC = () => {
           onClick={() => drawMode !== "circle" && changeMode("circle")}
         >
           <CircleIcon />
+        </Fab>
+      </Tooltip>
+      <Tooltip title="delete" style={{ marginLeft: 5 }} arrow>
+        <Fab
+          aria-label="delete"
+          color={drawMode === "delete" ? "success" : "primary"}
+          onClick={() => drawMode !== "delete" && changeMode("delete")}
+        >
+          <DeleteForeverIcon />
         </Fab>
       </Tooltip>
     </div>
