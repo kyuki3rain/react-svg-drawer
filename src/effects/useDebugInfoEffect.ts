@@ -1,11 +1,12 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useEffect } from "react";
 import { useRecoilValue } from "recoil";
-import { moveModeState, selectModeState } from "../states/selectModeState";
+import { selectedIdListState } from "../states/selectedIdListState";
 
 export const useDebugInfoEffect = () => {
-  const selectMode = useRecoilValue(selectModeState);
-  const moveMode = useRecoilValue(moveModeState);
-
-  useEffect(() => console.log("selectMode: ", selectMode), [selectMode]);
-  useEffect(() => console.log("moveMode: ", moveMode), [moveMode]);
+  // const selectedIdList = useRecoilValue(selectedIdListState);
+  // useEffect(
+  //   () => console.log("selectedIdListState: ", selectedIdList),
+  //   [selectedIdList]
+  // );
 };

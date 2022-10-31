@@ -4,13 +4,11 @@ import { drawModeState } from "../states/drawModeState";
 import { svgObjectListState, svgObjectStates } from "../states/svgObjectState";
 import { useHandleConfigModal } from "./useHandleConfigModal";
 import { usePreview } from "./usePreview";
-import { useSelect } from "./useSelect";
 
 const textConfig = new Map([["text", ""]]);
 
 export const useResetPreview = () => {
   const { deletePreview, updatePreview } = usePreview();
-  const { resetSelect } = useSelect();
   const { openModal } = useHandleConfigModal();
 
   const resetPreviewGroup = useRecoilCallback(
@@ -49,7 +47,6 @@ export const useResetPreview = () => {
       () => {
         const drawMode = snapshot.getLoadable(drawModeState).getValue();
         resetPreviewGroup();
-        resetSelect();
 
         switch (drawMode) {
           case "text": {
@@ -60,6 +57,10 @@ export const useResetPreview = () => {
               type: "text",
               configMap: configMap ?? new Map(textConfig),
               style: { stroke: "black" },
+              area: {
+                upperLeft: vp.zero() as VirtualAbsolute,
+                bottomRight: vp.zero() as VirtualAbsolute,
+              },
             });
             openModal("text", "preview", configMap ?? new Map(textConfig));
             break;
@@ -68,7 +69,7 @@ export const useResetPreview = () => {
             deletePreview();
         }
       },
-    [updatePreview, deletePreview, openModal, resetSelect, resetPreviewGroup]
+    [updatePreview, deletePreview, openModal, resetPreviewGroup]
   );
 
   return {

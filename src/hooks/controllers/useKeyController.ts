@@ -1,13 +1,16 @@
 import { useEffect, useRef } from "react";
 import { useRecoilCallback, useSetRecoilState } from "recoil";
 import { useResetPreview } from "../../operators/useResetPreview";
+import { useSelect } from "../../operators/useSelect";
 import { useSelectMode } from "../../operators/useSelectMode";
 import { keyControllerRefState } from "../../states/keyControllerRefState";
 import { snapGridState } from "../../states/snapGridState";
 
 export const useKeyController = () => {
   const { resetPreview } = useResetPreview();
-  const { toMoveMode, toCopyMode } = useSelectMode();
+  const { resetSelect } = useSelect();
+  const { toMoveMode, toCopyMode, toMultiSelectMode, toNormalSelectMode } =
+    useSelectMode();
 
   const ref = useRef<HTMLDivElement>(null);
   const setRef = useSetRecoilState(keyControllerRefState);
@@ -21,25 +24,31 @@ export const useKeyController = () => {
           case "Control":
             toMoveMode();
             break;
+          case "Shift":
+            toNormalSelectMode();
+            break;
           case "Alt":
             set(snapGridState, true);
             break;
           default:
         }
       },
-    [toMoveMode]
+    [toMoveMode, toNormalSelectMode]
   );
 
   const onKeyDown = useRecoilCallback(
     ({ set }) =>
       (key: string) => {
-        console.log(key);
         switch (key) {
           case "Escape":
             resetPreview();
+            resetSelect();
             break;
           case "Control":
             toCopyMode();
+            break;
+          case "Shift":
+            toMultiSelectMode();
             break;
           case "Alt":
             set(snapGridState, false);
@@ -47,7 +56,7 @@ export const useKeyController = () => {
           default:
         }
       },
-    [resetPreview, toCopyMode]
+    [resetPreview, resetSelect, toCopyMode, toMultiSelectMode]
   );
 
   return {
