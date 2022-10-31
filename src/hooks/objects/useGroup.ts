@@ -9,7 +9,7 @@ type Props = {
 };
 
 export const useGroup = ({ obj, parentPoint, parentId }: Props) => {
-  const { onClick } = useObject({
+  const { onClick, onMouseDown } = useObject({
     obj,
     parentPoint,
     parentId,
@@ -23,5 +23,6 @@ export const useGroup = ({ obj, parentPoint, parentId }: Props) => {
     groupPoint,
     draw: obj.objectIds.length !== 0,
     onClick,
+    onMouseDown,
   };
 };

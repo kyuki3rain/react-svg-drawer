@@ -2,6 +2,7 @@ import { useCallback } from "react";
 import { useRecoilCallback, useRecoilValue } from "recoil";
 import { useChangeMode } from "../operators/useChangeMode";
 import { useDraftConfig } from "../operators/useDraftConfig";
+import { useHandleConfigModal } from "../operators/useHandleConfigModal";
 import { usePreview } from "../operators/usePreview";
 import { useSvgObject } from "../operators/useSvgObject";
 import { configModalState, draftConfigState } from "../states/configModalState";
@@ -14,28 +15,20 @@ export const useConfigModal = () => {
   const { updatePreview } = usePreview();
   const { changeMode } = useChangeMode();
   const { updateDraft, resetDraft } = useDraftConfig();
-
-  const closeModal = useRecoilCallback(
-    ({ set }) =>
-      () => {
-        set(configModalState, {
-          isOpen: false,
-          type: "none" as const,
-          id: "preview",
-        });
-      },
-    []
-  );
+  const { closeModal } = useHandleConfigModal();
 
   const saveConfig = useRecoilCallback(
     ({ snapshot }) =>
-      (configMap: Map<string, string>) => {
+      () => {
         const id = snapshot.getLoadable(configModalState).getValue().id;
         const obj = snapshot.getLoadable(svgObjectStates(id)).getValue();
+        const draftConfigs = snapshot.getLoadable(draftConfigState).getValue();
         if (!obj || !obj.configMap) return;
 
         if (
-          ![...configMap].every((c) => obj.configMap?.get(c[0]) !== undefined)
+          ![...draftConfigs].every(
+            (c) => obj.configMap?.get(c[0]) !== undefined
+          )
         ) {
           console.error("configMap is not matched to obj.configMap!");
           return;
@@ -44,24 +37,18 @@ export const useConfigModal = () => {
         if (id === "preview") {
           updatePreview({
             ...obj,
-            configMap: new Map([...obj.configMap, ...configMap]),
+            configMap: new Map([...obj.configMap, ...draftConfigs]),
           });
         } else {
           updateObject({
             ...obj,
-            configMap: new Map([...obj.configMap, ...configMap]),
+            configMap: new Map([...obj.configMap, ...draftConfigs]),
           });
         }
-
         closeModal();
       },
     [closeModal, updatePreview, updateObject]
   );
-
-  const closeModalWithoutMode = useCallback(() => {
-    closeModal();
-    changeMode("selector");
-  }, [changeMode, closeModal]);
 
   const onChange = useCallback(
     (key: string, value: string) => updateDraft(key, value),
@@ -69,9 +56,10 @@ export const useConfigModal = () => {
   );
 
   const handleClose = useCallback(() => {
-    closeModalWithoutMode();
+    closeModal();
+    changeMode("selector");
     resetDraft();
-  }, [closeModalWithoutMode, resetDraft]);
+  }, [changeMode, closeModal, resetDraft]);
 
   return {
     type: configModal.type,

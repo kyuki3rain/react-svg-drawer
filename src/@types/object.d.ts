@@ -19,6 +19,7 @@ type SvgObjectCommon = {
   style: SvgObjectStyle;
   configMap?: Map<string, string>;
   fixedPoint?: VirtualAbsolute;
+  area: Area;
 };
 
 type LineObject = {
@@ -54,6 +55,5 @@ type CircleObject = {
 type GroupObject = {
   type: "group";
   objectIds: SvgId[];
-  isCopy: boolean;
   firstFixedPoint: VirtualAbsolute;
 } & SvgObjectCommon;

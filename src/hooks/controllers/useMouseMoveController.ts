@@ -7,11 +7,13 @@ import { useRecoilCallback } from "recoil";
 import { usePreview } from "../../operators/usePreview";
 import { vp } from "../../helpers/virtualPoint";
 import { rp } from "../../helpers/realPoint";
+import { useKeyControllerRef } from "../../operators/useKeyControllerRef";
 
 export const useOnMouseMoveController = () => {
   const { updatePreview } = usePreview();
   const { toVirtual } = usePoint();
   const pointRef = useRef<VirtualPoint | null>(null);
+  const { focus } = useKeyControllerRef();
 
   const omMouseMoveLine = useCallback(
     (obj: LineObject | null, v: VirtualPoint) => {
@@ -118,7 +120,21 @@ export const useOnMouseMoveController = () => {
         const isOpen = snapshot.getLoadable(configModalState).getValue().isOpen;
         if (isOpen) return;
 
+        focus();
+
         switch (drawMode) {
+          case "selector": {
+            switch (obj?.type) {
+              case "group":
+                onMouseMoveGroup(obj, v);
+                break;
+              case "rect":
+                onMouseMoveRect(obj, v);
+                break;
+              default:
+            }
+            break;
+          }
           case "line": {
             if (obj && obj.type !== "line") break;
             omMouseMoveLine(obj, v);
@@ -144,20 +160,11 @@ export const useOnMouseMoveController = () => {
             onMouseMoveCircle(obj, v);
             break;
           }
-          case "copy": {
-            if (obj && obj.type !== "group") break;
-            onMouseMoveGroup(obj, v);
-            break;
-          }
-          case "move": {
-            if (obj && obj.type !== "group") break;
-            onMouseMoveGroup(obj, v);
-            break;
-          }
           default:
         }
       },
     [
+      focus,
       omMouseMoveLine,
       omMouseMovePolyline,
       onMouseMoveCircle,

@@ -3,9 +3,10 @@ import { useDrawArea } from "../hooks/useDrawArea";
 import DrawAreaController from "../controllers/DrawAreaController";
 import Grids from "../components/DrawArea/Grids";
 import SvgObjectWrapper from "../components/DrawArea/SvgObjectWrapper";
+import { CopyingObjects } from "../components/DrawArea/CopyingObjects";
 
 const DrawArea: React.FC = () => {
-  const { svgObjectList, selectedIdList, rootPoint, width, height } =
+  const { svgObjectList, selectedIdList, rootPoint, moveMode, width, height } =
     useDrawArea();
 
   return (
@@ -27,9 +28,10 @@ const DrawArea: React.FC = () => {
         ))}
         <SvgObjectWrapper
           svgId="preview"
-          isSelected={false}
+          isSelected={true}
           parentPoint={rootPoint}
         ></SvgObjectWrapper>
+        {moveMode === "copy" && <CopyingObjects></CopyingObjects>}
       </svg>
     </DrawAreaController>
   );

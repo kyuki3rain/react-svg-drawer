@@ -14,3 +14,8 @@ type VirtualPoint = {
 
 type VirtualRelative = VirtualPoint & { _brand: "relative" };
 type VirtualAbsolute = VirtualPoint & { _brand: "absolute" };
+
+type Area = {
+  upperLeft: VirtualAbsolute;
+  bottomRight: VirtualAbsolute;
+};

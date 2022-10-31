@@ -1,4 +1,5 @@
 import { CLICK_TARGET_OBJECT } from "../../../helpers/clickTargetObject";
+import { useArea } from "../../../hooks/objects/useArea";
 import { useCircle } from "../../../hooks/objects/useCircle";
 
 type Props = {
@@ -14,7 +15,16 @@ const CircleObject: React.FC<Props> = ({
   isSelected,
   parentId,
 }) => {
-  const { c, r, onClick } = useCircle({ obj, parentPoint, parentId });
+  const { c, r, onClick, onMouseDown } = useCircle({
+    obj,
+    parentPoint,
+    parentId,
+  });
+  const area = useArea({
+    obj,
+    parentPoint,
+    parentId,
+  });
   if (!c || !r) return null;
 
   return (
@@ -30,6 +40,14 @@ const CircleObject: React.FC<Props> = ({
         }
         strokeOpacity={CLICK_TARGET_OBJECT.strokeOpacity}
         onClick={(e) => onClick(() => e.stopPropagation())}
+        onMouseDown={(e) =>
+          onMouseDown(
+            () => e.stopPropagation(),
+            e.clientX,
+            e.clientY,
+            isSelected
+          )
+        }
       ></ellipse>
       <ellipse
         cx={c.x}
@@ -40,6 +58,16 @@ const CircleObject: React.FC<Props> = ({
         style={{ pointerEvents: "none" }}
         stroke={isSelected ? "blue" : "black"}
       ></ellipse>
+      {area && (
+        <rect
+          x={area.x}
+          y={area.y}
+          width={area.width}
+          height={area.height}
+          stroke="red"
+          fill="none"
+        ></rect>
+      )}
     </>
   );
 };

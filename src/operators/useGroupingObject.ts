@@ -17,6 +17,34 @@ export const useGroupingObject = () => {
   const { includeIds, excludeIds } = useSvgObjectList();
   const { updatePreview, deletePreview } = usePreview();
 
+  const getGroupArea = useRecoilCallback(
+    ({ snapshot }) =>
+      (ids: SvgId[]) => {
+        return ids.reduce(
+          (acc, id) => {
+            const obj = snapshot.getLoadable(svgObjectStates(id)).getValue();
+            if (!obj?.fixedPoint) return acc;
+
+            return {
+              upperLeft: vp.min(
+                acc.upperLeft,
+                vp.add(obj.area.upperLeft, obj.fixedPoint)
+              ) as VirtualAbsolute,
+              bottomRight: vp.max(
+                acc.bottomRight,
+                vp.add(obj.area.bottomRight, obj.fixedPoint)
+              ) as VirtualAbsolute,
+            };
+          },
+          {
+            upperLeft: vp.maxVec() as VirtualAbsolute,
+            bottomRight: vp.minVec() as VirtualAbsolute,
+          }
+        );
+      },
+    []
+  );
+
   const groupingObject = useCallback(
     (
       parentPoint: VirtualPoint,
@@ -25,6 +53,7 @@ export const useGroupingObject = () => {
     ) => {
       updateFixedPoints(ids, parentPoint);
       excludeIds(ids);
+      const area = getGroupArea(ids);
 
       const groupObject = {
         type: "group" as const,
@@ -32,7 +61,7 @@ export const useGroupingObject = () => {
         fixedPoint: parentPoint as VirtualAbsolute,
         firstFixedPoint: parentPoint as VirtualAbsolute,
         style: {},
-        isCopy: false,
+        area: area,
       };
 
       if (id === "preview") {
@@ -43,7 +72,7 @@ export const useGroupingObject = () => {
         return id;
       }
     },
-    [addObject, excludeIds, updateFixedPoints, updatePreview]
+    [addObject, excludeIds, getGroupArea, updateFixedPoints, updatePreview]
   );
 
   const ungroupingObject = useRecoilCallback(
@@ -61,7 +90,7 @@ export const useGroupingObject = () => {
           deletePreview();
           return;
         } else {
-          deleteObject(id);
+          deleteObject(id, false);
           return id;
         }
       },

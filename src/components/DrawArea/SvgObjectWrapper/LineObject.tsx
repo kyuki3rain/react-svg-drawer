@@ -1,4 +1,5 @@
 import { CLICK_TARGET_OBJECT } from "../../../helpers/clickTargetObject";
+import { useArea } from "../../../hooks/objects/useArea";
 import { useLine } from "../../../hooks/objects/useLine";
 
 type Props = {
@@ -14,7 +15,12 @@ const LineObject: React.FC<Props> = ({
   isSelected,
   parentId,
 }) => {
-  const { r1, r2, onClick } = useLine({
+  const { r1, r2, onClick, onMouseDown } = useLine({
+    obj,
+    parentPoint,
+    parentId,
+  });
+  const area = useArea({
     obj,
     parentPoint,
     parentId,
@@ -34,6 +40,14 @@ const LineObject: React.FC<Props> = ({
         }
         strokeOpacity={CLICK_TARGET_OBJECT.strokeOpacity}
         onClick={(e) => onClick(() => e.stopPropagation())}
+        onMouseDown={(e) =>
+          onMouseDown(
+            () => e.stopPropagation(),
+            e.clientX,
+            e.clientY,
+            isSelected
+          )
+        }
       ></line>
       <line
         x1={r1.x}
@@ -43,6 +57,16 @@ const LineObject: React.FC<Props> = ({
         {...obj.style}
         stroke={isSelected ? "blue" : "black"}
       ></line>
+      {area && (
+        <rect
+          x={area.x}
+          y={area.y}
+          width={area.width}
+          height={area.height}
+          stroke="red"
+          fill="none"
+        ></rect>
+      )}
     </>
   );
 };

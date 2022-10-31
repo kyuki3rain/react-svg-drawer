@@ -10,13 +10,29 @@ import { useSvgObject } from "../../operators/useSvgObject";
 import { useGroupingObject } from "../../operators/useGroupingObject";
 import { vp } from "../../helpers/virtualPoint";
 import { rp } from "../../helpers/realPoint";
+import { useSelectMode } from "../../operators/useSelectMode";
+import {
+  moveModeState,
+  multiSelectModeState,
+  selectModeState,
+} from "../../states/selectModeState";
+import {
+  copyingIdsState,
+  selectedIdListState,
+} from "../../states/selectedIdListState";
+import { useResetPreview } from "../../operators/useResetPreview";
+import { allSvgObjectSelector } from "../../selectors/objectSelector";
+import { correctArea, include } from "../../helpers/areaHelper";
 
 export const useClickController = () => {
   const { updatePreview, deletePreview } = usePreview();
   const { addObject } = useSvgObject();
   const { toVirtual } = usePoint();
-  const { resetSelect } = useSelect();
-  const { groupingPreview, ungroupingPreview } = useGroupingObject();
+  const { resetSelect, select } = useSelect();
+  const { ungroupingPreview } = useGroupingObject();
+  const { toRangeSelectMode, resetSelectMode } = useSelectMode();
+  const { copyObject, removeTagFromId } = useSvgObject();
+  const { resetPreview } = useResetPreview();
 
   const onClickLine = useCallback(
     (obj: LineObject | null, v: VirtualPoint) => {
@@ -27,13 +43,23 @@ export const useClickController = () => {
           fixedPoint: v as VirtualAbsolute,
           point1: vp.zero() as VirtualAbsolute,
           style: { stroke: "black" },
+          area: {
+            upperLeft: vp.zero() as VirtualAbsolute,
+            bottomRight: vp.zero() as VirtualAbsolute,
+          },
         });
         return;
       }
+      if (!obj.point1) return;
 
+      const point2 = vp.sub(v, obj.fixedPoint) as VirtualAbsolute;
       addObject({
         ...obj,
-        point2: vp.sub(v, obj.fixedPoint) as VirtualAbsolute,
+        point2,
+        area: {
+          upperLeft: vp.min(obj.point1, point2) as VirtualAbsolute,
+          bottomRight: vp.max(obj.point1, point2) as VirtualAbsolute,
+        },
       });
       deletePreview();
     },
@@ -49,13 +75,23 @@ export const useClickController = () => {
           fixedPoint: v as VirtualAbsolute,
           points: [vp.zero() as VirtualAbsolute],
           style: { stroke: "black", fill: "none" },
+          area: {
+            upperLeft: vp.zero() as VirtualAbsolute,
+            bottomRight: vp.zero() as VirtualAbsolute,
+          },
         });
         return;
       }
 
+      const point2 = vp.sub(v, obj.fixedPoint);
+
       updatePreview({
         ...obj,
-        points: [...obj.points, vp.sub(v, obj.fixedPoint) as VirtualAbsolute],
+        points: [...obj.points, point2 as VirtualAbsolute],
+        area: {
+          upperLeft: vp.min(obj.area.upperLeft, point2) as VirtualAbsolute,
+          bottomRight: vp.max(obj.area.bottomRight, point2) as VirtualAbsolute,
+        },
       });
     },
     [updatePreview]
@@ -82,6 +118,10 @@ export const useClickController = () => {
           upperLeft: vp.zero() as VirtualAbsolute,
           fixedPoint: v as VirtualAbsolute,
           style: { stroke: "black", fill: "none" },
+          area: {
+            upperLeft: vp.zero() as VirtualAbsolute,
+            bottomRight: vp.zero() as VirtualAbsolute,
+          },
         });
         return;
       }
@@ -92,16 +132,20 @@ export const useClickController = () => {
         return;
       }
 
+      const upperLeft = vp.create(
+        diff.vx > 0 ? 0 : diff.vx,
+        diff.vy > 0 ? 0 : diff.vy
+      ) as VirtualAbsolute;
+      const bottomRight = vp.create(
+        diff.vx > 0 ? diff.vx : 0,
+        diff.vy > 0 ? diff.vy : 0
+      ) as VirtualAbsolute;
+
       addObject({
         ...obj,
-        upperLeft: vp.create(
-          diff.vx > 0 ? 0 : diff.vx,
-          diff.vy > 0 ? 0 : diff.vy
-        ) as VirtualAbsolute,
-        size: vp.create(
-          diff.vx > 0 ? diff.vx : -diff.vx,
-          diff.vy > 0 ? diff.vy : -diff.vy
-        ) as VirtualRelative,
+        upperLeft,
+        size: vp.sub(bottomRight, upperLeft) as VirtualRelative,
+        area: { upperLeft, bottomRight },
       });
 
       deletePreview();
@@ -117,45 +161,30 @@ export const useClickController = () => {
           type: "circle",
           fixedPoint: v as VirtualAbsolute,
           style: { stroke: "black", fill: "none" },
+          area: {
+            upperLeft: vp.zero() as VirtualAbsolute,
+            bottomRight: vp.zero() as VirtualAbsolute,
+          },
         });
         return;
       }
 
-      const c = vp.divConst(vp.sub(v, obj.fixedPoint), 2) as VirtualAbsolute;
+      const point2 = vp.sub(v, obj.fixedPoint);
+      const c = vp.divConst(point2, 2) as VirtualAbsolute;
       const r = vp.abs(c) as VirtualRelative;
 
       addObject({
         ...obj,
         r,
         c,
+        area: {
+          upperLeft: vp.min(point2, vp.zero()) as VirtualAbsolute,
+          bottomRight: vp.max(point2, vp.zero()) as VirtualAbsolute,
+        },
       });
       deletePreview();
     },
     [addObject, updatePreview, deletePreview]
-  );
-
-  const onClickCopy = useCallback(
-    (obj: GroupObject | null, v: VirtualPoint) => {
-      if (!obj || !obj.fixedPoint) {
-        groupingPreview(v, true);
-        return;
-      }
-
-      ungroupingPreview(v);
-    },
-    [ungroupingPreview, groupingPreview]
-  );
-
-  const onClickMove = useCallback(
-    (obj: GroupObject | null, v: VirtualPoint) => {
-      if (!obj || !obj.fixedPoint) {
-        groupingPreview(v, false);
-        return;
-      }
-
-      ungroupingPreview(v);
-    },
-    [ungroupingPreview, groupingPreview]
   );
 
   const onClick = useRecoilCallback(
@@ -194,32 +223,15 @@ export const useClickController = () => {
             onClickCircle(obj, v);
             break;
           }
-          case "copy": {
-            if (obj && obj.type !== "group") break;
-            onClickCopy(obj, v);
-            break;
-          }
-          case "move": {
-            if (obj && obj.type !== "group") break;
-            onClickMove(obj, v);
-            break;
-          }
-          case "selector": {
-            resetSelect();
-            break;
-          }
           default:
         }
       },
     [
       onClickCircle,
-      onClickCopy,
       onClickLine,
-      onClickMove,
       onClickPolyline,
       onClickRect,
       onClickText,
-      resetSelect,
       toVirtual,
     ]
   );
@@ -248,5 +260,116 @@ export const useClickController = () => {
     [addObject, deletePreview]
   );
 
-  return { onClick, onContextMenu };
+  const onMousedown = useRecoilCallback(
+    ({ snapshot }) =>
+      (x: number, y: number) => {
+        const drawMode = snapshot.getLoadable(drawModeState).getValue();
+        const isOpen = snapshot.getLoadable(configModalState).getValue().isOpen;
+        if (drawMode !== "selector" || isOpen) return;
+        if (!toRangeSelectMode()) return;
+
+        const v = toVirtual(rp.create(x, y));
+        updatePreview({
+          id: "preview",
+          type: "rect",
+          upperLeft: vp.zero() as VirtualAbsolute,
+          fixedPoint: v as VirtualAbsolute,
+          style: { stroke: "black", fill: "none" },
+          area: {
+            upperLeft: vp.zero() as VirtualAbsolute,
+            bottomRight: vp.zero() as VirtualAbsolute,
+          },
+        });
+      },
+    [toRangeSelectMode, toVirtual, updatePreview]
+  );
+
+  const onMouseup = useRecoilCallback(
+    ({ snapshot, set }) =>
+      (x: number, y: number) => {
+        const drawMode = snapshot.getLoadable(drawModeState).getValue();
+        const isOpen = snapshot.getLoadable(configModalState).getValue().isOpen;
+        if (drawMode !== "selector" || isOpen) return;
+
+        const selectMode = snapshot.getLoadable(selectModeState).getValue();
+        const v = toVirtual(rp.create(x, y));
+
+        if (selectMode === "range") {
+          if (!snapshot.getLoadable(multiSelectModeState).getValue())
+            resetSelect();
+          const range = snapshot
+            .getLoadable(svgObjectStates("preview"))
+            .getValue();
+          resetPreview();
+
+          if (range?.fixedPoint) {
+            const diff = vp.sub(v, range.fixedPoint);
+            if (diff.vx !== 0 && diff.vy !== 0) {
+              const upperLeft = vp.create(
+                diff.vx > 0 ? 0 : diff.vx,
+                diff.vy > 0 ? 0 : diff.vy
+              ) as VirtualAbsolute;
+              const bottomRight = vp.create(
+                diff.vx > 0 ? diff.vx : 0,
+                diff.vy > 0 ? diff.vy : 0
+              ) as VirtualAbsolute;
+
+              const area = correctArea(
+                { upperLeft, bottomRight },
+                range.fixedPoint
+              );
+
+              const allSvgObject = snapshot
+                .getLoadable(allSvgObjectSelector)
+                .getValue();
+
+              // 重たいかも？？改善の余地あり
+              allSvgObject.map((obj) => {
+                if (obj?.id && obj.id !== "preview" && obj.fixedPoint) {
+                  const objArea = correctArea(obj.area, obj.fixedPoint);
+                  if (include(area, objArea)) {
+                    select(obj.id);
+                  }
+                }
+              });
+            }
+          }
+        } else if (selectMode == "move") {
+          const moveMode = snapshot.getLoadable(moveModeState).getValue();
+          ungroupingPreview(v);
+
+          if (moveMode === "move") {
+            set(copyingIdsState, new Set());
+          } else {
+            const selectedIdList = [
+              ...snapshot.getLoadable(selectedIdListState).getValue(),
+            ];
+            const newIds = selectedIdList.flatMap(
+              (id) => copyObject(id, true, true) ?? []
+            );
+            resetSelect();
+            newIds.map((id) => select(id));
+
+            const copyingIds = [
+              ...snapshot.getLoadable(copyingIdsState).getValue(),
+            ];
+            copyingIds.map((id) => removeTagFromId(id, "copy"));
+          }
+        }
+
+        resetSelectMode();
+      },
+    [
+      copyObject,
+      removeTagFromId,
+      resetPreview,
+      resetSelect,
+      resetSelectMode,
+      select,
+      toVirtual,
+      ungroupingPreview,
+    ]
+  );
+
+  return { onClick, onContextMenu, onMousedown, onMouseup };
 };

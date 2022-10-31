@@ -1,29 +1,15 @@
 import { useRecoilCallback } from "recoil";
 import { vp } from "../helpers/virtualPoint";
-import { configModalState, draftConfigState } from "../states/configModalState";
 import { drawModeState } from "../states/drawModeState";
 import { svgObjectListState, svgObjectStates } from "../states/svgObjectState";
+import { useHandleConfigModal } from "./useHandleConfigModal";
 import { usePreview } from "./usePreview";
-import { useSelect } from "./useSelect";
 
 const textConfig = new Map([["text", ""]]);
 
 export const useResetPreview = () => {
   const { deletePreview, updatePreview } = usePreview();
-  const { resetSelect } = useSelect();
-
-  const openModal = useRecoilCallback(
-    ({ set }) =>
-      (
-        type: ConfigType,
-        id: SvgId | "preview",
-        configMap: Map<string, string>
-      ) => {
-        set(configModalState, { isOpen: true, type, id });
-        set(draftConfigState, new Map(configMap));
-      },
-    []
-  );
+  const { openModal } = useHandleConfigModal();
 
   const resetPreviewGroup = useRecoilCallback(
     ({ set, snapshot }) =>
@@ -32,32 +18,26 @@ export const useResetPreview = () => {
 
         if (!obj || obj.type !== "group" || !obj.fixedPoint) return;
 
-        if (obj.isCopy) {
-          obj.objectIds.map((id) => {
-            set(svgObjectStates(id), null);
-          });
-        } else {
-          const correction = vp.sub(vp.zero(), obj.firstFixedPoint);
-          obj.objectIds.map((id) =>
-            set(svgObjectStates(id), (prev) => {
-              if (!prev) return prev;
-              if (!prev.fixedPoint) return prev;
-              return (
-                prev && {
-                  ...prev,
-                  fixedPoint: vp.sub(
-                    prev.fixedPoint,
-                    correction
-                  ) as VirtualAbsolute,
-                }
-              );
-            })
-          );
-          set(svgObjectListState, (prev) => {
-            obj.objectIds.map((id) => prev.add(id));
-            return new Set(prev);
-          });
-        }
+        const correction = vp.sub(vp.zero(), obj.firstFixedPoint);
+        obj.objectIds.map((id) =>
+          set(svgObjectStates(id), (prev) => {
+            if (!prev) return prev;
+            if (!prev.fixedPoint) return prev;
+            return (
+              prev && {
+                ...prev,
+                fixedPoint: vp.sub(
+                  prev.fixedPoint,
+                  correction
+                ) as VirtualAbsolute,
+              }
+            );
+          })
+        );
+        set(svgObjectListState, (prev) => {
+          obj.objectIds.map((id) => prev.add(id));
+          return new Set(prev);
+        });
       },
     []
   );
@@ -77,22 +57,19 @@ export const useResetPreview = () => {
               type: "text",
               configMap: configMap ?? new Map(textConfig),
               style: { stroke: "black" },
+              area: {
+                upperLeft: vp.zero() as VirtualAbsolute,
+                bottomRight: vp.zero() as VirtualAbsolute,
+              },
             });
             openModal("text", "preview", configMap ?? new Map(textConfig));
             break;
           }
-          case "copy":
-            deletePreview();
-            break;
-          case "move":
-            deletePreview();
-            break;
           default:
-            resetSelect();
             deletePreview();
         }
       },
-    [updatePreview, deletePreview, openModal, resetSelect, resetPreviewGroup]
+    [updatePreview, deletePreview, openModal, resetPreviewGroup]
   );
 
   return {

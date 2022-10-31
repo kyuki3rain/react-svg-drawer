@@ -1,11 +1,28 @@
 # react-svg-drawer
 
-# mode 一覧
+# mode
 
 ## selector
 
 Object を選択できる。
 選択されたオブジェクトは青くなる。
+以下、いくつかの機能・モードがある。
+
+- 範囲選択
+
+  マウスで範囲を囲うようにドラッグすれば、そのエリア内にあるオブジェクトをまとめて選択できる
+
+- マルチセレクトモード
+
+  Shift キーを押しながらクリック　または　範囲選択
+
+- 移動
+
+  選択したものを掴んでドラッグ&ドロップ
+
+- コピー
+
+  移動時に Control キーを押し、そのままドロップすれば Copy が可能
 
 ## line
 
@@ -38,13 +55,56 @@ first click で一箇所確定
 そこから mousemove に対応して preview を表示
 second click のとき、その点と一つ目の点に接する楕円を描画して初期状態に戻る
 
-## import
+## delete
+
+selector モードのように object をクリックすると、クリックしたオブジェクトが消える
+削除は deep であり、Group 化している場合は Group の構成要素全てが削除される
+
+# Function
+
+## undo
+
+一つ前の状態に遷移する
+
+## redo
+
+（undo 後に）一つ後の状態に遷移する
+
+## grouping
+
+選択された object を group 化する
+
+## ungrouping
+
+group 化された object の group 化を解除する
+
+## newFile
+
+ファイル（状態）をリセットする
+
+## saveFile
+
+ファイル（状態）をローカルに保存する
+
+## loadFile
+
+ファイル（状態）をローカルから復元する
+
+## importFile
 
 対応する json ファイルを渡せば、読み込み可能
 
-## export
+## exportFile
 
 画面上にあるオブジェクトの情報を全て吐き出す
+
+## log
+
+画面上にあるオブジェクトの情報を全て console に出力する
+
+## showAreaMode
+
+画面上にあるオブジェクト全ての領域を赤枠で表示する
 
 # その他
 

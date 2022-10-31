@@ -41,6 +41,7 @@ export const useJSON = () => {
                 " import version: ",
                 json.version
               );
+              return;
             }
             if (json.appName !== __APP_NAME__) {
               console.log(
@@ -52,6 +53,7 @@ export const useJSON = () => {
                 " import AppName: ",
                 json.appName
               );
+              return;
             }
           }
 
