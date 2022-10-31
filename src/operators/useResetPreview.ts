@@ -49,6 +49,7 @@ export const useResetPreview = () => {
       () => {
         const drawMode = snapshot.getLoadable(drawModeState).getValue();
         resetPreviewGroup();
+        resetSelect();
 
         switch (drawMode) {
           case "text": {
@@ -64,7 +65,6 @@ export const useResetPreview = () => {
             break;
           }
           default:
-            resetSelect();
             deletePreview();
         }
       },
