@@ -18,19 +18,23 @@ export const useOnClickObject = () => {
   const { toMoveSelectMode } = useSelectMode();
   const { toVirtual } = usePoint();
   const { groupingObject } = useGroupingObject();
-  const { copyObject } = useSvgObject();
+  const { copyObject, deleteObject } = useSvgObject();
 
   const onClickObject = useRecoilCallback(
     ({ snapshot }) =>
       (id: SvgId) => {
         const drawMode = snapshot.getLoadable(drawModeState).getValue();
-        if (drawMode !== "selector") return false;
-
-        toggleSelect(id);
-
-        return true;
+        if (drawMode === "delete") {
+          deleteObject(id, true);
+          return true;
+        }
+        if (drawMode === "selector") {
+          toggleSelect(id);
+          return true;
+        }
+        return false;
       },
-    [toggleSelect]
+    [deleteObject, toggleSelect]
   );
 
   const onMouseDownObject = useRecoilCallback(
