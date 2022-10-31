@@ -90,7 +90,7 @@ export const useGroupingObject = () => {
           deletePreview();
           return;
         } else {
-          deleteObject(id);
+          deleteObject(id, false);
           return id;
         }
       },
