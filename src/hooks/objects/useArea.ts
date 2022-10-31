@@ -1,5 +1,7 @@
 import { useMemo } from "react";
+import { useRecoilValue } from "recoil";
 import { useObject } from "../../operators/useObject";
+import { showAreaModeState } from "../../states/areaConfigState";
 
 type Props = {
   obj: SvgObject;
@@ -13,6 +15,7 @@ export const useArea = ({ obj, parentPoint, parentId }: Props) => {
     parentPoint,
     parentId,
   });
+  const showAreaMode = useRecoilValue(showAreaModeState);
 
   const upperLeft = useMemo(
     () => obj.area.upperLeft && toRealAbsolute(obj.area.upperLeft),
@@ -25,6 +28,7 @@ export const useArea = ({ obj, parentPoint, parentId }: Props) => {
   );
 
   if (!upperLeft || !bottomRight) return null;
+  if (!showAreaMode) return null;
 
   return {
     x: upperLeft.x,
