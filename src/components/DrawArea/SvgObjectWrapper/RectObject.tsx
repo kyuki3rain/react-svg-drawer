@@ -1,4 +1,5 @@
 import { CLICK_TARGET_OBJECT } from "../../../helpers/clickTargetObject";
+import { useArea } from "../../../hooks/objects/useArea";
 import { useRect } from "../../../hooks/objects/useRect";
 
 type Props = {
@@ -15,6 +16,11 @@ const RectObject: React.FC<Props> = ({
   parentId,
 }) => {
   const { r, s, onClick, onMouseDown } = useRect({
+    obj,
+    parentPoint,
+    parentId,
+  });
+  const area = useArea({
     obj,
     parentPoint,
     parentId,
@@ -53,6 +59,16 @@ const RectObject: React.FC<Props> = ({
         {...obj.style}
         stroke={isSelected ? "blue" : "black"}
       ></rect>
+      {area && (
+        <rect
+          x={area.x}
+          y={area.y}
+          width={area.width}
+          height={area.height}
+          stroke="red"
+          fill="none"
+        ></rect>
+      )}
     </>
   );
 };

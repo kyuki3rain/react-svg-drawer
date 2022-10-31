@@ -1,3 +1,4 @@
+import { useArea } from "../../../hooks/objects/useArea";
 import { useText } from "../../../hooks/objects/useText";
 
 type Props = {
@@ -14,6 +15,11 @@ const TextObject: React.FC<Props> = ({
   parentId,
 }) => {
   const { r, text, onClick, onMouseDown } = useText({
+    obj,
+    parentPoint,
+    parentId,
+  });
+  const area = useArea({
     obj,
     parentPoint,
     parentId,
@@ -39,6 +45,16 @@ const TextObject: React.FC<Props> = ({
       >
         {text}
       </text>
+      {area && (
+        <rect
+          x={area.x}
+          y={area.y}
+          width={area.width}
+          height={area.height}
+          stroke="red"
+          fill="none"
+        ></rect>
+      )}
     </>
   );
 };

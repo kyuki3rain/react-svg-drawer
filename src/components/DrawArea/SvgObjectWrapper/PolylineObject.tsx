@@ -1,4 +1,5 @@
 import { CLICK_TARGET_OBJECT } from "../../../helpers/clickTargetObject";
+import { useArea } from "../../../hooks/objects/useArea";
 import { usePolyline } from "../../../hooks/objects/usePolyline";
 
 type Props = {
@@ -15,6 +16,11 @@ const PolylineObject: React.FC<Props> = ({
   parentId,
 }) => {
   const { points, draw, onClick, onMouseDown } = usePolyline({
+    obj,
+    parentPoint,
+    parentId,
+  });
+  const area = useArea({
     obj,
     parentPoint,
     parentId,
@@ -45,6 +51,16 @@ const PolylineObject: React.FC<Props> = ({
         {...obj.style}
         stroke={isSelected ? "blue" : "black"}
       ></polyline>
+      {area && (
+        <rect
+          x={area.x}
+          y={area.y}
+          width={area.width}
+          height={area.height}
+          stroke="red"
+          fill="none"
+        ></rect>
+      )}
     </>
   );
 };

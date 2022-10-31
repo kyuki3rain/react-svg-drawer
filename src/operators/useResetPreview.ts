@@ -60,6 +60,10 @@ export const useResetPreview = () => {
               type: "text",
               configMap: configMap ?? new Map(textConfig),
               style: { stroke: "black" },
+              area: {
+                upperLeft: vp.zero() as VirtualAbsolute,
+                bottomRight: vp.zero() as VirtualAbsolute,
+              },
             });
             openModal("text", "preview", configMap ?? new Map(textConfig));
             break;

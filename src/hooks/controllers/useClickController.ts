@@ -37,13 +37,23 @@ export const useClickController = () => {
           fixedPoint: v as VirtualAbsolute,
           point1: vp.zero() as VirtualAbsolute,
           style: { stroke: "black" },
+          area: {
+            upperLeft: vp.zero() as VirtualAbsolute,
+            bottomRight: vp.zero() as VirtualAbsolute,
+          },
         });
         return;
       }
+      if (!obj.point1) return;
 
+      const point2 = vp.sub(v, obj.fixedPoint) as VirtualAbsolute;
       addObject({
         ...obj,
-        point2: vp.sub(v, obj.fixedPoint) as VirtualAbsolute,
+        point2,
+        area: {
+          upperLeft: vp.min(obj.point1, point2) as VirtualAbsolute,
+          bottomRight: vp.max(obj.point1, point2) as VirtualAbsolute,
+        },
       });
       deletePreview();
     },
@@ -59,13 +69,23 @@ export const useClickController = () => {
           fixedPoint: v as VirtualAbsolute,
           points: [vp.zero() as VirtualAbsolute],
           style: { stroke: "black", fill: "none" },
+          area: {
+            upperLeft: vp.zero() as VirtualAbsolute,
+            bottomRight: vp.zero() as VirtualAbsolute,
+          },
         });
         return;
       }
 
+      const point2 = vp.sub(v, obj.fixedPoint);
+
       updatePreview({
         ...obj,
-        points: [...obj.points, vp.sub(v, obj.fixedPoint) as VirtualAbsolute],
+        points: [...obj.points, point2 as VirtualAbsolute],
+        area: {
+          upperLeft: vp.min(obj.area.upperLeft, point2) as VirtualAbsolute,
+          bottomRight: vp.max(obj.area.bottomRight, point2) as VirtualAbsolute,
+        },
       });
     },
     [updatePreview]
@@ -92,6 +112,10 @@ export const useClickController = () => {
           upperLeft: vp.zero() as VirtualAbsolute,
           fixedPoint: v as VirtualAbsolute,
           style: { stroke: "black", fill: "none" },
+          area: {
+            upperLeft: vp.zero() as VirtualAbsolute,
+            bottomRight: vp.zero() as VirtualAbsolute,
+          },
         });
         return;
       }
@@ -102,16 +126,20 @@ export const useClickController = () => {
         return;
       }
 
+      const upperLeft = vp.create(
+        diff.vx > 0 ? 0 : diff.vx,
+        diff.vy > 0 ? 0 : diff.vy
+      ) as VirtualAbsolute;
+      const bottomRight = vp.create(
+        diff.vx > 0 ? diff.vx : 0,
+        diff.vy > 0 ? diff.vy : 0
+      ) as VirtualAbsolute;
+
       addObject({
         ...obj,
-        upperLeft: vp.create(
-          diff.vx > 0 ? 0 : diff.vx,
-          diff.vy > 0 ? 0 : diff.vy
-        ) as VirtualAbsolute,
-        size: vp.create(
-          diff.vx > 0 ? diff.vx : -diff.vx,
-          diff.vy > 0 ? diff.vy : -diff.vy
-        ) as VirtualRelative,
+        upperLeft,
+        size: vp.sub(bottomRight, upperLeft) as VirtualRelative,
+        area: { upperLeft, bottomRight },
       });
 
       deletePreview();
@@ -127,17 +155,26 @@ export const useClickController = () => {
           type: "circle",
           fixedPoint: v as VirtualAbsolute,
           style: { stroke: "black", fill: "none" },
+          area: {
+            upperLeft: vp.zero() as VirtualAbsolute,
+            bottomRight: vp.zero() as VirtualAbsolute,
+          },
         });
         return;
       }
 
-      const c = vp.divConst(vp.sub(v, obj.fixedPoint), 2) as VirtualAbsolute;
+      const point2 = vp.sub(v, obj.fixedPoint);
+      const c = vp.divConst(point2, 2) as VirtualAbsolute;
       const r = vp.abs(c) as VirtualRelative;
 
       addObject({
         ...obj,
         r,
         c,
+        area: {
+          upperLeft: vp.min(point2, vp.zero()) as VirtualAbsolute,
+          bottomRight: vp.max(point2, vp.zero()) as VirtualAbsolute,
+        },
       });
       deletePreview();
     },
@@ -237,6 +274,10 @@ export const useClickController = () => {
           upperLeft: vp.zero() as VirtualAbsolute,
           fixedPoint: v as VirtualAbsolute,
           style: { stroke: "black", fill: "none" },
+          area: {
+            upperLeft: vp.zero() as VirtualAbsolute,
+            bottomRight: vp.zero() as VirtualAbsolute,
+          },
         });
       },
     [toRangeSelectMode, toVirtual, updatePreview]

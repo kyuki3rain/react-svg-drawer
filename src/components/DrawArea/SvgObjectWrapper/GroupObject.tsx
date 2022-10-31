@@ -1,3 +1,4 @@
+import { useArea } from "../../../hooks/objects/useArea";
 import { useGroup } from "../../../hooks/objects/useGroup";
 import SvgObjectWrapper from "../SvgObjectWrapper";
 
@@ -15,6 +16,11 @@ const GroupObject: React.FC<Props> = ({
   parentId,
 }) => {
   const { groupPoint, draw, onClick, onMouseDown } = useGroup({
+    obj,
+    parentPoint,
+    parentId,
+  });
+  const area = useArea({
     obj,
     parentPoint,
     parentId,
@@ -37,6 +43,16 @@ const GroupObject: React.FC<Props> = ({
           isSelected={isSelected}
         ></SvgObjectWrapper>
       ))}
+      {area && (
+        <rect
+          x={area.x}
+          y={area.y}
+          width={area.width}
+          height={area.height}
+          stroke="red"
+          fill="none"
+        ></rect>
+      )}
     </svg>
   );
 };
