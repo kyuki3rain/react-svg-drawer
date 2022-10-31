@@ -39,21 +39,21 @@ export const useOnClickObject = () => {
         if (drawMode !== "selector") return false;
         if (!isSelected) return false;
 
-        if (toMoveSelectMode()) {
-          const selectedIdList = snapshot
-            .getLoadable(selectedIdListState)
-            .getValue();
-          const ids = [...selectedIdList];
+        if (!toMoveSelectMode()) return false;
 
-          set(
-            copyingIdsState,
-            new Set(ids.flatMap((id) => copyObject(id, false, false) ?? []))
-          );
+        const selectedIdList = snapshot
+          .getLoadable(selectedIdListState)
+          .getValue();
+        const ids = [...selectedIdList];
 
-          const v = toVirtual(rp.create(x, y));
-          groupingObject(v, ids, "preview");
-          set(stopLogState, true);
-        }
+        set(
+          copyingIdsState,
+          new Set(ids.flatMap((id) => copyObject(id, false, false) ?? []))
+        );
+
+        const v = toVirtual(rp.create(x, y));
+        groupingObject(v, ids, "preview");
+        set(stopLogState, true);
 
         return true;
       },

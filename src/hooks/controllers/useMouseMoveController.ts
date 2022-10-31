@@ -120,8 +120,15 @@ export const useOnMouseMoveController = () => {
 
         switch (drawMode) {
           case "selector": {
-            if (obj && obj.type !== "group") break;
-            onMouseMoveGroup(obj, v);
+            switch (obj?.type) {
+              case "group":
+                onMouseMoveGroup(obj, v);
+                break;
+              case "rect":
+                onMouseMoveRect(obj, v);
+                break;
+              default:
+            }
             break;
           }
           case "line": {

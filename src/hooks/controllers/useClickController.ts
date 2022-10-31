@@ -11,11 +11,12 @@ import { useGroupingObject } from "../../operators/useGroupingObject";
 import { vp } from "../../helpers/virtualPoint";
 import { rp } from "../../helpers/realPoint";
 import { useSelectMode } from "../../operators/useSelectMode";
-import { moveModeState } from "../../states/selectModeState";
+import { moveModeState, selectModeState } from "../../states/selectModeState";
 import {
   copyingIdsState,
   selectedIdListState,
 } from "../../states/selectedIdListState";
+import { useResetPreview } from "../../operators/useResetPreview";
 
 export const useClickController = () => {
   const { updatePreview, deletePreview } = usePreview();
@@ -25,6 +26,7 @@ export const useClickController = () => {
   const { ungroupingPreview } = useGroupingObject();
   const { toRangeSelectMode, resetSelectMode } = useSelectMode();
   const { copyObject, removeTagFromId } = useSvgObject();
+  const { resetPreview } = useResetPreview();
 
   const onClickLine = useCallback(
     (obj: LineObject | null, v: VirtualPoint) => {
@@ -222,45 +224,57 @@ export const useClickController = () => {
 
   const onMousedown = useRecoilCallback(
     ({ snapshot }) =>
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       (x: number, y: number) => {
         const drawMode = snapshot.getLoadable(drawModeState).getValue();
         const isOpen = snapshot.getLoadable(configModalState).getValue().isOpen;
         if (drawMode !== "selector" || isOpen) return;
+        if (!toRangeSelectMode()) return;
 
-        toRangeSelectMode();
+        const v = toVirtual(rp.create(x, y));
+        updatePreview({
+          id: "preview",
+          type: "rect",
+          upperLeft: vp.zero() as VirtualAbsolute,
+          fixedPoint: v as VirtualAbsolute,
+          style: { stroke: "black", fill: "none" },
+        });
       },
-    [toRangeSelectMode]
+    [toRangeSelectMode, toVirtual, updatePreview]
   );
 
   const onMouseup = useRecoilCallback(
     ({ snapshot, set }) =>
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       (x: number, y: number) => {
         const drawMode = snapshot.getLoadable(drawModeState).getValue();
         const isOpen = snapshot.getLoadable(configModalState).getValue().isOpen;
         if (drawMode !== "selector" || isOpen) return;
 
-        const moveMode = snapshot.getLoadable(moveModeState).getValue();
+        const selectMode = snapshot.getLoadable(selectModeState).getValue();
         const v = toVirtual(rp.create(x, y));
-        ungroupingPreview(v);
 
-        if (moveMode === "move") {
-          set(copyingIdsState, new Set());
-        } else {
-          const selectedIdList = [
-            ...snapshot.getLoadable(selectedIdListState).getValue(),
-          ];
-          const newIds = selectedIdList.flatMap(
-            (id) => copyObject(id, true, true) ?? []
-          );
-          resetSelect();
-          newIds.map((id) => select(id));
+        if (selectMode === "range") {
+          resetPreview();
+        } else if (selectMode == "move") {
+          const moveMode = snapshot.getLoadable(moveModeState).getValue();
+          ungroupingPreview(v);
 
-          const copyingIds = [
-            ...snapshot.getLoadable(copyingIdsState).getValue(),
-          ];
-          copyingIds.map((id) => removeTagFromId(id, "copy"));
+          if (moveMode === "move") {
+            set(copyingIdsState, new Set());
+          } else {
+            const selectedIdList = [
+              ...snapshot.getLoadable(selectedIdListState).getValue(),
+            ];
+            const newIds = selectedIdList.flatMap(
+              (id) => copyObject(id, true, true) ?? []
+            );
+            resetSelect();
+            newIds.map((id) => select(id));
+
+            const copyingIds = [
+              ...snapshot.getLoadable(copyingIdsState).getValue(),
+            ];
+            copyingIds.map((id) => removeTagFromId(id, "copy"));
+          }
         }
 
         resetSelectMode();
@@ -268,6 +282,7 @@ export const useClickController = () => {
     [
       copyObject,
       removeTagFromId,
+      resetPreview,
       resetSelect,
       resetSelectMode,
       select,
