@@ -1,16 +1,22 @@
 import { useRecoilCallback } from "recoil";
-import { allSvgObjectSelector } from "../selectors/objectSelector";
+import {
+  allSvgObjectSelector,
+  selectSvgObjectSelector,
+} from "../selectors/objectSelector";
+import { useSvgObject } from "./useSvgObject";
 
 export const useJSON = () => {
+  const { addObject } = useSvgObject();
+
   const toJSON = useRecoilCallback(
     ({ snapshot }) =>
-      () => {
-        const allSvgObject = snapshot
-          .getLoadable(allSvgObjectSelector)
-          .getValue();
+      (isFile?: boolean) => {
+        const objects = isFile
+          ? snapshot.getLoadable(allSvgObjectSelector).getValue()
+          : snapshot.getLoadable(selectSvgObjectSelector).getValue();
         const s = JSON.stringify(
           {
-            objects: allSvgObject.map((obj) => ({
+            objects: objects.map((obj) => ({
               ...obj,
               configMap: obj?.configMap && Array.from(obj.configMap.entries()),
             })),
@@ -27,7 +33,7 @@ export const useJSON = () => {
 
   const fromJSON = useRecoilCallback(
     ({ set }) =>
-      (s: string) => {
+      (s: string, isFile?: boolean) => {
         try {
           const json = JSON.parse(s) as View;
           if (json?.appName && json.version) {
@@ -58,20 +64,27 @@ export const useJSON = () => {
           }
 
           if (json?.objects) {
-            const allSvgObject = json.objects.map(
+            const objects = json.objects.map(
               (obj) =>
                 obj && {
                   ...obj,
                   configMap: obj?.configMap && new Map(obj.configMap),
                 }
             );
-            set(allSvgObjectSelector, allSvgObject);
+
+            if (isFile) {
+              set(allSvgObjectSelector, objects);
+            } else {
+              objects.map(
+                (obj) => obj && obj.id !== "preview" && addObject(obj, obj.id)
+              );
+            }
           }
         } catch (e) {
           console.error(e);
         }
       },
-    []
+    [addObject]
   );
 
   return {
