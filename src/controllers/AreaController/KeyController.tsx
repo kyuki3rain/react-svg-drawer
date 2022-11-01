@@ -12,7 +12,7 @@ const KeyController: React.FC<Props> = ({ children }) => {
     <div
       ref={ref}
       tabIndex={-1}
-      onKeyDown={(e) => onKeyDown(e.key)}
+      onKeyDown={(e) => onKeyDown(e.key, e.ctrlKey || e.metaKey, e.shiftKey)}
       onKeyUp={(e) => onKeyUp(e.key)}
       id="keyController"
     >

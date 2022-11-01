@@ -1,5 +1,6 @@
 import { nanoid } from "nanoid";
 import { useRecoilCallback } from "recoil";
+import { vp } from "../helpers/virtualPoint";
 import { svgObjectListState, svgObjectStates } from "../states/svgObjectState";
 
 export const useSvgObject = () => {
@@ -23,8 +24,18 @@ export const useSvgObject = () => {
   );
 
   const addObject = useRecoilCallback(
-    ({ set }) =>
-      (obj: SvgObject, newId: SvgId = nanoid() as SvgId) => {
+    ({ snapshot, set }) =>
+      (obj: SvgObject, id?: SvgId) => {
+        let newId = id || (nanoid() as SvgId);
+        const list = snapshot.getLoadable(svgObjectListState).getValue();
+        if (list.has(newId)) {
+          newId = nanoid() as SvgId;
+          if (obj.fixedPoint)
+            obj.fixedPoint = vp.add(
+              obj.fixedPoint,
+              vp.one()
+            ) as VirtualAbsolute;
+        }
         set(svgObjectStates(newId), (prev) => {
           if (!prev) return { ...obj, id: newId };
           return prev;
