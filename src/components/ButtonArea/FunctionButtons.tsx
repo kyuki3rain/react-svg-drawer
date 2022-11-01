@@ -11,7 +11,7 @@ import RedoIcon from "@mui/icons-material/Redo";
 import { Fab, Tooltip } from "@mui/material";
 import React from "react";
 import { useFunctionButton } from "../../hooks/buttons/useFunctionButton";
-import BasicMenu from "./WithMenu";
+import ButtonWithMenu from "../common/ButtonWithMenu";
 
 const FunctionButtons: React.FC = () => {
   const {
@@ -77,22 +77,22 @@ const FunctionButtons: React.FC = () => {
           <CloudDownloadIcon />
         </Fab>
       </Tooltip>
-      <BasicMenu
+      <ButtonWithMenu
         title="import"
         icon={<FileUploadIcon />}
         items={[
           { title: "objects", onClick: () => importObjects() },
           { title: "file", onClick: () => importFile() },
         ]}
-      ></BasicMenu>
-      <BasicMenu
+      ></ButtonWithMenu>
+      <ButtonWithMenu
         title="export"
         icon={<FileDownloadIcon />}
         items={[
           { title: "objects", onClick: () => exportObjects() },
           { title: "file", onClick: () => exportFile() },
         ]}
-      ></BasicMenu>
+      ></ButtonWithMenu>
       <Tooltip title="log" style={{ marginRight: 5 }} arrow>
         <Fab aria-label="log" color="default" onClick={logFile}>
           <LogoDevIcon />

@@ -9,7 +9,7 @@ type Props = {
   items: { title: string; onClick: () => void }[];
 };
 
-export default function BasicMenu({ title, items, icon }: Props) {
+export default function ButtonWithMenu({ title, items, icon }: Props) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
