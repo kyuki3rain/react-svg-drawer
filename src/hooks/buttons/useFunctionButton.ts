@@ -37,6 +37,8 @@ export const useFunctionButton = () => {
   const undo = useRecoilCallback(
     ({ snapshot, set }) =>
       () => {
+        if (!snapshot.getLoadable(undoEnableSelector).getValue()) return;
+
         const logs = snapshot.getLoadable(logsState).getValue();
         const nextIndex = snapshot.getLoadable(logIndexState).getValue() - 1;
         set(allSvgObjectSelector, logs[nextIndex - 1].objects);
@@ -50,6 +52,8 @@ export const useFunctionButton = () => {
   const redo = useRecoilCallback(
     ({ snapshot, set }) =>
       () => {
+        if (!snapshot.getLoadable(redoEnableSelector).getValue()) return;
+
         const logs = snapshot.getLoadable(logsState).getValue();
         const nextIndex = snapshot.getLoadable(logIndexState).getValue() + 1;
         set(allSvgObjectSelector, logs[nextIndex - 1].objects);

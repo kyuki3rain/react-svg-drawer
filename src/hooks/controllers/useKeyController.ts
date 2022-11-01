@@ -5,12 +5,14 @@ import { useSelect } from "../../operators/useSelect";
 import { useSelectMode } from "../../operators/useSelectMode";
 import { keyControllerRefState } from "../../states/keyControllerRefState";
 import { snapGridState } from "../../states/snapGridState";
+import { useFunctionButton } from "../buttons/useFunctionButton";
 
 export const useKeyController = () => {
   const { resetPreview } = useResetPreview();
   const { resetSelect } = useSelect();
   const { toMoveMode, toCopyMode, toMultiSelectMode, toNormalSelectMode } =
     useSelectMode();
+  const { undo, redo } = useFunctionButton();
 
   const ref = useRef<HTMLDivElement>(null);
   const setRef = useSetRecoilState(keyControllerRefState);
@@ -38,8 +40,12 @@ export const useKeyController = () => {
 
   const onKeyDown = useRecoilCallback(
     ({ set }) =>
-      (key: string) => {
+      (key: string, ctrl: boolean, shift: boolean) => {
         switch (key) {
+          case "z":
+            if (shift && ctrl) redo();
+            else if (ctrl) undo();
+            break;
           case "Escape":
             resetPreview();
             resetSelect();
@@ -56,7 +62,7 @@ export const useKeyController = () => {
           default:
         }
       },
-    [resetPreview, resetSelect, toCopyMode, toMultiSelectMode]
+    [redo, resetPreview, resetSelect, toCopyMode, toMultiSelectMode, undo]
   );
 
   return {
