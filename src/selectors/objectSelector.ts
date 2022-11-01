@@ -1,8 +1,9 @@
 import { DefaultValue, selector } from "recoil";
+import { selectedIdListState } from "../states/selectedIdListState";
 import { svgObjectListState, svgObjectStates } from "../states/svgObjectState";
 
 export const allSvgObjectSelector = selector({
-  key: "objectView",
+  key: "allSvgObjectSelector",
   get: ({ get }) =>
     [...get(svgObjectListState)].map((id) => get(svgObjectStates(id))),
   set: ({ get, set, reset }, newValue) => {
@@ -22,4 +23,10 @@ export const allSvgObjectSelector = selector({
 
     set(svgObjectListState, new Set(idList));
   },
+});
+
+export const selectSvgObjectSelector = selector({
+  key: "selectSvgObjectSelector",
+  get: ({ get }) =>
+    [...get(selectedIdListState)].map((id) => get(svgObjectStates(id))),
 });

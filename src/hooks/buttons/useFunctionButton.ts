@@ -71,7 +71,7 @@ export const useFunctionButton = () => {
   );
 
   const saveFile = useCallback(() => {
-    const json = toJSON();
+    const json = toJSON(true);
 
     localStorage.setItem("view", json);
   }, [toJSON]);
@@ -83,37 +83,45 @@ export const useFunctionButton = () => {
       return;
     }
 
-    fromJSON(json);
+    fromJSON(json, true);
   }, [fromJSON]);
 
   const newFile = useCallback(() => {
-    fromJSON(defaultJSON);
+    fromJSON(defaultJSON, true);
     resetLog();
   }, [fromJSON, resetLog]);
 
-  const importFile = useCallback(() => {
-    if (!uploadFile) return;
-    uploadFile({ accept: "*.json", multiple: false }, (p) => {
-      p[0].file.text().then((s) => {
-        fromJSON(s);
+  const importObjects = useCallback(
+    (isFile = false) => {
+      if (!uploadFile) return;
+      uploadFile({ accept: "*.json", multiple: false }, (p) => {
+        p[0].file.text().then((s) => {
+          fromJSON(s, isFile);
+        });
       });
-    });
-  }, [fromJSON, uploadFile]);
+    },
+    [fromJSON, uploadFile]
+  );
+  const importFile = useCallback(() => importObjects(true), [importObjects]);
 
-  const exportFile = useCallback(() => {
-    const fileName =
-      "svg_drawer_" + dayjs().format("YYYYMMDD_HHmmss") + ".json";
-    const data = new Blob([toJSON()], { type: "text/json" });
-    const jsonURL = window.URL.createObjectURL(data);
-    const link = document.createElement("a");
-    document.body.appendChild(link);
-    link.href = jsonURL;
-    link.setAttribute("download", fileName);
-    link.click();
-    document.body.removeChild(link);
-  }, [toJSON]);
+  const exportObjects = useCallback(
+    (isFile = false) => {
+      const fileName =
+        "svg_drawer_" + dayjs().format("YYYYMMDD_HHmmss") + ".json";
+      const data = new Blob([toJSON(isFile)], { type: "text/json" });
+      const jsonURL = window.URL.createObjectURL(data);
+      const link = document.createElement("a");
+      document.body.appendChild(link);
+      link.href = jsonURL;
+      link.setAttribute("download", fileName);
+      link.click();
+      document.body.removeChild(link);
+    },
+    [toJSON]
+  );
+  const exportFile = useCallback(() => exportObjects(true), [exportObjects]);
 
-  const logFile = useCallback(() => console.log(toJSON()), [toJSON]);
+  const logFile = useCallback(() => console.log(toJSON(true)), [toJSON]);
 
   const toggleShowAreaMode = useCallback(
     () => setShowAreaMode((prev) => !prev),
@@ -131,7 +139,9 @@ export const useFunctionButton = () => {
     saveFile,
     loadFile,
     newFile,
+    importObjects,
     importFile,
+    exportObjects,
     exportFile,
     logFile,
     toggleShowAreaMode,

@@ -11,6 +11,7 @@ import RedoIcon from "@mui/icons-material/Redo";
 import { Fab, Tooltip } from "@mui/material";
 import React from "react";
 import { useFunctionButton } from "../../hooks/buttons/useFunctionButton";
+import BasicMenu from "./WithMenu";
 
 const FunctionButtons: React.FC = () => {
   const {
@@ -24,7 +25,9 @@ const FunctionButtons: React.FC = () => {
     saveFile,
     loadFile,
     newFile,
+    importObjects,
     importFile,
+    exportObjects,
     exportFile,
     logFile,
     toggleShowAreaMode,
@@ -74,16 +77,22 @@ const FunctionButtons: React.FC = () => {
           <CloudDownloadIcon />
         </Fab>
       </Tooltip>
-      <Tooltip title="import" style={{ marginRight: 5 }} arrow>
-        <Fab aria-label="import" color="default" onClick={importFile}>
-          <FileUploadIcon />
-        </Fab>
-      </Tooltip>
-      <Tooltip title="export" style={{ marginRight: 5 }} arrow>
-        <Fab aria-label="export" color="default" onClick={exportFile}>
-          <FileDownloadIcon />
-        </Fab>
-      </Tooltip>
+      <BasicMenu
+        title="import"
+        icon={<FileUploadIcon />}
+        items={[
+          { title: "objects", onClick: () => importObjects() },
+          { title: "file", onClick: () => importFile() },
+        ]}
+      ></BasicMenu>
+      <BasicMenu
+        title="export"
+        icon={<FileDownloadIcon />}
+        items={[
+          { title: "objects", onClick: () => exportObjects() },
+          { title: "file", onClick: () => exportFile() },
+        ]}
+      ></BasicMenu>
       <Tooltip title="log" style={{ marginRight: 5 }} arrow>
         <Fab aria-label="log" color="default" onClick={logFile}>
           <LogoDevIcon />
