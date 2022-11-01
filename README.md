@@ -146,6 +146,26 @@ group 化された object の group 化を解除する
 
 画面上にあるオブジェクト全ての領域を赤枠で表示する
 
+## ショートカット
+
+Mac では Ctrl, Command どちらも Ctrl とみなす
+
+### Ctrl + C
+
+選択されたオブジェクトの情報をクリップボードに書き込む（≒ exportObjects）
+
+### Ctrl + V
+
+クリップボードに書き込まれた情報を object のリストとして読み込む（≒ importObjects）
+
+### Ctrl + Z
+
+undo と同じ
+
+### Ctrl + Shift + Z
+
+redo と同じ
+
 # その他
 
 ## without snap mode
