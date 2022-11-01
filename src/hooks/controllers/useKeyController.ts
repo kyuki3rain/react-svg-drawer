@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import { useRecoilCallback, useSetRecoilState } from "recoil";
+import { useJSON } from "../../operators/useJSON";
 import { useResetPreview } from "../../operators/useResetPreview";
 import { useSelect } from "../../operators/useSelect";
 import { useSelectMode } from "../../operators/useSelectMode";
@@ -13,6 +14,7 @@ export const useKeyController = () => {
   const { toMoveMode, toCopyMode, toMultiSelectMode, toNormalSelectMode } =
     useSelectMode();
   const { undo, redo } = useFunctionButton();
+  const { fromJSON, toJSON } = useJSON();
 
   const ref = useRef<HTMLDivElement>(null);
   const setRef = useSetRecoilState(keyControllerRefState);
@@ -42,6 +44,22 @@ export const useKeyController = () => {
     ({ set }) =>
       (key: string, ctrl: boolean, shift: boolean) => {
         switch (key) {
+          case "c":
+            if (ctrl)
+              navigator.clipboard.writeText(toJSON(false)).catch((err) => {
+                console.error("Async: Could not copy text: ", err);
+              });
+            break;
+          case "v":
+            navigator.clipboard
+              .readText()
+              .then((s) => {
+                fromJSON(s, false);
+              })
+              .catch((err) => {
+                console.error("Async: Could not copy text: ", err);
+              });
+            break;
           case "z":
             if (shift && ctrl) redo();
             else if (ctrl) undo();
@@ -62,7 +80,16 @@ export const useKeyController = () => {
           default:
         }
       },
-    [redo, resetPreview, resetSelect, toCopyMode, toMultiSelectMode, undo]
+    [
+      fromJSON,
+      redo,
+      resetPreview,
+      resetSelect,
+      toCopyMode,
+      toJSON,
+      toMultiSelectMode,
+      undo,
+    ]
   );
 
   return {
