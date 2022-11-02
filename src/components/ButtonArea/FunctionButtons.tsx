@@ -17,7 +17,6 @@ const FunctionButtons: React.FC = () => {
   const {
     canUndo,
     canRedo,
-    showAreaMode,
     redo,
     undo,
     grouping,
@@ -30,7 +29,6 @@ const FunctionButtons: React.FC = () => {
     exportObjects,
     exportFile,
     logFile,
-    toggleShowAreaMode,
   } = useFunctionButton();
 
   return (
@@ -95,15 +93,6 @@ const FunctionButtons: React.FC = () => {
       ></ButtonWithMenu>
       <Tooltip title="log" style={{ marginRight: 5 }} arrow>
         <Fab aria-label="log" color="default" onClick={logFile}>
-          <LogoDevIcon />
-        </Fab>
-      </Tooltip>
-      <Tooltip title="showAreaMode" style={{ marginRight: 5 }} arrow>
-        <Fab
-          aria-label="showAreaMode"
-          color={showAreaMode ? "info" : "default"}
-          onClick={toggleShowAreaMode}
-        >
           <LogoDevIcon />
         </Fab>
       </Tooltip>

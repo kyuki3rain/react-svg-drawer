@@ -24,6 +24,7 @@ const CircleObject: React.FC<Props> = ({
     obj,
     parentPoint,
     parentId,
+    isSelected,
   });
   if (!c || !r) return null;
 
@@ -65,8 +66,9 @@ const CircleObject: React.FC<Props> = ({
           y={area.y}
           width={area.width}
           height={area.height}
-          stroke="red"
+          stroke="blue"
           fill="none"
+          strokeDasharray="4 4"
         ></rect>
       )}
     </>
