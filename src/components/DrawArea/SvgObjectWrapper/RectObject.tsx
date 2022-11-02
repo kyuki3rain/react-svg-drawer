@@ -15,7 +15,7 @@ const RectObject: React.FC<Props> = ({
   isSelected,
   parentId,
 }) => {
-  const { r, s, onClick, onMouseDown } = useRect({
+  const { r, s, onClick, onMouseDown, style } = useRect({
     obj,
     parentPoint,
     parentId,
@@ -26,7 +26,7 @@ const RectObject: React.FC<Props> = ({
     parentId,
     isSelected,
   });
-  if (!r || !s) return null;
+  if (!r || !s || !style) return null;
 
   return (
     <>
@@ -35,17 +35,17 @@ const RectObject: React.FC<Props> = ({
         y={r.y}
         width={s.x}
         height={s.y}
-        {...obj.style}
-        stroke={isSelected ? "blue" : obj.style.stroke}
+        {...style}
+        stroke={isSelected ? "blue" : style.stroke}
       ></rect>
       <rect
         x={r.x}
         y={r.y}
         width={s.x}
         height={s.y}
-        {...obj.style}
+        {...style}
         strokeWidth={
-          (obj.style.strokeWidth ?? 0) + CLICK_TARGET_OBJECT.defaultStrokeWidth
+          (style.strokeWidth ?? 0) + CLICK_TARGET_OBJECT.defaultStrokeWidth
         }
         strokeOpacity="0"
         onClick={(e) => onClick(() => e.stopPropagation())}

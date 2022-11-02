@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 import { useRecoilValue } from "recoil";
 import { vp } from "../helpers/virtualPoint";
 import { areaConfigState } from "../states/areaConfigState";
@@ -63,11 +63,20 @@ export const useObject = ({ obj, parentPoint, parentId }: Props) => {
     []
   );
 
+  const style = useMemo(() => {
+    if (obj.type === "group") return null;
+    return {
+      ...obj.style,
+      strokeWidth: obj.style.strokeWidth && obj.style.strokeWidth * pitch,
+    };
+  }, [obj, pitch]);
+
   return {
     toRealAbsolute,
     toRealRelative,
     onClick,
     onMouseDown,
     pointToText,
+    style,
   };
 };

@@ -8,11 +8,12 @@ type Props = {
 };
 
 export const usePolyline = ({ obj, parentPoint, parentId }: Props) => {
-  const { toRealAbsolute, onClick, onMouseDown, pointToText } = useObject({
-    obj,
-    parentPoint,
-    parentId,
-  });
+  const { toRealAbsolute, onClick, onMouseDown, pointToText, style } =
+    useObject({
+      obj,
+      parentPoint,
+      parentId,
+    });
 
   const points = useMemo(
     () =>
@@ -27,5 +28,6 @@ export const usePolyline = ({ obj, parentPoint, parentId }: Props) => {
     draw: points !== "",
     onClick,
     onMouseDown,
+    style,
   };
 };

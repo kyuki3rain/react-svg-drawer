@@ -15,7 +15,7 @@ const CircleObject: React.FC<Props> = ({
   isSelected,
   parentId,
 }) => {
-  const { c, r, onClick, onMouseDown } = useCircle({
+  const { c, r, onClick, onMouseDown, style } = useCircle({
     obj,
     parentPoint,
     parentId,
@@ -26,7 +26,7 @@ const CircleObject: React.FC<Props> = ({
     parentId,
     isSelected,
   });
-  if (!c || !r) return null;
+  if (!c || !r || !style) return null;
 
   return (
     <>
@@ -35,18 +35,18 @@ const CircleObject: React.FC<Props> = ({
         cy={c.y}
         rx={r.x}
         ry={r.y}
-        {...obj.style}
+        {...style}
         style={{ pointerEvents: "none" }}
-        stroke={isSelected ? "blue" : obj.style.stroke}
+        stroke={isSelected ? "blue" : style.stroke}
       ></ellipse>
       <ellipse
         cx={c.x}
         cy={c.y}
         rx={r.x}
         ry={r.y}
-        {...obj.style}
+        {...style}
         strokeWidth={
-          (obj.style.strokeWidth ?? 0) + CLICK_TARGET_OBJECT.defaultStrokeWidth
+          (style.strokeWidth ?? 0) + CLICK_TARGET_OBJECT.defaultStrokeWidth
         }
         strokeOpacity={CLICK_TARGET_OBJECT.strokeOpacity}
         fillOpacity={CLICK_TARGET_OBJECT.strokeOpacity}

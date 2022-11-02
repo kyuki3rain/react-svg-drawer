@@ -42,7 +42,7 @@ export const useClickController = () => {
           type: "line",
           fixedPoint: v as VirtualAbsolute,
           point1: vp.zero() as VirtualAbsolute,
-          style: { stroke: "black", strokeWidth: 1, fill: "none" },
+          style: { stroke: "black", strokeWidth: 0.2, fill: "none" },
           area: {
             upperLeft: vp.zero() as VirtualAbsolute,
             bottomRight: vp.zero() as VirtualAbsolute,
@@ -74,7 +74,7 @@ export const useClickController = () => {
           type: "polyline",
           fixedPoint: v as VirtualAbsolute,
           points: [vp.zero() as VirtualAbsolute],
-          style: { stroke: "black", strokeWidth: 1, fill: "none" },
+          style: { stroke: "black", strokeWidth: 0.2, fill: "none" },
           area: {
             upperLeft: vp.zero() as VirtualAbsolute,
             bottomRight: vp.zero() as VirtualAbsolute,
@@ -117,7 +117,7 @@ export const useClickController = () => {
           type: "rect",
           upperLeft: vp.zero() as VirtualAbsolute,
           fixedPoint: v as VirtualAbsolute,
-          style: { stroke: "black", strokeWidth: 1, fill: "none" },
+          style: { stroke: "black", strokeWidth: 0.2, fill: "none" },
           area: {
             upperLeft: vp.zero() as VirtualAbsolute,
             bottomRight: vp.zero() as VirtualAbsolute,
@@ -160,7 +160,7 @@ export const useClickController = () => {
           id: "preview",
           type: "circle",
           fixedPoint: v as VirtualAbsolute,
-          style: { stroke: "black", strokeWidth: 1, fill: "none" },
+          style: { stroke: "black", strokeWidth: 0.2, fill: "none" },
           area: {
             upperLeft: vp.zero() as VirtualAbsolute,
             bottomRight: vp.zero() as VirtualAbsolute,
@@ -274,7 +274,7 @@ export const useClickController = () => {
           type: "rect",
           upperLeft: vp.zero() as VirtualAbsolute,
           fixedPoint: v as VirtualAbsolute,
-          style: { stroke: "black", strokeWidth: 1, fill: "none" },
+          style: { stroke: "black", strokeWidth: 0.2, fill: "none" },
           area: {
             upperLeft: vp.zero() as VirtualAbsolute,
             bottomRight: vp.zero() as VirtualAbsolute,
