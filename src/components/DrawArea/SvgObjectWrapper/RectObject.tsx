@@ -35,6 +35,14 @@ const RectObject: React.FC<Props> = ({
         width={s.x}
         height={s.y}
         {...obj.style}
+        stroke={isSelected ? "blue" : obj.style.stroke}
+      ></rect>
+      <rect
+        x={r.x}
+        y={r.y}
+        width={s.x}
+        height={s.y}
+        {...obj.style}
         strokeWidth={
           (obj.style.strokeWidth ?? 0) + CLICK_TARGET_OBJECT.defaultStrokeWidth
         }
@@ -49,14 +57,7 @@ const RectObject: React.FC<Props> = ({
           )
         }
       ></rect>
-      <rect
-        x={r.x}
-        y={r.y}
-        width={s.x}
-        height={s.y}
-        {...obj.style}
-        stroke={isSelected ? "blue" : "black"}
-      ></rect>
+
       {area && (
         <rect
           x={area.x}
