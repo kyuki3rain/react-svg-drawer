@@ -15,7 +15,7 @@ const PolylineObject: React.FC<Props> = ({
   isSelected,
   parentId,
 }) => {
-  const { points, draw, onClick, onMouseDown } = usePolyline({
+  const { points, draw, onClick, onMouseDown, style } = usePolyline({
     obj,
     parentPoint,
     parentId,
@@ -24,16 +24,22 @@ const PolylineObject: React.FC<Props> = ({
     obj,
     parentPoint,
     parentId,
+    isSelected,
   });
-  if (!draw) return null;
+  if (!draw || !style) return null;
 
   return (
     <>
       <polyline
         points={points}
-        {...obj.style}
+        {...style}
+        stroke={isSelected ? "blue" : style.stroke}
+      ></polyline>
+      <polyline
+        points={points}
+        {...style}
         strokeWidth={
-          (obj.style.strokeWidth ?? 0) + CLICK_TARGET_OBJECT.defaultStrokeWidth
+          (style.strokeWidth ?? 0) + CLICK_TARGET_OBJECT.defaultStrokeWidth
         }
         strokeOpacity="0"
         onClick={(e) => onClick(() => e.stopPropagation())}
@@ -46,19 +52,15 @@ const PolylineObject: React.FC<Props> = ({
           )
         }
       ></polyline>
-      <polyline
-        points={points}
-        {...obj.style}
-        stroke={isSelected ? "blue" : "black"}
-      ></polyline>
       {area && (
         <rect
           x={area.x}
           y={area.y}
           width={area.width}
           height={area.height}
-          stroke="red"
+          stroke="blue"
           fill="none"
+          strokeDasharray="4 4"
         ></rect>
       )}
     </>

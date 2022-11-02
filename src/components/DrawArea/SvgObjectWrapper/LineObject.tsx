@@ -15,7 +15,7 @@ const LineObject: React.FC<Props> = ({
   isSelected,
   parentId,
 }) => {
-  const { r1, r2, onClick, onMouseDown } = useLine({
+  const { r1, r2, onClick, onMouseDown, style } = useLine({
     obj,
     parentPoint,
     parentId,
@@ -24,8 +24,9 @@ const LineObject: React.FC<Props> = ({
     obj,
     parentPoint,
     parentId,
+    isSelected,
   });
-  if (!r1 || !r2) return null;
+  if (!r1 || !r2 || !style) return null;
 
   return (
     <>
@@ -34,9 +35,17 @@ const LineObject: React.FC<Props> = ({
         y1={r1.y}
         x2={r2.x}
         y2={r2.y}
-        {...obj.style}
+        {...style}
+        stroke={isSelected ? "blue" : style.stroke}
+      ></line>
+      <line
+        x1={r1.x}
+        y1={r1.y}
+        x2={r2.x}
+        y2={r2.y}
+        {...style}
         strokeWidth={
-          (obj.style.strokeWidth ?? 0) + CLICK_TARGET_OBJECT.defaultStrokeWidth
+          (style.strokeWidth ?? 0) + CLICK_TARGET_OBJECT.defaultStrokeWidth
         }
         strokeOpacity={CLICK_TARGET_OBJECT.strokeOpacity}
         onClick={(e) => onClick(() => e.stopPropagation())}
@@ -49,22 +58,15 @@ const LineObject: React.FC<Props> = ({
           )
         }
       ></line>
-      <line
-        x1={r1.x}
-        y1={r1.y}
-        x2={r2.x}
-        y2={r2.y}
-        {...obj.style}
-        stroke={isSelected ? "blue" : "black"}
-      ></line>
       {area && (
         <rect
           x={area.x}
           y={area.y}
           width={area.width}
           height={area.height}
-          stroke="red"
+          stroke="blue"
           fill="none"
+          strokeDasharray="4 4"
         ></rect>
       )}
     </>

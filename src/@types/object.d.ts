@@ -16,7 +16,6 @@ type SvgObjectStyle = {
 
 type SvgObjectCommon = {
   id?: SvgId | "preview";
-  style: SvgObjectStyle;
   configMap?: Map<string, string>;
   fixedPoint?: VirtualAbsolute;
   area: Area;
@@ -26,17 +25,22 @@ type LineObject = {
   type: "line";
   point1?: VirtualAbsolute;
   point2?: VirtualAbsolute;
+  style: SvgObjectStyle;
 } & SvgObjectCommon;
 
 type PolylineObject = {
   type: "polyline";
   points: VirtualAbsolute[];
   previewPoint?: VirtualAbsolute;
+  style: SvgObjectStyle;
 } & SvgObjectCommon;
 
 type TextObject = {
   type: "text";
   point?: VirtualAbsolute;
+  style: SvgObjectStyle & {
+    fontSize: number;
+  };
 } & SvgObjectCommon;
 
 type RectObject = {
@@ -44,12 +48,14 @@ type RectObject = {
   upperLeft: VirtualAbsolute;
   size?: VirtualRelative;
   rx?: number;
+  style: SvgObjectStyle;
 } & SvgObjectCommon;
 
 type CircleObject = {
   type: "circle";
   c?: VirtualAbsolute;
   r?: VirtualRelative;
+  style: SvgObjectStyle;
 } & SvgObjectCommon;
 
 type GroupObject = {

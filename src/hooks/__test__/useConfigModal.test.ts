@@ -62,7 +62,7 @@ describe("useConfigModal", () => {
       preview: {
         type: "text",
         configMap: new Map([["text", ""]]),
-        style: { stroke: "black" },
+        style: { stroke: "black", strokeWidth: 0.2, fill: "none" },
       } as TextObject,
     };
 

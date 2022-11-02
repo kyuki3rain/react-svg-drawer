@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import { useRecoilCallback, useSetRecoilState } from "recoil";
+import { useDeleteSelectedObjects } from "../../operators/useDeleteSelectedObject";
 import { useJSON } from "../../operators/useJSON";
 import { useResetPreview } from "../../operators/useResetPreview";
 import { useSelect } from "../../operators/useSelect";
@@ -15,6 +16,7 @@ export const useKeyController = () => {
     useSelectMode();
   const { undo, redo } = useFunctionButton();
   const { fromJSON, toJSON } = useJSON();
+  const { deleteSelectedObjectes } = useDeleteSelectedObjects();
 
   const ref = useRef<HTMLDivElement>(null);
   const setRef = useSetRecoilState(keyControllerRefState);
@@ -60,9 +62,22 @@ export const useKeyController = () => {
                 console.error("Async: Could not copy text: ", err);
               });
             break;
+          case "x":
+            if (ctrl)
+              navigator.clipboard
+                .writeText(toJSON(false))
+                .then(() => deleteSelectedObjectes())
+                .catch((err) => {
+                  console.error("Async: Could not copy text: ", err);
+                });
+            break;
           case "z":
             if (shift && ctrl) redo();
             else if (ctrl) undo();
+            break;
+          case "Backspace":
+          case "Delete":
+            deleteSelectedObjectes();
             break;
           case "Escape":
             resetPreview();
@@ -81,6 +96,7 @@ export const useKeyController = () => {
         }
       },
     [
+      deleteSelectedObjectes,
       fromJSON,
       redo,
       resetPreview,

@@ -15,7 +15,7 @@ const CircleObject: React.FC<Props> = ({
   isSelected,
   parentId,
 }) => {
-  const { c, r, onClick, onMouseDown } = useCircle({
+  const { c, r, onClick, onMouseDown, style } = useCircle({
     obj,
     parentPoint,
     parentId,
@@ -24,8 +24,9 @@ const CircleObject: React.FC<Props> = ({
     obj,
     parentPoint,
     parentId,
+    isSelected,
   });
-  if (!c || !r) return null;
+  if (!c || !r || !style) return null;
 
   return (
     <>
@@ -34,11 +35,21 @@ const CircleObject: React.FC<Props> = ({
         cy={c.y}
         rx={r.x}
         ry={r.y}
-        {...obj.style}
+        {...style}
+        style={{ pointerEvents: "none" }}
+        stroke={isSelected ? "blue" : style.stroke}
+      ></ellipse>
+      <ellipse
+        cx={c.x}
+        cy={c.y}
+        rx={r.x}
+        ry={r.y}
+        {...style}
         strokeWidth={
-          (obj.style.strokeWidth ?? 0) + CLICK_TARGET_OBJECT.defaultStrokeWidth
+          (style.strokeWidth ?? 0) + CLICK_TARGET_OBJECT.defaultStrokeWidth
         }
         strokeOpacity={CLICK_TARGET_OBJECT.strokeOpacity}
+        fillOpacity={CLICK_TARGET_OBJECT.strokeOpacity}
         onClick={(e) => onClick(() => e.stopPropagation())}
         onMouseDown={(e) =>
           onMouseDown(
@@ -49,23 +60,15 @@ const CircleObject: React.FC<Props> = ({
           )
         }
       ></ellipse>
-      <ellipse
-        cx={c.x}
-        cy={c.y}
-        rx={r.x}
-        ry={r.y}
-        {...obj.style}
-        style={{ pointerEvents: "none" }}
-        stroke={isSelected ? "blue" : "black"}
-      ></ellipse>
       {area && (
         <rect
           x={area.x}
           y={area.y}
           width={area.width}
           height={area.height}
-          stroke="red"
+          stroke="blue"
           fill="none"
+          strokeDasharray="4 4"
         ></rect>
       )}
     </>

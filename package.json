@@ -1,7 +1,7 @@
 {
   "name": "react-svg-drawer",
   "private": true,
-  "version": "0.3.3",
+  "version": "0.3.4",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -21,6 +21,7 @@
     "nanoid": "^4.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-hook-form": "^7.39.0",
     "recoil": "^0.7.6"
   },
   "devDependencies": {

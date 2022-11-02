@@ -14,7 +14,7 @@ const TextObject: React.FC<Props> = ({
   isSelected,
   parentId,
 }) => {
-  const { r, text, onClick, onMouseDown } = useText({
+  const { r, text, onClick, onMouseDown, style } = useText({
     obj,
     parentPoint,
     parentId,
@@ -23,16 +23,17 @@ const TextObject: React.FC<Props> = ({
     obj,
     parentPoint,
     parentId,
+    isSelected,
   });
-  if (!r || !text) return null;
+  if (!r || !text || !style) return null;
 
   return (
     <>
       <text
         x={r.x}
         y={r.y}
-        {...obj.style}
-        stroke={isSelected ? "blue" : "black"}
+        {...style}
+        fill={isSelected ? "blue" : style.fill}
         onClick={(e) => onClick(() => e.stopPropagation())}
         onMouseDown={(e) =>
           onMouseDown(
@@ -51,8 +52,9 @@ const TextObject: React.FC<Props> = ({
           y={area.y}
           width={area.width}
           height={area.height}
-          stroke="red"
+          stroke="blue"
           fill="none"
+          strokeDasharray="4 4"
         ></rect>
       )}
     </>

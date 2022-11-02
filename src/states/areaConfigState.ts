@@ -5,8 +5,3 @@ export const areaConfigState = atom({
   key: "areaConfigState",
   default: { pitch: 10, upperLeft: vp.zero() },
 });
-
-export const showAreaModeState = atom({
-  key: "showAreaModeState",
-  default: false,
-});
