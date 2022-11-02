@@ -64,11 +64,21 @@ export const useObject = ({ obj, parentPoint, parentId }: Props) => {
   );
 
   const style = useMemo(() => {
-    if (obj.type === "group") return null;
-    return {
-      ...obj.style,
-      strokeWidth: obj.style.strokeWidth && obj.style.strokeWidth * pitch,
-    };
+    switch (obj.type) {
+      case "group":
+        return null;
+      case "text":
+        return {
+          ...obj.style,
+          strokeWidth: obj.style.strokeWidth && obj.style.strokeWidth * pitch,
+          fontSize: obj.style.fontSize && obj.style.fontSize * pitch,
+        };
+      default:
+        return {
+          ...obj.style,
+          strokeWidth: obj.style.strokeWidth && obj.style.strokeWidth * pitch,
+        };
+    }
   }, [obj, pitch]);
 
   return {

@@ -33,7 +33,7 @@ const TextObject: React.FC<Props> = ({
         x={r.x}
         y={r.y}
         {...style}
-        stroke={isSelected ? "blue" : style.stroke}
+        fill={isSelected ? "blue" : style.fill}
         onClick={(e) => onClick(() => e.stopPropagation())}
         onMouseDown={(e) =>
           onMouseDown(
