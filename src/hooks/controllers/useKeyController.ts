@@ -62,6 +62,15 @@ export const useKeyController = () => {
                 console.error("Async: Could not copy text: ", err);
               });
             break;
+          case "x":
+            if (ctrl)
+              navigator.clipboard
+                .writeText(toJSON(false))
+                .then(() => deleteSelectedObjectes())
+                .catch((err) => {
+                  console.error("Async: Could not copy text: ", err);
+                });
+            break;
           case "z":
             if (shift && ctrl) redo();
             else if (ctrl) undo();
