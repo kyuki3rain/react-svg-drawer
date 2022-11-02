@@ -35,6 +35,14 @@ const LineObject: React.FC<Props> = ({
         x2={r2.x}
         y2={r2.y}
         {...obj.style}
+        stroke={isSelected ? "blue" : obj.style.stroke}
+      ></line>
+      <line
+        x1={r1.x}
+        y1={r1.y}
+        x2={r2.x}
+        y2={r2.y}
+        {...obj.style}
         strokeWidth={
           (obj.style.strokeWidth ?? 0) + CLICK_TARGET_OBJECT.defaultStrokeWidth
         }
@@ -48,14 +56,6 @@ const LineObject: React.FC<Props> = ({
             isSelected
           )
         }
-      ></line>
-      <line
-        x1={r1.x}
-        y1={r1.y}
-        x2={r2.x}
-        y2={r2.y}
-        {...obj.style}
-        stroke={isSelected ? "blue" : "black"}
       ></line>
       {area && (
         <rect

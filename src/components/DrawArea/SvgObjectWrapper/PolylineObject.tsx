@@ -32,6 +32,11 @@ const PolylineObject: React.FC<Props> = ({
       <polyline
         points={points}
         {...obj.style}
+        stroke={isSelected ? "blue" : obj.style.stroke}
+      ></polyline>
+      <polyline
+        points={points}
+        {...obj.style}
         strokeWidth={
           (obj.style.strokeWidth ?? 0) + CLICK_TARGET_OBJECT.defaultStrokeWidth
         }
@@ -45,11 +50,6 @@ const PolylineObject: React.FC<Props> = ({
             isSelected
           )
         }
-      ></polyline>
-      <polyline
-        points={points}
-        {...obj.style}
-        stroke={isSelected ? "blue" : "black"}
       ></polyline>
       {area && (
         <rect

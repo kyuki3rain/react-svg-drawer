@@ -35,10 +35,20 @@ const CircleObject: React.FC<Props> = ({
         rx={r.x}
         ry={r.y}
         {...obj.style}
+        style={{ pointerEvents: "none" }}
+        stroke={isSelected ? "blue" : obj.style.stroke}
+      ></ellipse>
+      <ellipse
+        cx={c.x}
+        cy={c.y}
+        rx={r.x}
+        ry={r.y}
+        {...obj.style}
         strokeWidth={
           (obj.style.strokeWidth ?? 0) + CLICK_TARGET_OBJECT.defaultStrokeWidth
         }
         strokeOpacity={CLICK_TARGET_OBJECT.strokeOpacity}
+        fillOpacity={CLICK_TARGET_OBJECT.strokeOpacity}
         onClick={(e) => onClick(() => e.stopPropagation())}
         onMouseDown={(e) =>
           onMouseDown(
@@ -48,15 +58,6 @@ const CircleObject: React.FC<Props> = ({
             isSelected
           )
         }
-      ></ellipse>
-      <ellipse
-        cx={c.x}
-        cy={c.y}
-        rx={r.x}
-        ry={r.y}
-        {...obj.style}
-        style={{ pointerEvents: "none" }}
-        stroke={isSelected ? "blue" : "black"}
       ></ellipse>
       {area && (
         <rect

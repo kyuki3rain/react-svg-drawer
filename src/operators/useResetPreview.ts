@@ -56,7 +56,7 @@ export const useResetPreview = () => {
             updatePreview({
               type: "text",
               configMap: configMap ?? new Map(textConfig),
-              style: { stroke: "black" },
+              style: { stroke: "black", strokeWidth: 1, fill: "none" },
               area: {
                 upperLeft: vp.zero() as VirtualAbsolute,
                 bottomRight: vp.zero() as VirtualAbsolute,
