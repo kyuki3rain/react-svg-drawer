@@ -8,7 +8,7 @@ Object を選択できる。
 
 選択されたオブジェクトは縁が青くなる。
 
-選択されたオブジェクトの style は右上に現れる style Window で編集ができる。
+選択されたオブジェクトの style は右上に現れる style Window で編集ができる。詳細は[こちら](#style-window)
 
 複数選択している場合、それらの値をまとめて変更する。
 
@@ -150,6 +150,38 @@ group 化された object の group 化を解除する
 
 画面上にあるオブジェクト全ての領域を赤枠で表示する
 
+# style window
+
+グループ化したオブジェクト以外に対し、以下のパラメータを設定できる
+
+### stroke
+
+縁の色
+
+default: black
+
+指定できる値は[このリンクを参照](https://www.w3.org/TR/SVG/painting.html#SpecifyingPaint)
+
+カラーコード(例：#ffffff)、カラーネーム(例：white)、その他の指定(例：none（枠なし）)などが使える。
+
+### strokeWidth
+
+縁の幅。
+
+default: 1
+
+指定できる値は自然数(0 以上の整数)
+
+### fill
+
+オブジェクト内部の色
+
+default: none
+
+指定できる値は[stroke](#stroke)と同じ
+
+###
+
 # ショートカット
 
 Mac では Ctrl, Command どちらも Ctrl とみなす
@@ -164,11 +196,11 @@ Mac では Ctrl, Command どちらも Ctrl とみなす
 
 ### Ctrl + Z
 
-undo と同じ
+[undo](#undo) と同じ
 
 ### Ctrl + Shift + Z
 
-redo と同じ
+[redo](#redo) と同じ
 
 # その他
 
