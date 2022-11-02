@@ -8,7 +8,7 @@ type Props = {
 };
 
 export const useText = ({ obj, parentPoint, parentId }: Props) => {
-  const { toRealAbsolute, onClick, onMouseDown } = useObject({
+  const { toRealAbsolute, onClick, onMouseDown, style } = useObject({
     obj,
     parentPoint,
     parentId,
@@ -25,5 +25,6 @@ export const useText = ({ obj, parentPoint, parentId }: Props) => {
     text,
     onClick,
     onMouseDown,
+    style,
   };
 };
