@@ -34,23 +34,45 @@ export const useStyleForm = () => {
   const onSubmit: SubmitHandler<Inputs> = useCallback(
     (data: Inputs) => {
       console.log(`submit: ${data.name}`);
-      selectedObjects.map(
-        (obj) =>
-          obj &&
-          obj.type !== "group" &&
-          updateObject({
-            ...obj,
-            style: {
-              ...obj.style,
-              stroke: data.stroke !== "" ? data.stroke : obj.style.stroke,
-              strokeWidth:
-                data.strokeWidth !== ""
-                  ? Number(data.strokeWidth)
-                  : obj.style.strokeWidth,
-              fill: data.fill !== "" ? data.fill : obj.style.fill,
-            },
-          })
-      );
+      selectedObjects.map((obj) => {
+        if (!obj) return;
+
+        switch (obj.type) {
+          case "group":
+            return;
+          case "text":
+            updateObject({
+              ...obj,
+              style: {
+                ...obj.style,
+                stroke: data.stroke !== "" ? data.stroke : obj.style.stroke,
+                strokeWidth:
+                  data.strokeWidth !== ""
+                    ? Number(data.strokeWidth)
+                    : obj.style.strokeWidth,
+                fill: data.fill !== "" ? data.fill : obj.style.fill,
+                fontSize:
+                  data.fontSize !== ""
+                    ? Number(data.fontSize)
+                    : obj.style.fontSize,
+              },
+            });
+            break;
+          default:
+            updateObject({
+              ...obj,
+              style: {
+                ...obj.style,
+                stroke: data.stroke !== "" ? data.stroke : obj.style.stroke,
+                strokeWidth:
+                  data.strokeWidth !== ""
+                    ? Number(data.strokeWidth)
+                    : obj.style.strokeWidth,
+                fill: data.fill !== "" ? data.fill : obj.style.fill,
+              },
+            });
+        }
+      });
     },
     [selectedObjects, updateObject]
   );

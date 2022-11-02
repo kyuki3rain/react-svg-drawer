@@ -154,7 +154,7 @@ group 化された object の group 化を解除する
 
 縁の色
 
-default: black
+default: "black" (text の場合のみ"none")
 
 指定できる値は[このリンクを参照](https://www.w3.org/TR/SVG/painting.html#SpecifyingPaint)
 
@@ -172,9 +172,19 @@ default: 0.2
 
 オブジェクト内部の色
 
-default: none
+default: "none" (text の場合のみ"black")
 
 指定できる値は[stroke](#stroke)と同じ
+
+### fontSize
+
+選択されたオブジェクトの中に text が含まれているときのみ出現
+
+text のフォントサイズ（画面上のグリッド 1 マスに対する大きさで設定）
+
+default: 5
+
+指定できる値は正の少数
 
 ###
 

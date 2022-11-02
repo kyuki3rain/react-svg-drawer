@@ -38,7 +38,9 @@ type PolylineObject = {
 type TextObject = {
   type: "text";
   point?: VirtualAbsolute;
-  style: SvgObjectStyle;
+  style: SvgObjectStyle & {
+    fontSize: number;
+  };
 } & SvgObjectCommon;
 
 type RectObject = {
