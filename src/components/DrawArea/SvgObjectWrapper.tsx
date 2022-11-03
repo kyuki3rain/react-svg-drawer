@@ -6,6 +6,7 @@ import RectObject from "./SvgObjectWrapper/RectObject";
 import CircleObject from "./SvgObjectWrapper/CircleObject";
 import GroupObject from "./SvgObjectWrapper/GroupObject";
 import { useRecoilValue } from "recoil";
+import NodeObject from "./SvgObjectWrapper/NodeObject";
 
 type Props = {
   svgId: SvgId | "preview";
@@ -79,6 +80,17 @@ const SvgObjectWrapper: React.FC<Props> = ({
           parentId={parentId}
         ></GroupObject>
       );
+    case "node":
+      return (
+        <NodeObject
+          obj={obj}
+          parentPoint={parentPoint}
+          isSelected={isSelected}
+          parentId={parentId}
+        ></NodeObject>
+      );
+    case "edge":
+      return null;
   }
 };
 
