@@ -3,6 +3,7 @@ type NodeObject = {
   type: "node";
   id: NodeId | "preview";
   point: VirtualAbsolute;
+  beforeNodeId?: NodeId;
 } & SvgObjectCommon;
 
 type NodeIdList = Set<NodeId>;

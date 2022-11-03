@@ -1,7 +1,8 @@
 import { useMemo } from "react";
 import { useRecoilValue } from "recoil";
-import { useObject } from "../../operators/useObject";
+import { vp } from "../../helpers/virtualPoint";
 import { hasEdgeSelector } from "../../selectors/wireSelector";
+import { areaConfigState } from "../../states/areaConfigState";
 
 type Props = {
   obj: NodeObject;
@@ -9,17 +10,14 @@ type Props = {
   parentId?: SvgId | "preview";
 };
 
-export const useNode = ({ obj, parentPoint, parentId }: Props) => {
+export const useNode = ({ obj, parentPoint }: Props) => {
   const edgeCount = useRecoilValue(hasEdgeSelector(obj.id));
-  const { toRealAbsolute } = useObject({
-    obj,
-    parentPoint,
-    parentId,
-  });
+  const { pitch } = useRecoilValue(areaConfigState);
 
   const rp = useMemo(
-    () => obj.fixedPoint && toRealAbsolute(obj.fixedPoint),
-    [obj.fixedPoint, toRealAbsolute]
+    () =>
+      obj.fixedPoint && vp.toReal(vp.add(obj.fixedPoint, parentPoint), pitch),
+    [obj.fixedPoint, parentPoint, pitch]
   );
 
   const isCircle = useMemo(() => edgeCount >= 2, [edgeCount]);

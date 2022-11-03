@@ -17,5 +17,5 @@ export const edgeListState = atom({
 
 export const nodeIdToEdgeIdStates = atomFamily({
   key: "nodeIdToEdgeId",
-  default: new Map() as NodeIdToEdgeIdMap,
+  default: () => new Map() as NodeIdToEdgeIdMap,
 });

@@ -1,10 +1,22 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { useEffect } from "react";
-import { useRecoilValue } from "recoil";
+import { useRecoilCallback, useRecoilValue } from "recoil";
 import { selectedIdListState } from "../states/selectedIdListState";
 import { svgObjectListState } from "../states/svgObjectState";
+import { nodeIdToEdgeIdStates, nodeListState } from "../states/wireState";
 
 export const useDebugInfoEffect = () => {
-  const ids = useRecoilValue(svgObjectListState);
-  useEffect(() => console.log("svgObjectListState: ", ids), [ids]);
+  const nodeList = useRecoilValue(nodeListState);
+  const nodeIdToEdgeIdList = useRecoilCallback(
+    ({ snapshot }) =>
+      () =>
+        [...snapshot.getLoadable(nodeListState).getValue()].map((v) =>
+          snapshot.getLoadable(nodeIdToEdgeIdStates(v)).getValue()
+        )
+  );
+  useEffect(
+    () => console.log("nodeIdToEdgeIdList: ", nodeIdToEdgeIdList()),
+    [nodeList]
+  );
 };

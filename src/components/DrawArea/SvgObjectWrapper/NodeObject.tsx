@@ -7,7 +7,7 @@ type Props = {
   parentId?: SvgId | "preview";
 };
 
-const LineObject: React.FC<Props> = ({
+const NodeObject: React.FC<Props> = ({
   obj,
   parentPoint,
   isSelected,
@@ -27,8 +27,8 @@ const LineObject: React.FC<Props> = ({
         <circle
           cx={rp.x}
           cy={rp.y}
-          fill="black"
-          stroke={isSelected ? "blue" : "black"}
+          fill="red"
+          stroke={isSelected ? "blue" : "red"}
           r={4}
         />
       </>
@@ -40,7 +40,7 @@ const LineObject: React.FC<Props> = ({
         x={rp.x - 4}
         y={rp.y - 4}
         fill="white"
-        stroke={isSelected ? "blue" : "black"}
+        stroke={isSelected ? "blue" : "red"}
         strokeWidth={1}
         width={8}
         height={8}
@@ -49,4 +49,4 @@ const LineObject: React.FC<Props> = ({
   );
 };
 
-export default LineObject;
+export default NodeObject;
