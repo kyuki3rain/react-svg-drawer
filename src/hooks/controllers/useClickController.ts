@@ -24,7 +24,6 @@ import { useResetPreview } from "../../operators/useResetPreview";
 import { allSvgObjectSelector } from "../../selectors/objectSelector";
 import { correctArea, include } from "../../helpers/areaHelper";
 import { useNodeState } from "../../operators/useNodeState";
-import { useEdgeState } from "../../operators/useEdgeState";
 
 export const useClickController = () => {
   const { updatePreview, deletePreview } = usePreview();
@@ -35,8 +34,7 @@ export const useClickController = () => {
   const { toRangeSelectMode, resetSelectMode } = useSelectMode();
   const { copyObject, removeTagFromId } = useSvgObject();
   const { resetPreview } = useResetPreview();
-  const { getNodeFromPoint, setNode } = useNodeState();
-  const { setEdge } = useEdgeState();
+  const { getNodeFromPoint } = useNodeState();
 
   const onClickLine = useCallback(
     (obj: LineObject | null, v: VirtualPoint) => {
@@ -73,9 +71,29 @@ export const useClickController = () => {
   const onClickWire = useCallback(
     (obj: NodeObject | null, v: VirtualPoint) => {
       let newId = getNodeFromPoint(v);
-      if (!newId) newId = setNode(v as VirtualAbsolute);
+      if (!newId)
+        newId = addObject({
+          id: "preview",
+          type: "node",
+          point: v as VirtualAbsolute,
+          fixedPoint: v as VirtualAbsolute,
+          area: {
+            upperLeft: vp.zero() as VirtualAbsolute,
+            bottomRight: vp.zero() as VirtualAbsolute,
+          },
+        });
 
-      if (obj?.beforeNodeId) setEdge(obj.beforeNodeId, newId);
+      if (obj?.beforeNodeId)
+        addObject({
+          id: "preview",
+          type: "edge",
+          node1: obj?.beforeNodeId,
+          node2: newId,
+          area: {
+            upperLeft: vp.zero() as VirtualAbsolute,
+            bottomRight: vp.zero() as VirtualAbsolute,
+          },
+        });
 
       updatePreview({
         id: "preview",
@@ -89,7 +107,7 @@ export const useClickController = () => {
         },
       });
     },
-    [getNodeFromPoint, setEdge, setNode, updatePreview]
+    [addObject, getNodeFromPoint, updatePreview]
   );
 
   const onClickPolyline = useCallback(

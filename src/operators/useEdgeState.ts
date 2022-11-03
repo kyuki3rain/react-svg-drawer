@@ -1,13 +1,10 @@
 import { nanoid } from "nanoid";
 import { useRecoilCallback, useSetRecoilState } from "recoil";
-import { vp } from "../helpers/virtualPoint";
 import { svgObjectStates } from "../states/svgObjectState";
 import { edgeListState, nodeIdToEdgeIdStates } from "../states/wireState";
-import { useSvgObject } from "./useSvgObject";
 
 export const useEdgeState = () => {
   const setEdgeList = useSetRecoilState(edgeListState);
-  const { addObject } = useSvgObject();
 
   const setEdge = useRecoilCallback(
     ({ set }) =>
@@ -24,23 +21,10 @@ export const useEdgeState = () => {
           (prev) => new Map(prev.set(node1, edgeId))
         );
         setEdgeList((prev) => new Set(prev.add(edgeId)));
-        addObject(
-          {
-            id: edgeId,
-            type: "edge",
-            node1,
-            node2,
-            area: {
-              upperLeft: vp.zero() as VirtualAbsolute,
-              bottomRight: vp.zero() as VirtualAbsolute,
-            },
-          },
-          edgeId
-        );
 
         return edgeId;
       },
-    [addObject, setEdgeList]
+    [setEdgeList]
   );
 
   const removeEdge = useRecoilCallback(

@@ -10,14 +10,10 @@ import {
   nodeListState,
   pointToNodeIdState,
 } from "../states/wireState";
-import { useEdgeState } from "./useEdgeState";
-import { useSvgObject } from "./useSvgObject";
 
 export const useNodeState = () => {
   const setNodeList = useSetRecoilState(nodeListState);
   const setPointToNodeId = useSetRecoilState(pointToNodeIdState);
-  const { removeEdge, setEdge } = useEdgeState();
-  const { addObject } = useSvgObject();
 
   const getEdgeThrouphPoint = useRecoilCallback(
     ({ snapshot }) =>
@@ -37,73 +33,32 @@ export const useNodeState = () => {
     []
   );
 
-  const separateEdge = useRecoilCallback(
-    ({ snapshot }) =>
-      (edgeId: EdgeId, nodeId: NodeId) => {
-        const edge = snapshot.getLoadable(svgObjectStates(edgeId)).getValue();
-        if (edge?.type !== "edge" || edge.id === "preview") return;
-
-        removeEdge(edge.id);
-        setEdge(edge.node1, nodeId, edge.id);
-        setEdge(nodeId, edge.node2);
-      },
-    [removeEdge, setEdge]
-  );
-
   const setNode = useCallback(
     (point: VirtualAbsolute, id?: NodeId) => {
       const nodeId = id || (nanoid() as NodeId);
       setNodeList((prev) => new Set(prev.add(nodeId)));
-      console.log(nodeId, point);
-      addObject(
-        {
-          id: nodeId,
-          type: "node",
-          point,
-          fixedPoint: point,
-          area: {
-            upperLeft: vp.zero() as VirtualAbsolute,
-            bottomRight: vp.zero() as VirtualAbsolute,
-          },
-        },
-        nodeId
-      );
       setPointToNodeId(
         (prev) => new Map(prev.set(JSON.stringify(point), nodeId))
       );
 
-      const edge = getEdgeThrouphPoint(point);
-      if (edge) separateEdge(edge, nodeId);
-
       return nodeId;
     },
-    [
-      addObject,
-      getEdgeThrouphPoint,
-      separateEdge,
-      setNodeList,
-      setPointToNodeId,
-    ]
+    [setNodeList, setPointToNodeId]
   );
 
-  // const removeNode = useCallback(
-  //   (nodeId: NodeId) => {
-  //     const node = nodeList.get(nodeId);
-  //     if (!node) return null;
-
-  //     setNodeList((prev) => {
-  //       prev.delete(nodeId);
-  //       return new Map(prev);
-  //     });
-  //     setPointToNodeIdMap((prev) => {
-  //       prev.delete(JSON.stringify(node.point));
-  //       return new Map(prev);
-  //     });
-
-  //     return node;
-  //   },
-  //   [nodeList, setNodeList, setPointToNodeIdMap]
-  // );
+  const removeNode = useCallback(
+    (nodeId: NodeId, point: VirtualPoint) => {
+      setNodeList((prev) => {
+        prev.delete(nodeId);
+        return new Set(prev);
+      });
+      setPointToNodeId((prev) => {
+        prev.delete(JSON.stringify(point));
+        return new Map(prev);
+      });
+    },
+    [setNodeList, setPointToNodeId]
+  );
 
   const getNodeFromPoint = useRecoilCallback(
     ({ snapshot }) =>
@@ -118,5 +73,47 @@ export const useNodeState = () => {
     []
   );
 
-  return { getNodeFromPoint, setNode };
+  const separateEdge = useRecoilCallback(
+    ({ snapshot }) =>
+      (edgeId: EdgeId, nodeId: NodeId) => {
+        const edge = snapshot.getLoadable(svgObjectStates(edgeId)).getValue();
+        if (edge?.type !== "edge" || edge.id === "preview") return null;
+
+        const res: [EdgeId, EdgeObject, EdgeObject] = [
+          edge.id,
+          {
+            id: edge.id,
+            type: "edge",
+            node1: edge.node1,
+            node2: nodeId,
+            area: {
+              upperLeft: vp.zero() as VirtualAbsolute,
+              bottomRight: vp.zero() as VirtualAbsolute,
+            },
+          },
+          {
+            id: edge.id,
+            type: "edge",
+            node1: nodeId,
+            node2: edge.node2,
+            area: {
+              upperLeft: vp.zero() as VirtualAbsolute,
+              bottomRight: vp.zero() as VirtualAbsolute,
+            },
+          },
+        ];
+
+        return res;
+      },
+
+    []
+  );
+
+  return {
+    getNodeFromPoint,
+    setNode,
+    getEdgeThrouphPoint,
+    separateEdge,
+    removeNode,
+  };
 };
