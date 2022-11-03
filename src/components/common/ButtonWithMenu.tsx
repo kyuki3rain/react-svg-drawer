@@ -7,9 +7,18 @@ type Props = {
   title: string;
   icon: React.ReactNode;
   items: { title: string; onClick: () => void }[];
+  color?:
+    | "default"
+    | "inherit"
+    | "success"
+    | "primary"
+    | "secondary"
+    | "error"
+    | "info"
+    | "warning";
 };
 
-export default function ButtonWithMenu({ title, items, icon }: Props) {
+export default function ButtonWithMenu({ title, items, icon, color }: Props) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -22,7 +31,11 @@ export default function ButtonWithMenu({ title, items, icon }: Props) {
   return (
     <div>
       <Tooltip title={title} style={{ marginRight: 5 }} arrow>
-        <Fab aria-label={title} color="default" onClick={handleClick}>
+        <Fab
+          aria-label={title}
+          color={color ?? "default"}
+          onClick={handleClick}
+        >
           {icon}
         </Fab>
       </Tooltip>
@@ -36,7 +49,13 @@ export default function ButtonWithMenu({ title, items, icon }: Props) {
         }}
       >
         {items.map((item) => (
-          <MenuItem onClick={item.onClick} key={item.title}>
+          <MenuItem
+            onClick={() => {
+              item.onClick();
+              handleClose();
+            }}
+            key={item.title}
+          >
             {item.title}
           </MenuItem>
         ))}
