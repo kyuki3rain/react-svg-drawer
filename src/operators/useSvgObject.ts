@@ -24,7 +24,8 @@ export const useSvgObject = () => {
           removeEdge(svgObject.id);
         }
         if (svgObject.type === "node" && svgObject.id !== "preview") {
-          removeNode(svgObject.id, svgObject.point);
+          const edgeList = removeNode(svgObject.id, svgObject.point);
+          edgeList.map((edgeId) => deleteObject(edgeId));
         }
 
         set(svgObjectStates(id), null);

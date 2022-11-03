@@ -7,6 +7,7 @@ import { edgePointsSelector } from "../selectors/wireSelector";
 import { svgObjectStates } from "../states/svgObjectState";
 import {
   edgeListState,
+  nodeIdToEdgeIdStates,
   nodeListState,
   pointToNodeIdState,
 } from "../states/wireState";
@@ -46,17 +47,25 @@ export const useNodeState = () => {
     [setNodeList, setPointToNodeId]
   );
 
-  const removeNode = useCallback(
-    (nodeId: NodeId, point: VirtualPoint) => {
-      setNodeList((prev) => {
-        prev.delete(nodeId);
-        return new Set(prev);
-      });
-      setPointToNodeId((prev) => {
-        prev.delete(JSON.stringify(point));
-        return new Map(prev);
-      });
-    },
+  const removeNode = useRecoilCallback(
+    ({ snapshot }) =>
+      (nodeId: NodeId, point: VirtualPoint) => {
+        setNodeList((prev) => {
+          prev.delete(nodeId);
+          return new Set(prev);
+        });
+        setPointToNodeId((prev) => {
+          prev.delete(JSON.stringify(point));
+          return new Map(prev);
+        });
+
+        return [
+          ...snapshot
+            .getLoadable(nodeIdToEdgeIdStates(nodeId))
+            .getValue()
+            .values(),
+        ];
+      },
     [setNodeList, setPointToNodeId]
   );
 

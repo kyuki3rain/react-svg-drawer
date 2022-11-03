@@ -1,3 +1,4 @@
+import { CLICK_TARGET_OBJECT } from "../../../helpers/clickTargetObject";
 import { useNode } from "../../../hooks/objects/useNode";
 
 type Props = {
@@ -13,7 +14,7 @@ const NodeObject: React.FC<Props> = ({
   isSelected,
   parentId,
 }) => {
-  const { rp, isCircle } = useNode({
+  const { rp, isCircle, onClick, onMouseDown } = useNode({
     obj,
     parentPoint,
     parentId,
@@ -31,6 +32,25 @@ const NodeObject: React.FC<Props> = ({
           stroke={isSelected ? "blue" : "red"}
           r={4}
         />
+        <circle
+          cx={rp.x}
+          cy={rp.y}
+          r={4}
+          fill="black"
+          stroke="black"
+          strokeWidth={1 + CLICK_TARGET_OBJECT.defaultStrokeWidth}
+          strokeOpacity={CLICK_TARGET_OBJECT.strokeOpacity}
+          fillOpacity={CLICK_TARGET_OBJECT.strokeOpacity}
+          onClick={(e) => onClick(() => e.stopPropagation())}
+          onMouseDown={(e) =>
+            onMouseDown(
+              () => e.stopPropagation(),
+              e.clientX,
+              e.clientY,
+              isSelected
+            )
+          }
+        />
       </>
     );
 
@@ -44,6 +64,26 @@ const NodeObject: React.FC<Props> = ({
         strokeWidth={1}
         width={8}
         height={8}
+      />
+      <rect
+        x={rp.x - 4}
+        y={rp.y - 4}
+        width={8}
+        height={8}
+        fill="black"
+        stroke="black"
+        strokeWidth={1 + CLICK_TARGET_OBJECT.defaultStrokeWidth}
+        strokeOpacity={CLICK_TARGET_OBJECT.strokeOpacity}
+        fillOpacity={CLICK_TARGET_OBJECT.strokeOpacity}
+        onClick={(e) => onClick(() => e.stopPropagation())}
+        onMouseDown={(e) =>
+          onMouseDown(
+            () => e.stopPropagation(),
+            e.clientX,
+            e.clientY,
+            isSelected
+          )
+        }
       />
     </>
   );

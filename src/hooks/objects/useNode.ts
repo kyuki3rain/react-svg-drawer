@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { useRecoilValue } from "recoil";
 import { vp } from "../../helpers/virtualPoint";
+import { useObject } from "../../operators/useObject";
 import { hasEdgeSelector } from "../../selectors/wireSelector";
 import { areaConfigState } from "../../states/areaConfigState";
 
@@ -10,9 +11,15 @@ type Props = {
   parentId?: SvgId | "preview";
 };
 
-export const useNode = ({ obj, parentPoint }: Props) => {
+export const useNode = ({ obj, parentPoint, parentId }: Props) => {
   const edgeCount = useRecoilValue(hasEdgeSelector(obj.id));
   const { pitch } = useRecoilValue(areaConfigState);
+  const { onClick, onMouseDown } = useObject({
+    obj,
+    parentPoint,
+    parentId,
+  });
+  console.log(edgeCount);
 
   const rp = useMemo(
     () =>
@@ -25,5 +32,7 @@ export const useNode = ({ obj, parentPoint }: Props) => {
   return {
     rp,
     isCircle,
+    onClick,
+    onMouseDown,
   };
 };
