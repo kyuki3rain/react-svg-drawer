@@ -39,7 +39,6 @@ const EdgeObject: React.FC<Props> = ({
         stroke="black"
         strokeOpacity={CLICK_TARGET_OBJECT.strokeOpacity}
         onClick={(e) => {
-          console.log(e);
           onClick(() => e.stopPropagation());
         }}
         onMouseDown={(e) =>

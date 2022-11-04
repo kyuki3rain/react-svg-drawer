@@ -1,6 +1,7 @@
 import { nanoid } from "nanoid";
 import { useRecoilCallback } from "recoil";
 import { vp } from "../helpers/virtualPoint";
+import { rootPointSelector } from "../selectors/rootPointSelector";
 import { svgObjectListState, svgObjectStates } from "../states/svgObjectState";
 import { useEdgeState } from "./useEdgeState";
 import { useNodeState } from "./useNodeState";
@@ -135,11 +136,24 @@ export const useSvgObject = () => {
     []
   );
 
+  const setNodeObjectPoint = useRecoilCallback(
+    ({ snapshot }) =>
+      (obj: NodeObject, point: VirtualPoint) => {
+        const rootPoint = snapshot.getLoadable(rootPointSelector).getValue();
+        const nextPoint = vp.sub(point, rootPoint) as VirtualAbsolute;
+
+        if (JSON.stringify(obj.point) !== JSON.stringify(nextPoint))
+          updateObject({ ...obj, point: nextPoint });
+      },
+    [updateObject]
+  );
+
   return {
     deleteObject,
     addObject,
     updateObject,
     copyObject,
     removeTagFromId,
+    setNodeObjectPoint,
   };
 };
