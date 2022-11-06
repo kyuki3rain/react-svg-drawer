@@ -75,7 +75,6 @@ export const useKeyController = () => {
             if (shift && ctrl) redo();
             else if (ctrl) undo();
             break;
-          case "Backspace":
           case "Delete":
             deleteSelectedObjectes();
             break;
