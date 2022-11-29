@@ -23,6 +23,7 @@ import {
 import { useResetPreview } from "../../operators/useResetPreview";
 import { allSvgObjectSelector } from "../../selectors/objectSelector";
 import { correctArea, include } from "../../helpers/areaHelper";
+import { useNodeState } from "../../operators/useNodeState";
 
 export const useClickController = () => {
   const { updatePreview, deletePreview } = usePreview();
@@ -33,6 +34,7 @@ export const useClickController = () => {
   const { toRangeSelectMode, resetSelectMode } = useSelectMode();
   const { copyObject, removeTagFromId } = useSvgObject();
   const { resetPreview } = useResetPreview();
+  const { getNodeFromPoint } = useNodeState();
 
   const onClickLine = useCallback(
     (obj: LineObject | null, v: VirtualPoint) => {
@@ -64,6 +66,48 @@ export const useClickController = () => {
       deletePreview();
     },
     [addObject, updatePreview, deletePreview]
+  );
+
+  const onClickWire = useCallback(
+    (obj: NodeObject | null, v: VirtualPoint) => {
+      let newId = getNodeFromPoint(v);
+      if (!newId)
+        newId = addObject({
+          id: "preview",
+          type: "node",
+          point: v as VirtualAbsolute,
+          fixedPoint: v as VirtualAbsolute,
+          area: {
+            upperLeft: vp.zero() as VirtualAbsolute,
+            bottomRight: vp.zero() as VirtualAbsolute,
+          },
+        });
+
+      if (obj?.beforeNodeId)
+        addObject({
+          id: "preview",
+          type: "edge",
+          node1: obj?.beforeNodeId,
+          node2: newId,
+          area: {
+            upperLeft: vp.zero() as VirtualAbsolute,
+            bottomRight: vp.zero() as VirtualAbsolute,
+          },
+        });
+
+      updatePreview({
+        id: "preview",
+        type: "node",
+        fixedPoint: v as VirtualAbsolute,
+        point: v as VirtualAbsolute,
+        beforeNodeId: newId,
+        area: {
+          upperLeft: vp.zero() as VirtualAbsolute,
+          bottomRight: vp.zero() as VirtualAbsolute,
+        },
+      });
+    },
+    [addObject, getNodeFromPoint, updatePreview]
   );
 
   const onClickPolyline = useCallback(
@@ -223,6 +267,11 @@ export const useClickController = () => {
             onClickCircle(obj, v);
             break;
           }
+          case "wire": {
+            if (obj && obj.type !== "node") break;
+            onClickWire(obj, v);
+            break;
+          }
           default:
         }
       },
@@ -232,6 +281,7 @@ export const useClickController = () => {
       onClickPolyline,
       onClickRect,
       onClickText,
+      onClickWire,
       toVirtual,
     ]
   );

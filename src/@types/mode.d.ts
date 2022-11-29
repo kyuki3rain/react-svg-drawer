@@ -5,7 +5,8 @@ type DrawMode =
   | "polyline"
   | "text"
   | "rect"
-  | "circle";
+  | "circle"
+  | "wire";
 
 type SelectMode = "normal" | "range" | "move";
 type MoveMode = "move" | "copy";

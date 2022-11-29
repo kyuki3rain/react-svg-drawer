@@ -13,11 +13,18 @@ export const useStyleForm = () => {
   const defaultValues = useMemo(
     () =>
       selectedObjects.reduce((s, obj) => {
-        if (!obj || obj?.type === "group") return s;
+        if (!obj) return s;
 
-        for (const [key, value] of Object.entries(obj.style ?? {})) {
-          if (!s[key]) s[key] = value.toString();
-          else if (s[key] !== value.toString()) s[key] = "";
+        switch (obj.type) {
+          case "group":
+          case "node":
+          case "edge":
+            break;
+          default:
+            for (const [key, value] of Object.entries(obj.style ?? {})) {
+              if (!s[key]) s[key] = value.toString();
+              else if (s[key] !== value.toString()) s[key] = "";
+            }
         }
 
         return s;
@@ -39,6 +46,8 @@ export const useStyleForm = () => {
 
         switch (obj.type) {
           case "group":
+          case "node":
+          case "edge":
             return;
           case "text":
             updateObject({

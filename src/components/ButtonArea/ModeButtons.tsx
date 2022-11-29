@@ -8,6 +8,7 @@ import { Fab, SvgIcon, Tooltip } from "@mui/material";
 import React from "react";
 import { ReactComponent as CursorIcon } from "../../assets/CursorIcon.svg";
 import { useModeButtons } from "../../hooks/buttons/useModeButtons";
+import ButtonWithMenu from "../common/ButtonWithMenu";
 
 const ModeButtons: React.FC = () => {
   const { drawMode, changeMode } = useModeButtons();
@@ -19,9 +20,10 @@ const ModeButtons: React.FC = () => {
         display: "flex",
         justifyContent: "flex-start",
         flexWrap: "wrap",
+        marginLeft: 5,
       }}
     >
-      <Tooltip title="selector" style={{ marginLeft: 5 }} arrow>
+      <Tooltip title="selector" style={{ marginRight: 5 }} arrow>
         <Fab
           aria-label="selector"
           color={drawMode === "selector" ? "success" : "primary"}
@@ -32,16 +34,24 @@ const ModeButtons: React.FC = () => {
           </SvgIcon>
         </Fab>
       </Tooltip>
-      <Tooltip title="line" style={{ marginLeft: 5 }} arrow>
-        <Fab
-          aria-label="line"
-          color={drawMode === "line" ? "success" : "primary"}
-          onClick={() => drawMode !== "line" && changeMode("line")}
-        >
-          <HorizontalRuleIcon />
-        </Fab>
-      </Tooltip>
-      <Tooltip title="polyline" style={{ marginLeft: 5 }} arrow>
+      <ButtonWithMenu
+        title="line"
+        icon={<HorizontalRuleIcon />}
+        color={
+          drawMode === "line" || drawMode === "wire" ? "success" : "primary"
+        }
+        items={[
+          {
+            title: "line",
+            onClick: () => drawMode !== "line" && changeMode("line"),
+          },
+          {
+            title: "wire",
+            onClick: () => drawMode !== "wire" && changeMode("wire"),
+          },
+        ]}
+      ></ButtonWithMenu>
+      <Tooltip title="polyline" style={{ marginRight: 5 }} arrow>
         <Fab
           aria-label="polyline"
           color={drawMode === "polyline" ? "success" : "primary"}
@@ -50,7 +60,7 @@ const ModeButtons: React.FC = () => {
           <ShowChartIcon />
         </Fab>
       </Tooltip>
-      <Tooltip title="text" style={{ marginLeft: 5 }} arrow>
+      <Tooltip title="text" style={{ marginRight: 5 }} arrow>
         <Fab
           aria-label="text"
           color={drawMode === "text" ? "success" : "primary"}
@@ -59,7 +69,7 @@ const ModeButtons: React.FC = () => {
           <TextFieldsIcon />
         </Fab>
       </Tooltip>
-      <Tooltip title="rect" style={{ marginLeft: 5 }} arrow>
+      <Tooltip title="rect" style={{ marginRight: 5 }} arrow>
         <Fab
           aria-label="rect"
           color={drawMode === "rect" ? "success" : "primary"}
@@ -68,7 +78,7 @@ const ModeButtons: React.FC = () => {
           <RectangleIcon />
         </Fab>
       </Tooltip>
-      <Tooltip title="circle" style={{ marginLeft: 5 }} arrow>
+      <Tooltip title="circle" style={{ marginRight: 5 }} arrow>
         <Fab
           aria-label="circle"
           color={drawMode === "circle" ? "success" : "primary"}
@@ -77,7 +87,7 @@ const ModeButtons: React.FC = () => {
           <CircleIcon />
         </Fab>
       </Tooltip>
-      <Tooltip title="delete" style={{ marginLeft: 5 }} arrow>
+      <Tooltip title="delete" style={{ marginRight: 5 }} arrow>
         <Fab
           aria-label="delete"
           color={drawMode === "delete" ? "success" : "primary"}

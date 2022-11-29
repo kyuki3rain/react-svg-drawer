@@ -66,6 +66,8 @@ export const useObject = ({ obj, parentPoint, parentId }: Props) => {
   const style = useMemo(() => {
     switch (obj.type) {
       case "group":
+      case "node":
+      case "edge":
         return null;
       case "text":
         return {

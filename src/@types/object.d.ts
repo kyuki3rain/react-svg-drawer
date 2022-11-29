@@ -6,7 +6,9 @@ type SvgObject =
   | PolylineObject
   | RectObject
   | CircleObject
-  | GroupObject;
+  | GroupObject
+  | NodeObject
+  | EdgeObject;
 
 type SvgObjectStyle = {
   stroke?: string;

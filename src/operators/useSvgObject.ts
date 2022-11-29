@@ -1,9 +1,16 @@
 import { nanoid } from "nanoid";
 import { useRecoilCallback } from "recoil";
 import { vp } from "../helpers/virtualPoint";
+import { rootPointSelector } from "../selectors/rootPointSelector";
 import { svgObjectListState, svgObjectStates } from "../states/svgObjectState";
+import { useEdgeState } from "./useEdgeState";
+import { useNodeState } from "./useNodeState";
 
 export const useSvgObject = () => {
+  const { removeEdge, setEdge } = useEdgeState();
+  const { setNode, getEdgeThrouphPoint, separateEdge, removeNode } =
+    useNodeState();
+
   const deleteObject = useRecoilCallback(
     ({ snapshot, set }) =>
       (id: SvgId, deep?: boolean) => {
@@ -14,13 +21,21 @@ export const useSvgObject = () => {
           svgObject.objectIds.map((cid) => deleteObject(cid));
         }
 
+        if (svgObject.type === "edge" && svgObject.id !== "preview") {
+          removeEdge(svgObject.id);
+        }
+        if (svgObject.type === "node" && svgObject.id !== "preview") {
+          const edgeList = removeNode(svgObject.id, svgObject.point);
+          edgeList.map((edgeId) => deleteObject(edgeId));
+        }
+
         set(svgObjectStates(id), null);
         set(svgObjectListState, (prev) => {
           prev.delete(id);
           return new Set(prev);
         });
       },
-    []
+    [removeEdge, removeNode]
   );
 
   const addObject = useRecoilCallback(
@@ -28,6 +43,7 @@ export const useSvgObject = () => {
       (obj: SvgObject, id?: SvgId) => {
         let newId = id || (nanoid() as SvgId);
         const list = snapshot.getLoadable(svgObjectListState).getValue();
+
         if (list.has(newId)) {
           newId = nanoid() as SvgId;
           if (obj.fixedPoint)
@@ -36,6 +52,25 @@ export const useSvgObject = () => {
               vp.one()
             ) as VirtualAbsolute;
         }
+
+        if (obj.type === "edge") {
+          setEdge(obj.node1, obj.node2, newId);
+        }
+
+        if (obj.type === "node") {
+          setNode(obj.point, newId);
+          const edge = getEdgeThrouphPoint(obj.point);
+          if (edge) {
+            const job = separateEdge(edge, newId);
+            if (job) {
+              const [id, obj1, obj2] = job;
+              deleteObject(id);
+              addObject(obj1);
+              addObject(obj2);
+            }
+          }
+        }
+
         set(svgObjectStates(newId), (prev) => {
           if (!prev) return { ...obj, id: newId };
           return prev;
@@ -101,11 +136,24 @@ export const useSvgObject = () => {
     []
   );
 
+  const setNodeObjectPoint = useRecoilCallback(
+    ({ snapshot }) =>
+      (obj: NodeObject, point: VirtualPoint) => {
+        const rootPoint = snapshot.getLoadable(rootPointSelector).getValue();
+        const nextPoint = vp.sub(point, rootPoint) as VirtualAbsolute;
+
+        if (JSON.stringify(obj.point) !== JSON.stringify(nextPoint))
+          updateObject({ ...obj, point: nextPoint });
+      },
+    [updateObject]
+  );
+
   return {
     deleteObject,
     addObject,
     updateObject,
     copyObject,
     removeTagFromId,
+    setNodeObjectPoint,
   };
 };
